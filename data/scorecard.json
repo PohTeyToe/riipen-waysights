@@ -3,12 +3,12 @@
  "answer_key_commit": "f7023e6a7759b91039f19af83e90432a0091fed9",
  "counts": {
   "right": 24,
-  "wrong": 0,
+  "wrong": 2,
   "correctly_blank": 7,
   "missed": 0,
-  "sent_to_person": 5
+  "sent_to_person": 3
  },
- "sent_to_person_key_agrees": 4,
+ "sent_to_person_key_agrees": 2,
  "total": 36,
  "misses": [
   {
@@ -24,7 +24,31 @@
     "905-892-2607 ext. 33"
    ],
    "key_expect": "filled",
-   "why": "The run took \"Public Works\nPhone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/); \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+   "why": "The run took \"Phone: 905-892-2607 ext. 33\" (Contacts Directory); \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (Municipal Plans, Reports & Studies). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+  },
+  {
+   "outcome": "wrong",
+   "got": 398.1,
+   "account": "warren",
+   "field": "road_length_km",
+   "expected": [
+    398.1,
+    393.2
+   ],
+   "key_expect": "needs_human",
+   "why": "The key sends this to a person because its sources print different figures. The run filled 398.1 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
+  },
+  {
+   "outcome": "wrong",
+   "got": 483.8,
+   "account": "tompkins",
+   "field": "road_length_km",
+   "expected": [
+    486.0,
+    483.8
+   ],
+   "key_expect": "needs_human",
+   "why": "The key sends this to a person because its sources print different figures. The run filled 483.8 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
   }
  ],
  "rows": [
@@ -82,7 +106,6 @@
   {
    "outcome": "right",
    "got": [
-    "https://www.lincoln.ca/council-administration/community-plans/asset-management-plan",
     "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf"
    ],
    "account": "lincoln",
@@ -146,7 +169,7 @@
     "905-892-2607 ext. 33"
    ],
    "key_expect": "filled",
-   "why": "The run took \"Public Works\nPhone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/); \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+   "why": "The run took \"Phone: 905-892-2607 ext. 33\" (Contacts Directory); \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (Municipal Plans, Reports & Studies). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
   },
   {
    "outcome": "right",
@@ -282,20 +305,16 @@
    "key_expect": null
   },
   {
-   "outcome": "sent_to_person",
-   "key_agrees_unclear": true,
-   "options_include_accepted": true,
-   "got": [
-    393.2,
-    398.1
-   ],
+   "outcome": "wrong",
+   "got": 398.1,
    "account": "warren",
    "field": "road_length_km",
    "expected": [
     398.1,
     393.2
    ],
-   "key_expect": "needs_human"
+   "key_expect": "needs_human",
+   "why": "The key sends this to a person because its sources print different figures. The run filled 398.1 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
   },
   {
    "outcome": "right",
@@ -348,20 +367,16 @@
    "key_expect": null
   },
   {
-   "outcome": "sent_to_person",
-   "key_agrees_unclear": true,
-   "options_include_accepted": true,
-   "got": [
-    483.8,
-    486.0
-   ],
+   "outcome": "wrong",
+   "got": 483.8,
    "account": "tompkins",
    "field": "road_length_km",
    "expected": [
     486.0,
     483.8
    ],
-   "key_expect": "needs_human"
+   "key_expect": "needs_human",
+   "why": "The key sends this to a person because its sources print different figures. The run filled 483.8 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
   },
   {
    "outcome": "right",

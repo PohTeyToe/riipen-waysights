@@ -10,30 +10,30 @@
   "example_public_account": true
  },
  "run": {
-  "started_at": "2026-10-15T22:43:17.957Z",
-  "finished_at": "2026-10-15T22:44:15.594Z",
+  "started_at": "2026-10-15T23:28:45.374Z",
+  "finished_at": "2026-10-15T23:29:36.174Z",
   "model": "claude-opus-5-5",
-  "pages_read": 14,
-  "page_fetches": 15,
+  "pages_read": 12,
+  "page_fetches": 13,
   "page_budget": 15,
-  "http_requests": 21,
-  "prompt_chars": 76089
+  "http_requests": 19,
+  "prompt_chars": 71101
  },
- "status": "needs_review",
+ "status": "done",
  "steps": [
   {
-   "t": "2026-10-15T22:43:17.957Z",
+   "t": "2026-10-15T23:28:45.374Z",
    "step": "status",
    "msg": "Queued"
   },
   {
-   "t": "2026-10-15T22:43:17.957Z",
+   "t": "2026-10-15T23:28:45.374Z",
    "step": "status",
    "msg": "Running",
    "rate_rule": "One run per Account per day. Last run: never."
   },
   {
-   "t": "2026-10-15T22:43:17.957Z",
+   "t": "2026-10-15T23:28:45.374Z",
    "step": "allowlist",
    "msg": "www.tompkinscountyny.gov is on the approved list",
    "approved": [
@@ -42,7 +42,7 @@
    ]
   },
   {
-   "t": "2026-10-15T22:43:18.265Z",
+   "t": "2026-10-15T23:28:45.505Z",
    "step": "robots",
    "msg": "robots.txt read for www.tompkinscountyny.gov",
    "url": "https://www.tompkinscountyny.gov/robots.txt",
@@ -50,7 +50,7 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T22:43:20.070Z",
+   "t": "2026-10-15T23:28:47.493Z",
    "step": "redirect",
    "msg": "HTTP 302 redirect",
    "url": "https://www.tompkinscountyny.gov/",
@@ -58,145 +58,79 @@
    "status": 302
   },
   {
-   "t": "2026-10-15T22:43:22.920Z",
+   "t": "2026-10-15T23:28:50.443Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.tompkinscountyny.gov/Home",
    "status": 200,
    "bytes": 240922,
-   "ms": 952,
-   "waited_ms": 1890,
+   "ms": 1077,
+   "waited_ms": 1875,
    "why": "the Account's website",
    "page": "1/15"
   },
   {
-   "t": "2026-10-15T22:43:23.198Z",
+   "t": "2026-10-15T23:28:50.567Z",
    "step": "skip",
    "msg": "off-list link skipped: \"Health and Human Services Oversees health and social services departments, facilitates conversation on health-related topics.\"",
    "url": "https://tompkinscountyny.iqm2.com/Citizens/Board/1016-Health-and-Human-Services-Committee"
   },
   {
-   "t": "2026-10-15T22:43:23.199Z",
+   "t": "2026-10-15T23:28:50.567Z",
    "step": "skip",
    "msg": "off-list link skipped: \"Facilities and Infrastructure Oversees county facilities, highway and other infrastructure, and ITH Airport.\"",
    "url": "https://tompkinscountyny.iqm2.com/Citizens/Board/1020-Facilities-and-Infrastructure-Committee"
   },
   {
-   "t": "2026-10-15T22:43:24.464Z",
+   "t": "2026-10-15T23:28:50.568Z",
+   "step": "skip",
+   "msg": "off-list link skipped: \"Sign Up Now\"",
+   "url": "https://public.govdelivery.com/accounts/NYTOMPKINS/subscriber/new?qsp=CODE_RED"
+  },
+  {
+   "t": "2026-10-15T23:28:51.741Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
    "status": 200,
-   "bytes": 142797,
-   "ms": 422,
-   "waited_ms": 765,
+   "bytes": 142798,
+   "ms": 375,
+   "waited_ms": 797,
    "why": "menu link \"Highway Department\" on Home | Tompkins County",
    "page": "2/15"
   },
   {
-   "t": "2026-10-15T22:43:24.744Z",
+   "t": "2026-10-15T23:28:51.839Z",
    "step": "skip",
    "msg": "off-list link skipped: \"Road Maintenance Mapper\"",
    "url": "https://tompkinscounty.maps.arcgis.com/apps/instant/sidebar/index.html?appid=053ac0cca5e74c54b4d90c9b647035be"
   },
   {
-   "t": "2026-10-15T22:43:26.296Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Roads",
-   "status": 200,
-   "bytes": 152679,
-   "ms": 327,
-   "waited_ms": 1218,
-   "why": "menu link \"County Roads\" on Home | Tompkins County",
-   "page": "3/15"
-  },
-  {
-   "t": "2026-10-15T22:43:28.334Z",
+   "t": "2026-10-15T23:28:54.236Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Adopt-A-Highway-Program",
    "status": 200,
    "bytes": 138501,
-   "ms": 375,
-   "waited_ms": 1437,
+   "ms": 858,
+   "waited_ms": 1531,
    "why": "menu link \"Adopt-A-Highway Program\" on Home | Tompkins County",
+   "page": "3/15"
+  },
+  {
+   "t": "2026-10-15T23:28:55.670Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Roads",
+   "status": 200,
+   "bytes": 152679,
+   "ms": 296,
+   "waited_ms": 1016,
+   "why": "menu link \"County Roads\" on Home | Tompkins County",
    "page": "4/15"
   },
   {
-   "t": "2026-10-15T22:43:30.309Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Sheriffs-Office/Road-Patrol",
-   "status": 200,
-   "bytes": 143402,
-   "ms": 342,
-   "waited_ms": 1468,
-   "why": "menu link \"Road Patrol\" on Home | Tompkins County",
-   "page": "5/15"
-  },
-  {
-   "t": "2026-10-15T22:43:32.745Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Bridges",
-   "status": 200,
-   "bytes": 138243,
-   "ms": 766,
-   "waited_ms": 1515,
-   "why": "menu link \"County Bridges\" on Home | Tompkins County",
-   "page": "6/15"
-  },
-  {
-   "t": "2026-10-15T22:43:34.456Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Mailbox-Guidelines",
-   "status": 200,
-   "bytes": 138213,
-   "ms": 484,
-   "waited_ms": 1062,
-   "why": "menu link \"Mailbox Guidelines\" on Home | Tompkins County",
-   "page": "7/15"
-  },
-  {
-   "t": "2026-10-15T22:43:36.335Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Snow-and-Ice-Maintenance",
-   "status": 200,
-   "bytes": 138556,
-   "ms": 375,
-   "waited_ms": 1390,
-   "why": "menu link \"Snow and Ice Maintenance\" on Home | Tompkins County",
-   "page": "8/15"
-  },
-  {
-   "t": "2026-10-15T22:43:38.519Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Stormwater-Management",
-   "status": 200,
-   "bytes": 143577,
-   "ms": 562,
-   "waited_ms": 1468,
-   "why": "menu link \"Stormwater Management\" on Home | Tompkins County",
-   "page": "9/15"
-  },
-  {
-   "t": "2026-10-15T22:43:40.322Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Adopt-A-Highway-Program/Program-Guidelines",
-   "status": 200,
-   "bytes": 140540,
-   "ms": 359,
-   "waited_ms": 1297,
-   "why": "menu link \"Program Guidelines\" on Highway Department | Tompkins County",
-   "page": "10/15"
-  },
-  {
-   "t": "2026-10-15T22:43:42.065Z",
+   "t": "2026-10-15T23:28:57.523Z",
    "step": "redirect",
    "msg": "HTTP 302 redirect",
    "url": "https://www.tompkinscountyny.gov/highway",
@@ -204,71 +138,125 @@
    "status": 302
   },
   {
-   "t": "2026-10-15T22:43:42.066Z",
+   "t": "2026-10-15T23:28:57.523Z",
    "step": "skip",
    "msg": "redirect leaves the approved list or robots.txt disallows it",
    "url": "https://tompkinscony.prelive.opencities.com/County/All-Departments/Highway-Department"
   },
   {
-   "t": "2026-10-15T22:43:44.704Z",
+   "t": "2026-10-15T23:28:59.893Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.tompkinscountyny.gov/All-Departments",
+   "status": 200,
+   "bytes": 161506,
+   "ms": 515,
+   "waited_ms": 1844,
+   "why": "menu link \"All Departments\" on Home | Tompkins County",
+   "page": "6/15"
+  },
+  {
+   "t": "2026-10-15T23:29:02.240Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council",
    "status": 200,
    "bytes": 149072,
-   "ms": 734,
-   "waited_ms": 1890,
+   "ms": 875,
+   "waited_ms": 1375,
    "why": "menu link \"Ithaca-Tompkins County Transportation Council\" on Home | Tompkins County",
-   "page": "12/15"
+   "page": "7/15"
   },
   {
-   "t": "2026-10-15T22:43:46.350Z",
+   "t": "2026-10-15T23:29:03.975Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Transportation-Improvement-Program-TIP",
    "status": 200,
    "bytes": 145300,
-   "ms": 390,
-   "waited_ms": 1000,
+   "ms": 608,
+   "waited_ms": 1016,
    "why": "menu link \"Transportation Improvement Program (TIP)\" on Home | Tompkins County",
-   "page": "13/15"
+   "page": "8/15"
   },
   {
-   "t": "2026-10-15T22:43:48.291Z",
+   "t": "2026-10-15T23:29:05.891Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/2045-Long-Range-Transportation-Plan",
    "status": 200,
    "bytes": 146808,
-   "ms": 327,
-   "waited_ms": 1407,
+   "ms": 515,
+   "waited_ms": 1297,
    "why": "menu link \"2045 Long Range Transportation Plan\" on Home | Tompkins County",
-   "page": "14/15"
+   "page": "9/15"
   },
   {
-   "t": "2026-10-15T22:43:50.362Z",
+   "t": "2026-10-15T23:29:07.867Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Municipal-Transportation-Snapshots",
    "status": 200,
    "bytes": 146259,
-   "ms": 390,
-   "waited_ms": 1532,
+   "ms": 500,
+   "waited_ms": 1375,
    "why": "menu link \"Municipal Transportation Snapshots\" on Home | Tompkins County",
-   "page": "15/15"
+   "page": "10/15"
   },
   {
-   "t": "2026-10-15T22:43:50.521Z",
+   "t": "2026-10-15T23:29:09.931Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Transportation-Links",
+   "status": 200,
+   "bytes": 149575,
+   "ms": 561,
+   "waited_ms": 1406,
+   "why": "menu link \"Transportation Links\" on Home | Tompkins County",
+   "page": "11/15"
+  },
+  {
+   "t": "2026-10-15T23:29:11.704Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.tompkinscountyny.gov/All-Departments/Planning-and-Sustainability/Transportation",
+   "status": 200,
+   "bytes": 150200,
+   "ms": 327,
+   "waited_ms": 1328,
+   "why": "menu link \"Transportation\" on Home | Tompkins County",
+   "page": "12/15"
+  },
+  {
+   "t": "2026-10-15T23:29:11.812Z",
    "step": "skip",
-   "msg": "208 links pointed off the approved list and were not followed"
+   "msg": "off-list link skipped: \"Tompkins Transportation Scout\"",
+   "url": "https://tompkinsscout.org/"
   },
   {
-   "t": "2026-10-15T22:43:50.521Z",
+   "t": "2026-10-15T23:29:13.842Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.tompkinscountyny.gov/About/Contact-Us",
+   "status": 200,
+   "bytes": 129376,
+   "ms": 452,
+   "waited_ms": 1563,
+   "why": "menu link \"Contact Us\" on Home | Tompkins County",
+   "page": "13/15"
+  },
+  {
+   "t": "2026-10-15T23:29:13.966Z",
+   "step": "skip",
+   "msg": "197 links pointed off the approved list and were not followed"
+  },
+  {
+   "t": "2026-10-15T23:29:13.966Z",
    "step": "read",
-   "msg": "14 pages read, 15 of 15 page fetches used"
+   "msg": "12 pages read, 13 of 15 page fetches used"
   },
   {
-   "t": "2026-10-15T22:43:50.739Z",
+   "t": "2026-10-15T23:29:14.215Z",
    "step": "robots",
    "msg": "robots.txt read for data.ny.gov",
    "url": "https://data.ny.gov/robots.txt",
@@ -276,43 +264,43 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T22:43:52.603Z",
+   "t": "2026-10-15T23:29:16.091Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/api/views/tccz-tc3t.json",
    "status": 200,
    "bytes": 24118,
-   "ms": 77,
-   "waited_ms": 1780,
+   "ms": 125,
+   "waited_ms": 1750,
    "why": "dataset column descriptions",
    "page": "1/3"
   },
   {
-   "t": "2026-10-15T22:43:54.768Z",
+   "t": "2026-10-15T23:29:18.075Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24select=max%28year%29+as+year",
    "status": 200,
    "bytes": 18,
-   "ms": 234,
-   "waited_ms": 1922,
+   "ms": 109,
+   "waited_ms": 1875,
    "why": "latest year in the set",
    "page": "2/3"
   },
   {
-   "t": "2026-10-15T22:43:56.800Z",
+   "t": "2026-10-15T23:29:20.096Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
    "status": 200,
    "bytes": 4200,
-   "ms": 265,
-   "waited_ms": 1750,
+   "ms": 140,
+   "waited_ms": 1890,
    "why": "Tompkins County rows for 2020",
    "page": "3/3"
   },
   {
-   "t": "2026-10-15T22:43:56.800Z",
+   "t": "2026-10-15T23:29:20.096Z",
    "step": "dataset",
    "msg": "16 rows for Tompkins County, 2020: county_mileage sums to 300.62 mi, total_centerline_highway_mileage to 1227.49 mi",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
@@ -320,47 +308,42 @@
    "year": "2020"
   },
   {
-   "t": "2026-10-15T22:43:56.801Z",
+   "t": "2026-10-15T23:29:20.096Z",
    "step": "extract",
-   "msg": "sending 14 sources to the model"
+   "msg": "sending 12 sources to the model"
   },
   {
-   "t": "2026-10-15T22:44:08.062Z",
+   "t": "2026-10-15T23:29:29.991Z",
    "step": "extract",
-   "msg": "model returned 1 road lines, a roads head, an email, 1 phone(s)",
+   "msg": "model returned 1 road line, a roads head, an email, 1 phone",
    "model": "claude-opus-5-5"
   },
   {
-   "t": "2026-10-15T22:44:08.066Z",
+   "t": "2026-10-15T23:29:29.994Z",
    "step": "check",
-   "msg": "checks run: 0 value(s) rejected",
+   "msg": "checks run: 0 values rejected",
    "rejected": 0
   },
   {
-   "t": "2026-10-15T22:44:08.066Z",
-   "step": "question",
-   "msg": "These sources give different road lengths. Which one is right?"
-  },
-  {
-   "t": "2026-10-15T22:44:08.066Z",
+   "t": "2026-10-15T23:29:29.994Z",
    "step": "dedupe",
    "msg": "no matching Contact; a new Contact is proposed"
   },
   {
-   "t": "2026-10-15T22:44:15.594Z",
+   "t": "2026-10-15T23:29:36.174Z",
    "step": "brief",
-   "msg": "2 sentence(s) kept",
+   "msg": "2 sentences kept",
    "model": "claude-opus-5-5"
   },
   {
-   "t": "2026-10-15T22:44:15.594Z",
+   "t": "2026-10-15T23:29:36.174Z",
    "step": "writeback",
-   "msg": "3 request(s) built, none sent"
+   "msg": "2 requests built, none sent"
   },
   {
-   "t": "2026-10-15T22:44:15.594Z",
+   "t": "2026-10-15T23:29:36.174Z",
    "step": "status",
-   "msg": "Needs review"
+   "msg": "Done"
   }
  ],
  "sources": [
@@ -375,9 +358,9 @@
    "status": 200,
    "content_type": "text/html; charset=utf-8",
    "bytes": 240922,
-   "sha256": "bd5399500a87cbd7dd4e6fe5e67748f93585ef08d17bbccc3f0a0b30579fe23c",
-   "fetched_at": "2026-10-15T22:43:22.917Z",
-   "elapsed_ms": 952,
+   "sha256": "0480911377c0d66373921643e66fb035781be082002b9af9e6a773ba14d395d4",
+   "fetched_at": "2026-10-15T23:28:50.443Z",
+   "elapsed_ms": 1077,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -393,10 +376,10 @@
    "requested_url": null,
    "status": 200,
    "content_type": "text/html; charset=utf-8",
-   "bytes": 142797,
-   "sha256": "0ad721205482c4a0685f15b76ae147b303ae745ab38eff9f165d8e9daaf7db64",
-   "fetched_at": "2026-10-15T22:43:24.383Z",
-   "elapsed_ms": 422,
+   "bytes": 142798,
+   "sha256": "cc25a15d7de525f7a3535d9a583fecb67ebb34ef35e4e7631f8f816a32f084e5",
+   "fetched_at": "2026-10-15T23:28:51.740Z",
+   "elapsed_ms": 375,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -404,25 +387,6 @@
   },
   {
    "id": "S3",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Roads",
-   "kind": "html",
-   "title": "County Roads | Tompkins County",
-   "found_via": "menu link \"County Roads\" on Home | Tompkins County",
-   "anchor": "County Roads",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=utf-8",
-   "bytes": 152679,
-   "sha256": "9d86a2834fcfcf9c7f396b69697a3db1b3f7e2117d88ac4255038849e8925168",
-   "fetched_at": "2026-10-15T22:43:26.294Z",
-   "elapsed_ms": 327,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S4",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Adopt-A-Highway-Program",
    "kind": "html",
    "title": "Adopt-A-Highway Program | Tompkins County",
@@ -432,9 +396,28 @@
    "status": 200,
    "content_type": "text/html; charset=utf-8",
    "bytes": 138501,
-   "sha256": "48a42d36d7cf3522e2c36171b915ba571107ab48fc898d9983cce9a97c328c7f",
-   "fetched_at": "2026-10-15T22:43:28.333Z",
-   "elapsed_ms": 375,
+   "sha256": "a2803a5ed5b96a04612878263a5c3cbdacf2f0b67c1959ca0c8c468e992b2d89",
+   "fetched_at": "2026-10-15T23:28:54.235Z",
+   "elapsed_ms": 858,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S4",
+   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Roads",
+   "kind": "html",
+   "title": "County Roads | Tompkins County",
+   "found_via": "menu link \"County Roads\" on Home | Tompkins County",
+   "anchor": "County Roads",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 152679,
+   "sha256": "763a282270d63052d511f96569b4837dc860ad65e8cbf8a724e901ae17a1f19e",
+   "fetched_at": "2026-10-15T23:28:55.669Z",
+   "elapsed_ms": 296,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -442,18 +425,18 @@
   },
   {
    "id": "S5",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Sheriffs-Office/Road-Patrol",
+   "url": "https://www.tompkinscountyny.gov/All-Departments",
    "kind": "html",
-   "title": "Road Patrol | Tompkins County",
-   "found_via": "menu link \"Road Patrol\" on Home | Tompkins County",
-   "anchor": "Road Patrol",
+   "title": "All Departments | Tompkins County",
+   "found_via": "menu link \"All Departments\" on Home | Tompkins County",
+   "anchor": "All Departments",
    "requested_url": null,
    "status": 200,
    "content_type": "text/html; charset=utf-8",
-   "bytes": 143402,
-   "sha256": "d0bb4d1b192fdce6ad1eba4fe8d0d05fe8651ad7bd22715527225c7ec14649d7",
-   "fetched_at": "2026-10-15T22:43:30.308Z",
-   "elapsed_ms": 342,
+   "bytes": 161506,
+   "sha256": "d12878f6c6b09d44fada8a5ecdb4c4e3ec6372a7b54c8b57ede5047a9547f6b4",
+   "fetched_at": "2026-10-15T23:28:59.892Z",
+   "elapsed_ms": 515,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -461,101 +444,6 @@
   },
   {
    "id": "S6",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Bridges",
-   "kind": "html",
-   "title": "County Bridges | Tompkins County",
-   "found_via": "menu link \"County Bridges\" on Home | Tompkins County",
-   "anchor": "County Bridges",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=utf-8",
-   "bytes": 138243,
-   "sha256": "56e7e9a3de9fef9e4a3d98e4fbbd7d4fa0276f876bfd8602c0406836544ed042",
-   "fetched_at": "2026-10-15T22:43:32.744Z",
-   "elapsed_ms": 766,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S7",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Mailbox-Guidelines",
-   "kind": "html",
-   "title": "Mailbox Guidelines | Tompkins County",
-   "found_via": "menu link \"Mailbox Guidelines\" on Home | Tompkins County",
-   "anchor": "Mailbox Guidelines",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=utf-8",
-   "bytes": 138213,
-   "sha256": "d2d3bf4d5daa71cbd3f87d79d2d717af0843886203d14a7a21a446445b956fa8",
-   "fetched_at": "2026-10-15T22:43:34.455Z",
-   "elapsed_ms": 484,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S8",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Snow-and-Ice-Maintenance",
-   "kind": "html",
-   "title": "Snow and Ice Maintenance | Tompkins County",
-   "found_via": "menu link \"Snow and Ice Maintenance\" on Home | Tompkins County",
-   "anchor": "Snow and Ice Maintenance",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=utf-8",
-   "bytes": 138556,
-   "sha256": "b9b61ca850a482b10af753be311cef94b3e90f91942ade991906870256c688a6",
-   "fetched_at": "2026-10-15T22:43:36.334Z",
-   "elapsed_ms": 375,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S9",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Stormwater-Management",
-   "kind": "html",
-   "title": "Stormwater Management | Tompkins County",
-   "found_via": "menu link \"Stormwater Management\" on Home | Tompkins County",
-   "anchor": "Stormwater Management",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=utf-8",
-   "bytes": 143577,
-   "sha256": "ee5d2878c957c5c0db8033f1c39cc76ef027d3084d5f9d0377d5aa48956a9fb3",
-   "fetched_at": "2026-10-15T22:43:38.518Z",
-   "elapsed_ms": 562,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S10",
-   "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Adopt-A-Highway-Program/Program-Guidelines",
-   "kind": "html",
-   "title": "Program Guidelines | Tompkins County",
-   "found_via": "menu link \"Program Guidelines\" on Highway Department | Tompkins County",
-   "anchor": "Program Guidelines",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=utf-8",
-   "bytes": 140540,
-   "sha256": "4b31298d4d9653c4427a2cf96603f28ec6a5a5b05a70578e193ce517f6c9e8bf",
-   "fetched_at": "2026-10-15T22:43:40.321Z",
-   "elapsed_ms": 359,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S11",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council",
    "kind": "html",
    "title": "Ithaca-Tompkins County Transportation Council | Tompkins County",
@@ -565,16 +453,16 @@
    "status": 200,
    "content_type": "text/html; charset=utf-8",
    "bytes": 149072,
-   "sha256": "a18430a2ff498f8944f820a4ff90fd9721951ec71dbcfc783e23c89596f78882",
-   "fetched_at": "2026-10-15T22:43:44.703Z",
-   "elapsed_ms": 734,
+   "sha256": "335aa33637247eac179b6f6eb9cdd4f93e053ba3b4b109a4451c67c5ebac12a6",
+   "fetched_at": "2026-10-15T23:29:02.240Z",
+   "elapsed_ms": 875,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
    "dataset": null
   },
   {
-   "id": "S12",
+   "id": "S7",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Transportation-Improvement-Program-TIP",
    "kind": "html",
    "title": "Transportation Improvement Program (TIP) | Tompkins County",
@@ -584,16 +472,16 @@
    "status": 200,
    "content_type": "text/html; charset=utf-8",
    "bytes": 145300,
-   "sha256": "a9bf35af3c5af63c3b866e39e77a51d86994433ef799f782dbe149d583f52069",
-   "fetched_at": "2026-10-15T22:43:46.349Z",
-   "elapsed_ms": 390,
+   "sha256": "929fe9474d24c69756b0548690ae1839eef22b91822cb6e21efc4563e130357e",
+   "fetched_at": "2026-10-15T23:29:03.974Z",
+   "elapsed_ms": 608,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
    "dataset": null
   },
   {
-   "id": "S13",
+   "id": "S8",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/2045-Long-Range-Transportation-Plan",
    "kind": "html",
    "title": "2045 Long Range Transportation Plan | Tompkins County",
@@ -603,16 +491,16 @@
    "status": 200,
    "content_type": "text/html; charset=utf-8",
    "bytes": 146808,
-   "sha256": "1ff9e7b54086487b80f52afac2b5d4e9e0103fd53d5332500153a134698d7a87",
-   "fetched_at": "2026-10-15T22:43:48.290Z",
-   "elapsed_ms": 327,
+   "sha256": "97ca7c3a1f1167fa394a95f90b014e0d12295f97d1b777bca240bf762547c749",
+   "fetched_at": "2026-10-15T23:29:05.890Z",
+   "elapsed_ms": 515,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
    "dataset": null
   },
   {
-   "id": "S14",
+   "id": "S9",
    "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Municipal-Transportation-Snapshots",
    "kind": "html",
    "title": "Municipal Transportation Snapshots | Tompkins County",
@@ -622,16 +510,73 @@
    "status": 200,
    "content_type": "text/html; charset=utf-8",
    "bytes": 146259,
-   "sha256": "8800998ac5c1d476ba7690d62ea3e84ab0178cef6cd7b9d3bc11f17c572f7925",
-   "fetched_at": "2026-10-15T22:43:50.360Z",
-   "elapsed_ms": 390,
+   "sha256": "fa47bb1856a0de0cabdc3ca9cca6ba4f57ccc90b964d9641f04174813553d6c4",
+   "fetched_at": "2026-10-15T23:29:07.867Z",
+   "elapsed_ms": 500,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
    "dataset": null
   },
   {
-   "id": "S15",
+   "id": "S10",
+   "url": "https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Transportation-Links",
+   "kind": "html",
+   "title": "Transportation Links | Tompkins County",
+   "found_via": "menu link \"Transportation Links\" on Home | Tompkins County",
+   "anchor": "Transportation Links",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 149575,
+   "sha256": "450852ac6382352084311b35de9eb43629e6e0d25f71c149e9d545455617ffe1",
+   "fetched_at": "2026-10-15T23:29:09.930Z",
+   "elapsed_ms": 561,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S11",
+   "url": "https://www.tompkinscountyny.gov/All-Departments/Planning-and-Sustainability/Transportation",
+   "kind": "html",
+   "title": "Transportation | Tompkins County",
+   "found_via": "menu link \"Transportation\" on Home | Tompkins County",
+   "anchor": "Transportation",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 150200,
+   "sha256": "553884aad151d20c129bb7713a5430925b9d57176f4203f620fbb64b23db74f7",
+   "fetched_at": "2026-10-15T23:29:11.703Z",
+   "elapsed_ms": 327,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S12",
+   "url": "https://www.tompkinscountyny.gov/About/Contact-Us",
+   "kind": "html",
+   "title": "Contact Us | Tompkins County",
+   "found_via": "menu link \"Contact Us\" on Home | Tompkins County",
+   "anchor": "Contact Us",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 129376,
+   "sha256": "791fd877fd19ae653ec94bc70e7573f544e4c257df3193d45d296d509f6021e3",
+   "fetched_at": "2026-10-15T23:29:13.841Z",
+   "elapsed_ms": 452,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S13",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
    "kind": "dataset",
    "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
@@ -642,8 +587,8 @@
    "content_type": "application/json;charset=utf-8",
    "bytes": 4200,
    "sha256": "ad3a466f0f1dd09e86260f5ff0371218640a9012d1b305a6b5bb67628893e4a0",
-   "fetched_at": "2026-10-15T22:43:56.797Z",
-   "elapsed_ms": 265,
+   "fetched_at": "2026-10-15T23:29:20.095Z",
+   "elapsed_ms": 140,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -663,8 +608,8 @@
      "content_type": "application/json; charset=utf-8",
      "bytes": 24118,
      "sha256": "d9bc77c0a138cd69c1438aa31cea3c34cc9bc664dda33f948e730884e1cae432",
-     "fetched_at": "2026-10-15T22:43:52.602Z",
-     "elapsed_ms": 77
+     "fetched_at": "2026-10-15T23:29:16.090Z",
+     "elapsed_ms": 125
     },
     "row_values": [
      "0",
@@ -687,7 +632,12 @@
    }
   }
  ],
- "fetch_errors": [],
+ "fetch_errors": [
+  {
+   "url": "https://www.tompkinscountyny.gov/highway",
+   "reason": "redirects to https://tompkinscony.prelive.opencities.com/County/All-Departments/Highway-Department, off the approved list or disallowed"
+  }
+ ],
  "extracted": {
   "road_lines": [
    {
@@ -706,7 +656,7 @@
      0
     ],
     "covers_whole_network": true,
-    "why": "The line gives the whole highway mileage the County Highway Department maintains (stated as approximate: 'close to')."
+    "why": "The Highway Department's page gives about 302 highway miles as the whole county highway system it maintains."
    }
   ],
   "roads_head": {
@@ -717,7 +667,7 @@
   },
   "department_email": {
    "value": "highway@tompkins-co.org",
-   "quote": "highway@tompkins-co.org",
+   "quote": "Email\nhighway@tompkins-co.org",
    "source": "S2"
   },
   "department_phones": [
@@ -741,6 +691,7 @@
      "km": 483.8,
      "centerline": true,
      "approximate": false,
+     "dataset": true,
      "why": "sum of county_mileage over 16 rows, 2020",
      "parts": [
       {
@@ -752,22 +703,19 @@
        "approximate": false,
        "cite": {
         "quote": "county_mileage: County-owned highway centerline mileage that is located within each city, town, and village",
-        "source": "S15",
+        "source": "S13",
         "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
         "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
         "pdf_page": null,
-        "fetched_at": "2026-10-15T22:43:56.797Z",
+        "fetched_at": "2026-10-15T23:29:20.095Z",
         "rows": 16,
         "year": "2020",
         "sum_mi": 300.62,
         "column": "county_mileage"
        }
       }
-     ]
-    },
-    {
-     "km": 486.0,
-     "parts": [
+     ],
+     "agrees": [
       {
        "index": 0,
        "km": 486.02188800000005,
@@ -782,13 +730,11 @@
         "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
         "title": "Highway Department | Tompkins County",
         "pdf_page": null,
-        "fetched_at": "2026-10-15T22:43:24.383Z"
-       }
+        "fetched_at": "2026-10-15T23:28:51.740Z"
+       },
+       "agrees_by": "near"
       }
-     ],
-     "centerline": false,
-     "approximate": true,
-     "why": "The line gives the whole highway mileage the County Highway Department maintains (stated as approximate: 'close to')."
+     ]
     }
    ],
    "partial": [],
@@ -796,32 +742,8 @@
    "within_mi": 1227.49,
    "within_column": "total_centerline_highway_mileage",
    "data_year": "2020",
-   "status": "needs_human",
-   "value_km": 483.8,
-   "question": {
-    "field": "road_length_km",
-    "kind": "pick",
-    "text": "These sources give different road lengths. Which one is right?",
-    "options": [
-     {
-      "label": "483.8 km · NYSDOT Highway Mileage, 2020 (data.ny.gov)",
-      "value_km": 483.8,
-      "result": "filled",
-      "centerline": true
-     },
-     {
-      "label": "about 486 km · Highway Department",
-      "value_km": 486.0,
-      "result": "filled",
-      "centerline": false
-     },
-     {
-      "label": "Not sure",
-      "value_km": null,
-      "result": "note"
-     }
-    ]
-   }
+   "status": "filled",
+   "value_km": 483.8
   },
   "roads_head": {
    "cite": {
@@ -830,7 +752,7 @@
     "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
     "title": "Highway Department | Tompkins County",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T22:43:24.383Z"
+    "fetched_at": "2026-10-15T23:28:51.740Z"
    },
    "name": "Nick Ensign",
    "title": "Highway Director",
@@ -840,12 +762,12 @@
    "status": "filled",
    "value": "highway@tompkins-co.org",
    "cite": {
-    "quote": "highway@tompkins-co.org",
+    "quote": "Email\nhighway@tompkins-co.org",
     "source": "S2",
     "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
     "title": "Highway Department | Tompkins County",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T22:43:24.383Z"
+    "fetched_at": "2026-10-15T23:28:51.740Z"
    }
   },
   "phone": {
@@ -857,7 +779,7 @@
     "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
     "title": "Highway Department | Tompkins County",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T22:43:24.383Z"
+    "fetched_at": "2026-10-15T23:28:51.740Z"
    }
   },
   "key_documents": [
@@ -866,14 +788,14 @@
     "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
     "source": "S2",
     "kind": "html",
-    "fetched_at": "2026-10-15T22:43:24.383Z"
+    "fetched_at": "2026-10-15T23:28:51.740Z"
    },
    {
     "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
     "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
-    "source": "S15",
+    "source": "S13",
     "kind": "dataset",
-    "fetched_at": "2026-10-15T22:43:56.797Z"
+    "fetched_at": "2026-10-15T23:29:20.095Z"
    }
   ]
  },
@@ -884,7 +806,7 @@
    "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
    "title": "Highway Department | Tompkins County",
    "pdf_page": null,
-   "fetched_at": "2026-10-15T22:43:24.383Z"
+   "fetched_at": "2026-10-15T23:28:51.740Z"
   }
  ],
  "rejected": [],
@@ -893,15 +815,15 @@
    "field": "road_length_km",
    "label": "Road network (centerline km)",
    "current": null,
-   "status": "needs_human",
+   "status": "filled",
    "sources": [
     {
      "quote": "county_mileage: County-owned highway centerline mileage that is located within each city, town, and village",
-     "source": "S15",
+     "source": "S13",
      "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
      "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:43:56.797Z",
+     "fetched_at": "2026-10-15T23:29:20.095Z",
      "rows": 16,
      "year": "2020",
      "sum_mi": 300.62,
@@ -913,34 +835,11 @@
      "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
      "title": "Highway Department | Tompkins County",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:43:24.383Z"
+     "fetched_at": "2026-10-15T23:28:51.740Z"
     }
    ],
+   "detail": "Highway Department gives about 486 km (302 miles), 0.5% more. Figures within 2% are the same roads, so it isn't a second option.",
    "proposed": "483.8 km",
-   "question": {
-    "field": "road_length_km",
-    "kind": "pick",
-    "text": "These sources give different road lengths. Which one is right?",
-    "options": [
-     {
-      "label": "483.8 km · NYSDOT Highway Mileage, 2020 (data.ny.gov)",
-      "value_km": 483.8,
-      "result": "filled",
-      "centerline": true
-     },
-     {
-      "label": "about 486 km · Highway Department",
-      "value_km": 486.0,
-      "result": "filled",
-      "centerline": false
-     },
-     {
-      "label": "Not sure",
-      "value_km": null,
-      "result": "note"
-     }
-    ]
-   },
    "within": {
     "km": 1975.5,
     "mi": 1227.49,
@@ -957,12 +856,12 @@
    "proposed": "highway@tompkins-co.org",
    "sources": [
     {
-     "quote": "highway@tompkins-co.org",
+     "quote": "Email\nhighway@tompkins-co.org",
      "source": "S2",
      "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
      "title": "Highway Department | Tompkins County",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:43:24.383Z"
+     "fetched_at": "2026-10-15T23:28:51.740Z"
     }
    ]
   },
@@ -979,7 +878,7 @@
      "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
      "title": "Highway Department | Tompkins County",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:43:24.383Z"
+     "fetched_at": "2026-10-15T23:28:51.740Z"
     }
    ]
   },
@@ -994,7 +893,7 @@
      "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
      "title": "Highway Department | Tompkins County",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:43:24.383Z"
+     "fetched_at": "2026-10-15T23:28:51.740Z"
     }
    ],
    "proposed": "Nick Ensign, Highway Director",
@@ -1013,12 +912,12 @@
     {
      "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department",
      "title": "Highway Department",
-     "fetched_at": "2026-10-15T22:43:24.383Z"
+     "fetched_at": "2026-10-15T23:28:51.740Z"
     },
     {
      "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
      "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
-     "fetched_at": "2026-10-15T22:43:56.797Z"
+     "fetched_at": "2026-10-15T23:29:20.095Z"
     }
    ]
   },
@@ -1027,36 +926,11 @@
    "label": "Account brief",
    "current": null,
    "status": "filled",
-   "proposed": "The Tompkins County Highway Department says it \"also maintains more than 5,000 signs.\" Next step: ask for Nick Ensign, Highway Director, by calling the Highway Department at (607) 274-0300 or emailing highway@tompkins-co.org.",
+   "proposed": "The Tompkins County Highway Department says it \"also maintains more than 5,000 signs.\" Next step: call the Highway Department at (607) 274-0300 or email highway@tompkins-co.org, asking for Nick Ensign, Highway Director.",
    "sources": []
   }
  ],
- "questions": [
-  {
-   "field": "road_length_km",
-   "kind": "pick",
-   "text": "These sources give different road lengths. Which one is right?",
-   "options": [
-    {
-     "label": "483.8 km · NYSDOT Highway Mileage, 2020 (data.ny.gov)",
-     "value_km": 483.8,
-     "result": "filled",
-     "centerline": true
-    },
-    {
-     "label": "about 486 km · Highway Department",
-     "value_km": 486.0,
-     "result": "filled",
-     "centerline": false
-    },
-    {
-     "label": "Not sure",
-     "value_km": null,
-     "result": "note"
-    }
-   ]
-  }
- ],
+ "questions": [],
  "merge": null,
  "brief": {
   "sentences": [
@@ -1067,14 +941,13 @@
     ]
    },
    {
-    "text": "Next step: ask for Nick Ensign, Highway Director, by calling the Highway Department at (607) 274-0300 or emailing highway@tompkins-co.org.",
+    "text": "Next step: call the Highway Department at (607) 274-0300 or email highway@tompkins-co.org, asking for Nick Ensign, Highway Director.",
     "cites": [
      "S2"
     ]
    }
   ],
-  "model": "claude-opus-5-5",
-  "context": {}
+  "model": "claude-opus-5-5"
  },
  "writeback": {
   "sent": false,
@@ -1087,12 +960,13 @@
      "data": [
       {
        "id": "sample-acct-006",
-       "Enrichment_Status": "Needs review",
-       "Last_Enriched": "2026-10-15T22:44:15.594Z",
+       "Enrichment_Status": "Done",
+       "Last_Enriched": "2026-10-15T23:29:36.174Z",
+       "Road_Network_Centerline_km": 483.8,
        "Public_Works_Email": "highway@tompkins-co.org",
        "Public_Works_Phone": "(607) 274-0300",
        "Key_Documents": "Highway Department: https://www.tompkinscountyny.gov/All-Departments/Highway-Department\nNYSDOT Highway Mileage, 2020 (data.ny.gov): https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500",
-       "Account_Brief": "The Tompkins County Highway Department says it \"also maintains more than 5,000 signs.\" Next step: ask for Nick Ensign, Highway Director, by calling the Highway Department at (607) 274-0300 or emailing highway@tompkins-co.org."
+       "Account_Brief": "The Tompkins County Highway Department says it \"also maintains more than 5,000 signs.\" Next step: call the Highway Department at (607) 274-0300 or email highway@tompkins-co.org, asking for Nick Ensign, Highway Director."
       }
      ]
     }
@@ -1110,24 +984,6 @@
        "Account_Name": {
         "id": "sample-acct-006"
        }
-      }
-     ]
-    }
-   },
-   {
-    "method": "POST",
-    "url": "https://www.zohoapis.com/crm/v8/Notes",
-    "body": {
-     "data": [
-      {
-       "Parent_Id": {
-        "module": {
-         "api_name": "Accounts"
-        },
-        "id": "sample-acct-006"
-       },
-       "Note_Title": "Enrich Account: needs a person",
-       "Note_Content": "These sources give different road lengths. Which one is right?\n\n- \"county_mileage: County-owned highway centerline mileage that is located within each city, town, and village\" (https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500 (fetched 2026-10-15))\n- \"The Highway Department maintains close to 302 highway miles and 109 bridges in Tompkins County.\" (https://www.tompkinscountyny.gov/All-Departments/Highway-Department (fetched 2026-10-15))\n\nLeft blank by Enrich Account until someone confirms it."
       }
      ]
     }

@@ -1,6 +1,6 @@
 # Sources
 
-Every page, PDF and dataset the run read, with the date, HTTP status and the first 16 hex digits of the sha256 of what came back (the full hashes are in `run/pages/`). Run date 2026-10-15, user agent `enrich-account-demo/0.1 (+https://github.com/PohTeyToe/riipen-waysights)`, robots.txt obeyed, at least 2 s between requests to one host, at most 15 pages per Account. robots.txt files and redirect hops are extra requests: each Account's run log lists every request, and `run/{slug}.json` counts them (`http_requests`).
+Every page, PDF and dataset the run read, with the date, HTTP status and the first 16 hex digits of the sha256 of what came back (the full hashes are in `run/pages/`). Run date 2026-10-15, user agent `enrich-account-demo/0.1 (+https://github.com/PohTeyToe/riipen-waysights)`, robots.txt obeyed, at least 2 s between requests to one host, at most 15 pages per Account, plus 3 requests to data.ny.gov for a New York county. robots.txt files and redirect hops are extra requests: each Account's run log lists every request, and `run/{slug}.json` counts them (`http_requests`).
 
 ## Collected, generated, made up
 
@@ -14,20 +14,17 @@ Every page, PDF and dataset the run read, with the date, HTTP status and the fir
 
 | # | URL | Fetched (UTC) | HTTP | Bytes | sha256 (first 16) | How it was reached |
 |---|---|---|---|---|---|---|
-| S1 | https://www.lincoln.ca/ | 2026-10-15T22:42:13.765Z | 200 | 106790 | `9d1c5ff407d7ba80` | the Account's website |
-| S2 | https://www.lincoln.ca/council-administration/community-plans/asset-management-plan | 2026-10-15T22:42:15.689Z | 200 | 186458 | `dd3f9011005dd785` | menu link "Asset Management Plan" on Town of Lincoln |
-| S3 | https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf (PDF pages read: 49 of 134) | 2026-10-15T22:42:18.023Z | 200 | 6137495 | `a6d1dbe1dd3c263f` | link "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)" on Asset Management Plan / Town of Lincoln |
-| S4 | https://www.lincoln.ca/services/roads-transportation | 2026-10-15T22:42:21.620Z | 200 | 182456 | `767da345e417da9c` | menu link "Roads & Transportation" on Town of Lincoln |
-| S5 | https://www.lincoln.ca/services/roads-transportation/24-hour-emergency-service-roads | 2026-10-15T22:42:23.811Z | 200 | 182267 | `c6b607ba55a48c71` | menu link "24 Hour Emergency Service for Roads" on Town of Lincoln |
-| S6 | https://www.lincoln.ca/services/roads-transportation/active-transportation | 2026-10-15T22:42:25.782Z | 200 | 191161 | `238fcd4ee312c611` | menu link "Active Transportation" on Town of Lincoln |
-| S7 | https://www.lincoln.ca/RoadRehabilitationProgram | 2026-10-15T22:42:29.750Z | 200 | 187784 | `76086e95c68df291` | menu link "Road Rehabilitation Program" on Town of Lincoln |
-| S8 | https://www.lincoln.ca/Contact | 2026-10-15T22:42:31.825Z | 200 | 207644 | `3a393180fdd1c930` | menu link "Contact Us" on Town of Lincoln |
-| S9 | https://www.lincoln.ca/council-administration/community-plans/transportation-master-plan | 2026-10-15T22:42:33.715Z | 200 | 184868 | `de11869bfd0261a4` | menu link "Transportation Master Plan" on Town of Lincoln |
-| S10 | https://www.lincoln.ca/investinginfrastructure | 2026-10-15T22:42:35.643Z | 200 | 199414 | `43e29a698723f056` | menu link "Investing in Infrastructure" on Town of Lincoln |
-| S11 | https://www.lincoln.ca/services/roads-transportation/report-potholes-sod-damage-streetlights-damaged-signs | 2026-10-15T22:42:37.629Z | 200 | 191746 | `b528e7fbb73fcca6` | menu link "Report Potholes, Sod Damage, Streetlights & Damaged Signs" on Town of Lincoln |
-| S12 | https://www.lincoln.ca/services/roads-transportation/snow-ice-removal | 2026-10-15T22:42:39.618Z | 200 | 184049 | `e0bc48c552676a0c` | menu link "Snow & Ice Removal" on Town of Lincoln |
-| S13 | https://www.lincoln.ca/services/roads-transportation/transit | 2026-10-15T22:42:41.614Z | 200 | 187305 | `0387e1c9ab92fb9e` | menu link "Transit" on Town of Lincoln |
-| S14 | https://www.lincoln.ca/services/roads-transportation/truck-traffic | 2026-10-15T22:42:44.935Z | 200 | 210492 | `6db04d993f0b7882` | menu link "Truck Traffic" on Town of Lincoln |
+| S1 | https://www.lincoln.ca/ | 2026-10-15T23:27:56.485Z | 200 | 106790 | `9d1c5ff407d7ba80` | the Account's website |
+| S2 | https://www.lincoln.ca/council-administration/community-plans/asset-management-plan | 2026-10-15T23:27:58.553Z | 200 | 186458 | `dd3f9011005dd785` | menu link "Asset Management Plan" on Town of Lincoln |
+| S3 | https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf (PDF pages read: 49 of 134) | 2026-10-15T23:28:00.766Z | 200 | 6137495 | `a6d1dbe1dd3c263f` | link "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)" on Asset Management Plan / Town of Lincoln |
+| S4 | https://www.lincoln.ca/services/roads-transportation | 2026-10-15T23:28:03.556Z | 200 | 182456 | `767da345e417da9c` | menu link "Roads & Transportation" on Town of Lincoln |
+| S5 | https://www.lincoln.ca/services/roads-transportation/report-potholes-sod-damage-streetlights-damaged-signs | 2026-10-15T23:28:05.711Z | 200 | 191746 | `b528e7fbb73fcca6` | menu link "Report Potholes, Sod Damage, Streetlights & Damaged Signs" on Town of Lincoln |
+| S6 | https://www.lincoln.ca/services/roads-transportation/24-hour-emergency-service-roads | 2026-10-15T23:28:07.665Z | 200 | 182267 | `c6b607ba55a48c71` | menu link "24 Hour Emergency Service for Roads" on Town of Lincoln |
+| S7 | https://www.lincoln.ca/RoadRehabilitationProgram | 2026-10-15T23:28:09.557Z | 200 | 187784 | `76086e95c68df291` | menu link "Road Rehabilitation Program" on Town of Lincoln |
+| S8 | https://www.lincoln.ca/Contact | 2026-10-15T23:28:11.708Z | 200 | 207644 | `3a393180fdd1c930` | menu link "Contact Us" on Town of Lincoln |
+| S9 | https://www.lincoln.ca/services/roads-transportation/active-transportation | 2026-10-15T23:28:13.706Z | 200 | 191161 | `238fcd4ee312c611` | menu link "Active Transportation" on Town of Lincoln |
+| S10 | https://www.lincoln.ca/council-administration/community-plans/transportation-master-plan | 2026-10-15T23:28:17.551Z | 200 | 184868 | `de11869bfd0261a4` | menu link "Transportation Master Plan" on Town of Lincoln |
+| S11 | https://www.lincoln.ca/investinginfrastructure | 2026-10-15T23:28:19.550Z | 200 | 199414 | `43e29a698723f056` | menu link "Investing in Infrastructure" on Town of Lincoln |
 
 Requests that failed: https://www.lincoln.ca/build-invest/capital-investments/road-rehabilitation-program-archived (HTTP 403).
 
@@ -35,68 +32,56 @@ Requests that failed: https://www.lincoln.ca/build-invest/capital-investments/ro
 
 | # | URL | Fetched (UTC) | HTTP | Bytes | sha256 (first 16) | How it was reached |
 |---|---|---|---|---|---|---|
-| S1 | https://www.pelham.ca/ | 2026-10-15T22:42:13.680Z | 200 | 96305 | `011623e78be17523` | the Account's website |
-| S2 | https://www.pelham.ca/living-in-pelham/roads-parking/ | 2026-10-15T22:42:15.856Z | 200 | 62550 | `b415414826196ddb` | menu link "Roads & Parking" on Home / Town of Pelham |
-| S3 | https://www.pelham.ca/contacts-directory/ | 2026-10-15T22:42:17.831Z | 200 | 292270 | `325300d6b3ede57f` | menu link "Contact Us" on Home / Town of Pelham |
-| S4 | https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/ | 2026-10-15T22:42:19.912Z | 200 | 87647 | `87f355f81317b495` | menu link "Municipal Plans, Reports & Studies" on Home / Town of Pelham |
-| S5 | https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf (PDF pages read: 62, 68 of 174) | 2026-10-15T22:42:22.634Z | 200 | 9798522 | `0cbb34a27f539436` | link "2025 Asset Management Plan" on Municipal Plans, Reports & Studies / Town of Pelham |
+| S1 | https://www.pelham.ca/ | 2026-10-15T23:27:56.483Z | 200 | 96305 | `ec4c53d5686177df` | the Account's website |
+| S2 | https://www.pelham.ca/living-in-pelham/roads-parking/ | 2026-10-15T23:27:58.399Z | 200 | 62551 | `45833328aa5df8fd` | menu link "Roads & Parking" on Home / Town of Pelham |
+| S3 | https://www.pelham.ca/contacts-directory/ | 2026-10-15T23:28:00.454Z | 200 | 292273 | `8924bcdf34cf0f51` | menu link "Contact Us" on Home / Town of Pelham |
+| S4 | https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/ | 2026-10-15T23:28:02.493Z | 200 | 87645 | `91eb99f39fa76ec1` | menu link "Municipal Plans, Reports & Studies" on Home / Town of Pelham |
+| S5 | https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf (PDF pages read: 62, 68 of 174) | 2026-10-15T23:28:05.209Z | 200 | 9798522 | `0cbb34a27f539436` | link "2025 Asset Management Plan" on Municipal Plans, Reports & Studies / Town of Pelham |
 
 ## Saratoga County (saratoga)
 
 | # | URL | Fetched (UTC) | HTTP | Bytes | sha256 (first 16) | How it was reached |
 |---|---|---|---|---|---|---|
-| S1 | https://www.saratogacountyny.gov/ | 2026-10-15T22:42:55.341Z | 200 | 192919 | `ef812e867be79f86` | the Account's website |
-| S2 | https://www.saratogacountyny.gov/departments/public-works/ | 2026-10-15T22:42:57.213Z | 200 | 181088 | `47bd76cc74dbb4e1` | menu link "Public Works" on County of Saratoga, New York |
-| S3 | https://www.saratogacountyny.gov/departments/dmv/ | 2026-10-15T22:42:59.231Z | 200 | 180545 | `e5f8fbba2314c038` | menu link "Road Test" on County of Saratoga, New York |
-| S4 | https://www.saratogacountyny.gov/departments/dmv/road-test-information/ | 2026-10-15T22:43:01.065Z | 200 | 130818 | `63e6d823927b417d` | link "Road Tests" on Department of Motor Vehicles – County of Saratoga, New York |
-| S5 | https://www.saratogacountyny.gov/departments/ | 2026-10-15T22:43:03.013Z | 200 | 130275 | `f61fe8cc9528b0c7` | menu link "Departments" on County of Saratoga, New York |
-| S6 | https://www.saratogacountyny.gov/departments/public-works/recycle/ | 2026-10-15T22:43:05.064Z | 200 | 147872 | `86aef8c7d71e9aa2` | menu link "Recycle" on County of Saratoga, New York |
-| S7 | https://www.saratogacountyny.gov/departments/health/medication-disposal/ | 2026-10-15T22:43:07.029Z | 200 | 134761 | `5239a2bd9480ce49` | link "https://www.saratogacountyny.gov/departments/health/medication-disposal/" on Recycle – County of Saratoga, New York |
-| S8 | https://www.saratogacountyny.gov/departments/dmv/contact-us/ | 2026-10-15T22:43:09.205Z | 200 | 141496 | `fad9566813bbb056` | link "Contact Us" on Department of Motor Vehicles – County of Saratoga, New York |
-| S9 | https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500 | 2026-10-15T22:43:15.572Z | 200 | 8206 | `b997841263bc87fe` | state dataset for New York Accounts |
-| S9 | https://data.ny.gov/api/views/tccz-tc3t.json (column descriptions) | 2026-10-15T22:43:11.358Z | 200 | 24118 | `d9bc77c0a138cd69` | dataset metadata |
+| S1 | https://www.saratogacountyny.gov/ | 2026-10-15T23:28:41.147Z | 200 | 192919 | `4fb2b87b1b37323a` | the Account's website |
+| S2 | https://www.saratogacountyny.gov/departments/public-works/ | 2026-10-15T23:28:42.852Z | 200 | 181088 | `96aa3e69d6e2ba34` | menu link "Public Works" on County of Saratoga, New York |
+| S3 | https://www.saratogacountyny.gov/departments/ | 2026-10-15T23:28:45.816Z | 200 | 130275 | `4dd1ba61ceac86cf` | menu link "Departments" on County of Saratoga, New York |
+| S4 | https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500 | 2026-10-15T23:28:52.029Z | 200 | 8206 | `b997841263bc87fe` | state dataset for New York Accounts |
+| S4 | https://data.ny.gov/api/views/tccz-tc3t.json (column descriptions) | 2026-10-15T23:28:47.961Z | 200 | 24118 | `d9bc77c0a138cd69` | dataset metadata |
 
 ## Tompkins County (tompkins)
 
 | # | URL | Fetched (UTC) | HTTP | Bytes | sha256 (first 16) | How it was reached |
 |---|---|---|---|---|---|---|
-| S1 | https://www.tompkinscountyny.gov/Home | 2026-10-15T22:43:22.917Z | 200 | 240922 | `bd5399500a87cbd7` | the Account's website |
-| S2 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department | 2026-10-15T22:43:24.383Z | 200 | 142797 | `0ad721205482c4a0` | menu link "Highway Department" on Home / Tompkins County |
-| S3 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Roads | 2026-10-15T22:43:26.294Z | 200 | 152679 | `9d86a2834fcfcf9c` | menu link "County Roads" on Home / Tompkins County |
-| S4 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Adopt-A-Highway-Program | 2026-10-15T22:43:28.333Z | 200 | 138501 | `48a42d36d7cf3522` | menu link "Adopt-A-Highway Program" on Home / Tompkins County |
-| S5 | https://www.tompkinscountyny.gov/All-Departments/Sheriffs-Office/Road-Patrol | 2026-10-15T22:43:30.308Z | 200 | 143402 | `d0bb4d1b192fdce6` | menu link "Road Patrol" on Home / Tompkins County |
-| S6 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Bridges | 2026-10-15T22:43:32.744Z | 200 | 138243 | `56e7e9a3de9fef9e` | menu link "County Bridges" on Home / Tompkins County |
-| S7 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Mailbox-Guidelines | 2026-10-15T22:43:34.455Z | 200 | 138213 | `d2d3bf4d5daa71cb` | menu link "Mailbox Guidelines" on Home / Tompkins County |
-| S8 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Snow-and-Ice-Maintenance | 2026-10-15T22:43:36.334Z | 200 | 138556 | `b9b61ca850a482b1` | menu link "Snow and Ice Maintenance" on Home / Tompkins County |
-| S9 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Stormwater-Management | 2026-10-15T22:43:38.518Z | 200 | 143577 | `ee5d2878c957c5c0` | menu link "Stormwater Management" on Home / Tompkins County |
-| S10 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Adopt-A-Highway-Program/Program-Guidelines | 2026-10-15T22:43:40.321Z | 200 | 140540 | `4b31298d4d9653c4` | menu link "Program Guidelines" on Highway Department / Tompkins County |
-| S11 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council | 2026-10-15T22:43:44.703Z | 200 | 149072 | `a18430a2ff498f89` | menu link "Ithaca-Tompkins County Transportation Council" on Home / Tompkins County |
-| S12 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Transportation-Improvement-Program-TIP | 2026-10-15T22:43:46.349Z | 200 | 145300 | `a9bf35af3c5af63c` | menu link "Transportation Improvement Program (TIP)" on Home / Tompkins County |
-| S13 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/2045-Long-Range-Transportation-Plan | 2026-10-15T22:43:48.290Z | 200 | 146808 | `1ff9e7b54086487b` | menu link "2045 Long Range Transportation Plan" on Home / Tompkins County |
-| S14 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Municipal-Transportation-Snapshots | 2026-10-15T22:43:50.360Z | 200 | 146259 | `8800998ac5c1d476` | menu link "Municipal Transportation Snapshots" on Home / Tompkins County |
-| S15 | https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500 | 2026-10-15T22:43:56.797Z | 200 | 4200 | `ad3a466f0f1dd09e` | state dataset for New York Accounts |
-| S15 | https://data.ny.gov/api/views/tccz-tc3t.json (column descriptions) | 2026-10-15T22:43:52.602Z | 200 | 24118 | `d9bc77c0a138cd69` | dataset metadata |
+| S1 | https://www.tompkinscountyny.gov/Home | 2026-10-15T23:28:50.443Z | 200 | 240922 | `0480911377c0d663` | the Account's website |
+| S2 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department | 2026-10-15T23:28:51.740Z | 200 | 142798 | `cc25a15d7de525f7` | menu link "Highway Department" on Home / Tompkins County |
+| S3 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/Adopt-A-Highway-Program | 2026-10-15T23:28:54.235Z | 200 | 138501 | `a2803a5ed5b96a04` | menu link "Adopt-A-Highway Program" on Home / Tompkins County |
+| S4 | https://www.tompkinscountyny.gov/All-Departments/Highway-Department/County-Roads | 2026-10-15T23:28:55.669Z | 200 | 152679 | `763a282270d63052` | menu link "County Roads" on Home / Tompkins County |
+| S5 | https://www.tompkinscountyny.gov/All-Departments | 2026-10-15T23:28:59.892Z | 200 | 161506 | `d12878f6c6b09d44` | menu link "All Departments" on Home / Tompkins County |
+| S6 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council | 2026-10-15T23:29:02.240Z | 200 | 149072 | `335aa33637247eac` | menu link "Ithaca-Tompkins County Transportation Council" on Home / Tompkins County |
+| S7 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Transportation-Improvement-Program-TIP | 2026-10-15T23:29:03.974Z | 200 | 145300 | `929fe9474d24c697` | menu link "Transportation Improvement Program (TIP)" on Home / Tompkins County |
+| S8 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/2045-Long-Range-Transportation-Plan | 2026-10-15T23:29:05.890Z | 200 | 146808 | `97ca7c3a1f1167fa` | menu link "2045 Long Range Transportation Plan" on Home / Tompkins County |
+| S9 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Municipal-Transportation-Snapshots | 2026-10-15T23:29:07.867Z | 200 | 146259 | `fa47bb1856a0de0c` | menu link "Municipal Transportation Snapshots" on Home / Tompkins County |
+| S10 | https://www.tompkinscountyny.gov/All-Departments/Ithaca-Tompkins-County-Transportation-Council/Transportation-Links | 2026-10-15T23:29:09.930Z | 200 | 149575 | `450852ac63823520` | menu link "Transportation Links" on Home / Tompkins County |
+| S11 | https://www.tompkinscountyny.gov/All-Departments/Planning-and-Sustainability/Transportation | 2026-10-15T23:29:11.703Z | 200 | 150200 | `553884aad151d20c` | menu link "Transportation" on Home / Tompkins County |
+| S12 | https://www.tompkinscountyny.gov/About/Contact-Us | 2026-10-15T23:29:13.841Z | 200 | 129376 | `791fd877fd19ae65` | menu link "Contact Us" on Home / Tompkins County |
+| S13 | https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27TOMPKINS%27&%24order=municipality&%24limit=500 | 2026-10-15T23:29:20.095Z | 200 | 4200 | `ad3a466f0f1dd09e` | state dataset for New York Accounts |
+| S13 | https://data.ny.gov/api/views/tccz-tc3t.json (column descriptions) | 2026-10-15T23:29:16.090Z | 200 | 24118 | `d9bc77c0a138cd69` | dataset metadata |
 
 ## Warren County (warren)
 
 | # | URL | Fetched (UTC) | HTTP | Bytes | sha256 (first 16) | How it was reached |
 |---|---|---|---|---|---|---|
-| S1 | https://www.warrencountyny.gov/ | 2026-10-15T22:43:05.712Z | 200 | 49492 | `5cfa72480d6c3456` | the Account's website |
-| S2 | https://www.warrencountyny.gov/dpw | 2026-10-15T22:43:07.716Z | 200 | 47685 | `d690d2726c563c10` | menu link "Public Works" on What is Happening in Warren County / Warren County |
-| S3 | https://www.warrencountyny.gov/dpw/about | 2026-10-15T22:43:09.699Z | 200 | 51673 | `1f79f8a655ec8569` | link "DPW History" on Department Of Public Works / Warren County |
-| S4 | https://www.warrencountyny.gov/dpw/townhighway | 2026-10-15T22:43:11.710Z | 200 | 40786 | `c91e9ec32ea2c2d4` | link "Town Highway Superintendents" on Department Of Public Works / Warren County |
-| S5 | https://www.warrencountyny.gov/residents/highway_adopt | 2026-10-15T22:43:13.701Z | 200 | 34971 | `2b06b9a23b6a7432` | link "Adopt a Highway Program" on Department Of Public Works / Warren County |
-| S6 | https://www.warrencountyny.gov/departments | 2026-10-15T22:43:15.710Z | 200 | 83715 | `e507cdd6f5555b34` | menu link "DEPARTMENTS" on What is Happening in Warren County / Warren County |
-| S7 | https://www.warrencountyny.gov/bos | 2026-10-15T22:43:19.717Z | 200 | 53879 | `1cd54391c8fd0a9f` | link "Directory of Officials" on What is Happening in Warren County / Warren County |
-| S8 | https://www.warrencountyny.gov/Contact | 2026-10-15T22:43:23.693Z | 200 | 34114 | `ab8cf63eb5ed8f0e` | link "Contact" on What is Happening in Warren County / Warren County |
-| S9 | https://www.warrencountyny.gov/dpw/countygarage | 2026-10-15T22:43:25.695Z | 200 | 45395 | `7bb3b5ecc3f396ed` | link "Maintenance" on Department Of Public Works / Warren County |
-| S10 | https://www.warrencountyny.gov/dpw/signshop | 2026-10-15T22:43:27.716Z | 200 | 39352 | `132d38921fb13367` | link "Sign Shop" on Department Of Public Works / Warren County |
-| S11 | https://www.warrencountyny.gov/dpw/stormwater | 2026-10-15T22:43:29.694Z | 200 | 42080 | `a28f226b1976ee2a` | link "Stormwater Management" on Department Of Public Works / Warren County |
-| S12 | https://www.warrencountyny.gov/DPW/SolidWaste | 2026-10-15T22:43:33.780Z | 200 | 39606 | `6bc970d2e6ab1dc9` | link "Solid Waste & Recycling" on Department Of Public Works / Warren County |
-| S13 | https://www.warrencountyny.gov/dpw/composting | 2026-10-15T22:43:35.794Z | 200 | 38990 | `352e8fa0a5628945` | link "Composting Pilot Program" on Department Of Public Works / Warren County |
-| S14 | https://www.warrencountyny.gov/dpw/compost | 2026-10-15T22:43:37.823Z | 200 | 38625 | `90e13a4c18584501` | link "Compost Workshop" on Department Of Public Works / Warren County |
-| S15 | https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27WARREN%27&%24order=municipality&%24limit=500 | 2026-10-15T22:43:44.263Z | 200 | 3411 | `acecfb69539a15e0` | state dataset for New York Accounts |
-| S15 | https://data.ny.gov/api/views/tccz-tc3t.json (column descriptions) | 2026-10-15T22:43:40.016Z | 200 | 24118 | `d9bc77c0a138cd69` | dataset metadata |
+| S1 | https://www.warrencountyny.gov/ | 2026-10-15T23:28:44.719Z | 200 | 49492 | `5cfa72480d6c3456` | the Account's website |
+| S2 | https://www.warrencountyny.gov/dpw | 2026-10-15T23:28:46.713Z | 200 | 47685 | `35e330bc3a3aab9f` | menu link "Public Works" on What is Happening in Warren County / Warren County |
+| S3 | https://www.warrencountyny.gov/dpw/about | 2026-10-15T23:28:48.708Z | 200 | 51673 | `9f5225c4585a6991` | link "DPW History" on Department Of Public Works / Warren County |
+| S4 | https://www.warrencountyny.gov/dpw/signshop | 2026-10-15T23:28:50.711Z | 200 | 39352 | `5b0488b87ec588c5` | link "Sign Shop" on Department Of Public Works / Warren County |
+| S5 | https://www.warrencountyny.gov/residents/highway_adopt | 2026-10-15T23:28:52.698Z | 200 | 34971 | `2b06b9a23b6a7432` | link "Adopt a Highway Program" on Department Of Public Works / Warren County |
+| S6 | https://www.warrencountyny.gov/departments | 2026-10-15T23:28:54.698Z | 200 | 83715 | `e507cdd6f5555b34` | menu link "DEPARTMENTS" on What is Happening in Warren County / Warren County |
+| S7 | https://www.warrencountyny.gov/bos | 2026-10-15T23:28:58.720Z | 200 | 53879 | `1cd54391c8fd0a9f` | link "Directory of Officials" on What is Happening in Warren County / Warren County |
+| S8 | https://www.warrencountyny.gov/dpw/townhighway | 2026-10-15T23:29:00.687Z | 200 | 40786 | `4d1ef4c51a4e2efc` | link "Town Highway Superintendents" on Department Of Public Works / Warren County |
+| S9 | https://www.warrencountyny.gov/Contact | 2026-10-15T23:29:04.682Z | 200 | 34114 | `ab8cf63eb5ed8f0e` | link "Contact" on What is Happening in Warren County / Warren County |
+| S10 | https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27WARREN%27&%24order=municipality&%24limit=500 | 2026-10-15T23:29:10.821Z | 200 | 3411 | `acecfb69539a15e0` | state dataset for New York Accounts |
+| S10 | https://data.ny.gov/api/views/tccz-tc3t.json (column descriptions) | 2026-10-15T23:29:06.817Z | 200 | 24118 | `d9bc77c0a138cd69` | dataset metadata |
 
 Requests that failed: https://www.warrencountyny.gov/publicworks/contact (HTTP 404).
 
@@ -104,25 +89,14 @@ Requests that failed: https://www.warrencountyny.gov/publicworks/contact (HTTP 4
 
 | # | URL | Fetched (UTC) | HTTP | Bytes | sha256 (first 16) | How it was reached |
 |---|---|---|---|---|---|---|
-| S1 | https://www.westlincoln.ca/ | 2026-10-15T22:42:13.681Z | 200 | 80467 | `6dea6f378a3bc981` | the Account's website |
-| S2 | https://www.westlincoln.ca/contacts-directory/ | 2026-10-15T22:42:15.856Z | 200 | 206391 | `9eb251f60db0732c` | menu link "Contacts Directory" on Home / Township of West Lincoln |
-| S3 | https://www.westlincoln.ca/living-here/roads-and-sidewalks/ | 2026-10-15T22:42:17.762Z | 200 | 75116 | `e3bc3ff7316ee6c3` | menu link "Roads and Sidewalks" on Home / Township of West Lincoln |
-| S4 | https://www.westlincoln.ca/living-here/roads-and-sidewalks/road-safety-action-plan/ | 2026-10-15T22:42:19.939Z | 200 | 77164 | `7fbb95aac5c19bca` | menu link "Road Safety Action Plan" on Roads and Sidewalks / Township of West Lincoln |
-| S5 | https://www.westlincoln.ca/township-office/departments/ | 2026-10-15T22:42:21.777Z | 200 | 68941 | `9839496506c9eda3` | menu link "Departments" on Home / Township of West Lincoln |
-| S6 | https://www.westlincoln.ca/township-office/plans-studies-and-reports/ | 2026-10-15T22:42:24.253Z | 200 | 66259 | `51c8f531645ebf55` | menu link "Plans, Studies and Reports" on Home / Township of West Lincoln |
-| S7 | https://www.westlincoln.ca/township-office/plans-studies-and-reports/asset-management-plans/ | 2026-10-15T22:42:25.783Z | 200 | 66246 | `9f71c82058658058` | link "Asset management" on Departments / Township of West Lincoln |
-| S8 | https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf (PDF pages read: 46, 67 of 158) | 2026-10-15T22:42:28.632Z | 200 | 9717111 | `442a45a06f36609c` | link "2025 Asset Management Plan" on Asset Management Plans / Township of West Lincoln |
-
-## Context for the Account briefs
-
-Waysights' own pages, read once per run, for the briefs' vocabulary only.
-
-| ID | URL | Fetched (UTC) | HTTP | sha256 (first 16) |
-|---|---|---|---|---|
-| W1 | https://waysights.com/faq/ | 2026-10-15T22:42:05.628Z | 200 | `7e8bb9d5657a5d1d` |
-| W2 | https://waysights.com/how-it-works/ | 2026-10-15T22:42:07.651Z | 200 | `144e8c489b4d77c2` |
-| W3 | https://waysights.com/products/ | 2026-10-15T22:42:09.582Z | 200 | `c6297a94cafed290` |
-| W4 | https://waysights.com/pricing/ | 2026-10-15T22:42:11.571Z | 200 | `9638da75ea22e2ab` |
+| S1 | https://www.westlincoln.ca/ | 2026-10-15T23:27:56.420Z | 200 | 80468 | `9ce9e56b5c3ef65f` | the Account's website |
+| S2 | https://www.westlincoln.ca/contacts-directory/ | 2026-10-15T23:27:58.448Z | 200 | 206392 | `d0e22e7855a76c9c` | menu link "Contacts Directory" on Home / Township of West Lincoln |
+| S3 | https://www.westlincoln.ca/living-here/roads-and-sidewalks/ | 2026-10-15T23:28:00.406Z | 200 | 75116 | `e0bf7faade98cd5c` | menu link "Roads and Sidewalks" on Home / Township of West Lincoln |
+| S4 | https://www.westlincoln.ca/living-here/roads-and-sidewalks/road-safety-action-plan/ | 2026-10-15T23:28:02.484Z | 200 | 77163 | `03205fdbe9c52c2e` | menu link "Road Safety Action Plan" on Roads and Sidewalks / Township of West Lincoln |
+| S5 | https://www.westlincoln.ca/township-office/departments/ | 2026-10-15T23:28:04.400Z | 200 | 68940 | `3c62f940e941cf63` | menu link "Departments" on Home / Township of West Lincoln |
+| S6 | https://www.westlincoln.ca/township-office/plans-studies-and-reports/ | 2026-10-15T23:28:06.491Z | 200 | 66260 | `2b4f14458afaed31` | menu link "Plans, Studies and Reports" on Home / Township of West Lincoln |
+| S7 | https://www.westlincoln.ca/township-office/plans-studies-and-reports/asset-management-plans/ | 2026-10-15T23:28:08.477Z | 200 | 66247 | `7e3620008e5aa44b` | link "Asset management" on Departments / Township of West Lincoln |
+| S8 | https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf (PDF pages read: 46, 67 of 158) | 2026-10-15T23:28:10.934Z | 200 | 9717111 | `442a45a06f36609c` | link "2025 Asset Management Plan" on Asset Management Plans / Township of West Lincoln |
 
 ## How the run was made
 
@@ -154,7 +128,19 @@ After review of an earlier final run (pipeline commit 21ee5db; it scored 24 righ
 - Fetching: a redirected robots.txt is read where it lands, `..` in a path is refused, a broken PDF is skipped, and a run that reads nothing is marked Failed instead of Done.
 - Discovery spent Warren's and Tompkins' budgets on other departments' contact pages (Sheriff, Social Services, Board of Elections) and West Lincoln's on every page under "Plans, Studies and Reports". A bare "Contact" link now counts only as the site's own contact page, and the plans-and-reports words count on a link's text, not on every path under that section.
 
-The first repeat asked the extractor for every number printed for the department, and it listed staff extensions, after-hours lines and another program's office, so four Accounts got a phone conflict that wasn't real. The extractor now returns only the number a page gives for the department itself, and sign lines must be about signs in general. A second repeat had the brief call Tompkins County's Highway Department "Public Works"; the brief now names the department the way its page does. The discovery change above came after the third repeat, so the outputs here are from a fourth.
+The first repeat asked the extractor for every number printed for the department, and it listed staff extensions, after-hours lines and another program's office, so four Accounts got a phone conflict that wasn't real. The extractor now returns only the number a page gives for the department itself, and sign lines must be about signs in general. A second repeat had the brief call Tompkins County's Highway Department "Public Works"; the brief now names the department the way its page does. The discovery change above came after the third repeat, so the outputs from that round came from a fourth.
+
+After review of that run (pipeline commit 731e55e; 24 right, 0 wrong, 7 correctly blank, 0 missed, 5 sent to a person), these changes were made and the run was repeated from scratch:
+
+- Rule 4: two road lengths within 2% of each other are the same roads measured twice. The precise figure is kept, the Account's own page before the state's data, and the other is shown beside it. Warren (398.1 km on the county's page, 393.2 km in the 2020 state data) and Tompkins ("close to 302 highway miles" against 300.62 mi) no longer ask a person to pick between figures about 1% apart. The answer key, written before the first run, sends both to a person, and its rules count filling them as wrong. The key is unchanged.
+- Checks: emails and phones must be printed whole (a review found "x33" passing against "x332"), the 2 of "m2" or "km²" is not read as a number, a total uses each printed number once however its lines quote it, a county with no dataset rows gets no state figure instead of 0 km, and every word of a brief sentence must be printed on a page it cites, apart from a short list of connecting words.
+- Write-back: a Contact merge sends only the fields the run found, so a missing title is never sent as null.
+- Fetching: robots.txt refusals and off-list redirects are recorded as fetch errors, so a failed run's Note says why.
+- Discovery: a link counts on its own words and its page's own name, not the folder it sits in (Warren's Public Works folder also holds its composting and solid waste pages). Other departments' pages are skipped even when they say "road" (Saratoga's DMV road tests, Tompkins' Sheriff road patrol), a link whose text is its URL has no words, a bare "Contact Us" counts only near the site's root, sign pages are wanted, and plan PDFs compete on their year alone, so the newest is read.
+- Sign lines: a list that only names signs among other assets (Lincoln's "parking lots, signs, playground equipment") is not sign work.
+- No Account brief when the pages say nothing about signs, since it would only repeat the contact fields (Saratoga). Waysights' own pages are no longer read: they were there for the brief's vocabulary, and no kept sentence ever cited one.
+
+In the first repeat the stricter brief check dropped good sign sentences: the prompt still asked for Waysights' words, and the check split "County's" into two words. The prompt now lists the connecting words the check allows and the check reads a possessive as its word, so the outputs here are from a second repeat.
 
 ## Changes to the answer key after the run
 

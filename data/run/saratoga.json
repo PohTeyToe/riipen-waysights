@@ -10,30 +10,30 @@
   "example_public_account": true
  },
  "run": {
-  "started_at": "2026-10-15T22:42:52.146Z",
-  "finished_at": "2026-10-15T22:43:28.102Z",
+  "started_at": "2026-10-15T23:28:37.861Z",
+  "finished_at": "2026-10-15T23:28:59.282Z",
   "model": "claude-opus-5-5",
-  "pages_read": 8,
-  "page_fetches": 8,
+  "pages_read": 3,
+  "page_fetches": 3,
   "page_budget": 15,
-  "http_requests": 13,
-  "prompt_chars": 30486
+  "http_requests": 8,
+  "prompt_chars": 13297
  },
  "status": "done",
  "steps": [
   {
-   "t": "2026-10-15T22:42:52.146Z",
+   "t": "2026-10-15T23:28:37.861Z",
    "step": "status",
    "msg": "Queued"
   },
   {
-   "t": "2026-10-15T22:42:52.146Z",
+   "t": "2026-10-15T23:28:37.861Z",
    "step": "status",
    "msg": "Running",
    "rate_rule": "One run per Account per day. Last run: never."
   },
   {
-   "t": "2026-10-15T22:42:52.146Z",
+   "t": "2026-10-15T23:28:37.861Z",
    "step": "allowlist",
    "msg": "www.saratogacountyny.gov is on the approved list",
    "approved": [
@@ -42,7 +42,7 @@
    ]
   },
   {
-   "t": "2026-10-15T22:42:52.394Z",
+   "t": "2026-10-15T23:28:38.074Z",
    "step": "robots",
    "msg": "robots.txt read for www.saratogacountyny.gov",
    "url": "https://www.saratogacountyny.gov/robots.txt",
@@ -50,119 +50,53 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T22:42:55.342Z",
+   "t": "2026-10-15T23:28:41.147Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/",
    "status": 200,
    "bytes": 192919,
-   "ms": 1187,
-   "waited_ms": 1750,
+   "ms": 1280,
+   "waited_ms": 1797,
    "why": "the Account's website",
    "page": "1/15"
   },
   {
-   "t": "2026-10-15T22:42:57.215Z",
+   "t": "2026-10-15T23:28:42.853Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/public-works/",
    "status": 200,
    "bytes": 181088,
-   "ms": 1062,
-   "waited_ms": 640,
+   "ms": 983,
+   "waited_ms": 672,
    "why": "menu link \"Public Works\" on County of Saratoga, New York",
    "page": "2/15"
   },
   {
-   "t": "2026-10-15T22:42:59.233Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.saratogacountyny.gov/departments/dmv/",
-   "status": 200,
-   "bytes": 180545,
-   "ms": 1077,
-   "waited_ms": 844,
-   "why": "menu link \"Road Test\" on County of Saratoga, New York",
-   "page": "3/15"
-  },
-  {
-   "t": "2026-10-15T22:43:01.066Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.saratogacountyny.gov/departments/dmv/road-test-information/",
-   "status": 200,
-   "bytes": 130818,
-   "ms": 922,
-   "waited_ms": 812,
-   "why": "link \"Road Tests\" on Department of Motor Vehicles – County of Saratoga, New York",
-   "page": "4/15"
-  },
-  {
-   "t": "2026-10-15T22:43:01.115Z",
-   "step": "skip",
-   "msg": "off-list link skipped: \"https://dmv.ny.gov/schedule-road-test\"",
-   "url": "https://dmv.ny.gov/driver-license/schedule-and-take-a-road-test"
-  },
-  {
-   "t": "2026-10-15T22:43:03.014Z",
+   "t": "2026-10-15T23:28:45.817Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/",
    "status": 200,
    "bytes": 130275,
-   "ms": 859,
-   "waited_ms": 1030,
+   "ms": 1952,
+   "waited_ms": 953,
    "why": "menu link \"Departments\" on County of Saratoga, New York",
-   "page": "5/15"
+   "page": "3/15"
   },
   {
-   "t": "2026-10-15T22:43:05.066Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.saratogacountyny.gov/departments/public-works/recycle/",
-   "status": 200,
-   "bytes": 147872,
-   "ms": 922,
-   "waited_ms": 1077,
-   "why": "menu link \"Recycle\" on County of Saratoga, New York",
-   "page": "6/15"
-  },
-  {
-   "t": "2026-10-15T22:43:07.031Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.saratogacountyny.gov/departments/health/medication-disposal/",
-   "status": 200,
-   "bytes": 134761,
-   "ms": 875,
-   "waited_ms": 1015,
-   "why": "link \"https://www.saratogacountyny.gov/departments/health/medication-disposal/\" on Recycle – County of Saratoga, New York",
-   "page": "7/15"
-  },
-  {
-   "t": "2026-10-15T22:43:09.206Z",
-   "step": "fetch",
-   "msg": "HTTP 200",
-   "url": "https://www.saratogacountyny.gov/departments/dmv/contact-us/",
-   "status": 200,
-   "bytes": 141496,
-   "ms": 1047,
-   "waited_ms": 1062,
-   "why": "link \"Contact Us\" on Department of Motor Vehicles – County of Saratoga, New York",
-   "page": "8/15"
-  },
-  {
-   "t": "2026-10-15T22:43:09.257Z",
+   "t": "2026-10-15T23:28:45.856Z",
    "step": "skip",
-   "msg": "139 links pointed off the approved list and were not followed"
+   "msg": "64 links pointed off the approved list and were not followed"
   },
   {
-   "t": "2026-10-15T22:43:09.257Z",
+   "t": "2026-10-15T23:28:45.856Z",
    "step": "read",
-   "msg": "8 pages read, 8 of 15 page fetches used"
+   "msg": "3 pages read, 3 of 15 page fetches used"
   },
   {
-   "t": "2026-10-15T22:43:09.481Z",
+   "t": "2026-10-15T23:28:46.118Z",
    "step": "robots",
    "msg": "robots.txt read for data.ny.gov",
    "url": "https://data.ny.gov/robots.txt",
@@ -170,43 +104,43 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T22:43:11.359Z",
+   "t": "2026-10-15T23:28:47.962Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/api/views/tccz-tc3t.json",
    "status": 200,
    "bytes": 24118,
-   "ms": 92,
-   "waited_ms": 1782,
+   "ms": 109,
+   "waited_ms": 1733,
    "why": "dataset column descriptions",
    "page": "1/3"
   },
   {
-   "t": "2026-10-15T22:43:13.758Z",
+   "t": "2026-10-15T23:28:49.952Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24select=max%28year%29+as+year",
    "status": 200,
    "bytes": 18,
-   "ms": 500,
-   "waited_ms": 1907,
+   "ms": 94,
+   "waited_ms": 1890,
    "why": "latest year in the set",
    "page": "2/3"
   },
   {
-   "t": "2026-10-15T22:43:15.573Z",
+   "t": "2026-10-15T23:28:52.030Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
    "status": 200,
    "bytes": 8206,
-   "ms": 312,
-   "waited_ms": 1500,
+   "ms": 172,
+   "waited_ms": 1905,
    "why": "Saratoga County rows for 2020",
    "page": "3/3"
   },
   {
-   "t": "2026-10-15T22:43:15.573Z",
+   "t": "2026-10-15T23:28:52.030Z",
    "step": "dataset",
    "msg": "31 rows for Saratoga County, 2020: county_mileage sums to 364.21 mi, total_centerline_highway_mileage to 2250.53 mi",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
@@ -214,40 +148,39 @@
    "year": "2020"
   },
   {
-   "t": "2026-10-15T22:43:15.573Z",
+   "t": "2026-10-15T23:28:52.030Z",
    "step": "extract",
-   "msg": "sending 8 sources to the model"
+   "msg": "sending 3 sources to the model"
   },
   {
-   "t": "2026-10-15T22:43:21.716Z",
+   "t": "2026-10-15T23:28:59.281Z",
    "step": "extract",
-   "msg": "model returned 0 road lines, a roads head, no email, 1 phone(s)",
+   "msg": "model returned 0 road lines, a roads head, no email, 1 phone",
    "model": "claude-opus-5-5"
   },
   {
-   "t": "2026-10-15T22:43:21.719Z",
+   "t": "2026-10-15T23:28:59.282Z",
    "step": "check",
-   "msg": "checks run: 0 value(s) rejected",
+   "msg": "checks run: 0 values rejected",
    "rejected": 0
   },
   {
-   "t": "2026-10-15T22:43:21.719Z",
+   "t": "2026-10-15T23:28:59.282Z",
    "step": "dedupe",
    "msg": "no matching Contact; a new Contact is proposed"
   },
   {
-   "t": "2026-10-15T22:43:28.102Z",
+   "t": "2026-10-15T23:28:59.282Z",
    "step": "brief",
-   "msg": "1 sentence(s) kept",
-   "model": "claude-opus-5-5"
+   "msg": "no sign work on the pages read, so no brief"
   },
   {
-   "t": "2026-10-15T22:43:28.102Z",
+   "t": "2026-10-15T23:28:59.282Z",
    "step": "writeback",
-   "msg": "2 request(s) built, none sent"
+   "msg": "2 requests built, none sent"
   },
   {
-   "t": "2026-10-15T22:43:28.102Z",
+   "t": "2026-10-15T23:28:59.282Z",
    "step": "status",
    "msg": "Done"
   }
@@ -264,9 +197,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 192919,
-   "sha256": "ef812e867be79f860f416d9d1588289c83ed1e5afd93e02d7d3b5d058bbcdc37",
-   "fetched_at": "2026-10-15T22:42:55.341Z",
-   "elapsed_ms": 1187,
+   "sha256": "4fb2b87b1b37323ad4eaa17cfaf6c3bef29d1e8fae6c52d5d55471e2d2f09bf6",
+   "fetched_at": "2026-10-15T23:28:41.147Z",
+   "elapsed_ms": 1280,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -283,9 +216,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 181088,
-   "sha256": "47bd76cc74dbb4e1e916a2d158fb84715bc52117d42484451ce204fea4ebb296",
-   "fetched_at": "2026-10-15T22:42:57.213Z",
-   "elapsed_ms": 1062,
+   "sha256": "96aa3e69d6e2ba34b3d6e5d663c89e1a3d5c84246f0ca511cfc0524b657acafc",
+   "fetched_at": "2026-10-15T23:28:42.852Z",
+   "elapsed_ms": 983,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -293,44 +226,6 @@
   },
   {
    "id": "S3",
-   "url": "https://www.saratogacountyny.gov/departments/dmv/",
-   "kind": "html",
-   "title": "Department of Motor Vehicles – County of Saratoga, New York",
-   "found_via": "menu link \"Road Test\" on County of Saratoga, New York",
-   "anchor": "Road Test",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=UTF-8",
-   "bytes": 180545,
-   "sha256": "e5f8fbba2314c038dc9bc782bf21b2342ad925ac5e25579f0c37db920f37eee2",
-   "fetched_at": "2026-10-15T22:42:59.231Z",
-   "elapsed_ms": 1077,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S4",
-   "url": "https://www.saratogacountyny.gov/departments/dmv/road-test-information/",
-   "kind": "html",
-   "title": "Road Test Information – County of Saratoga, New York",
-   "found_via": "link \"Road Tests\" on Department of Motor Vehicles – County of Saratoga, New York",
-   "anchor": "Road Tests",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=UTF-8",
-   "bytes": 130818,
-   "sha256": "63e6d823927b417da0f3d460c1e375b8f6f77124b0af73599a0310f14f31a50d",
-   "fetched_at": "2026-10-15T22:43:01.065Z",
-   "elapsed_ms": 922,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S5",
    "url": "https://www.saratogacountyny.gov/departments/",
    "kind": "html",
    "title": "Departments – County of Saratoga, New York",
@@ -340,73 +235,16 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 130275,
-   "sha256": "f61fe8cc9528b0c7269e12b54d5d4eeaaf513bdb66a4ebc80a888fe8ce266145",
-   "fetched_at": "2026-10-15T22:43:03.013Z",
-   "elapsed_ms": 859,
+   "sha256": "4dd1ba61ceac86cfccaa8ec43b3390be2a863d08ba0bfa9b44f93fc8727bbc63",
+   "fetched_at": "2026-10-15T23:28:45.816Z",
+   "elapsed_ms": 1952,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
    "dataset": null
   },
   {
-   "id": "S6",
-   "url": "https://www.saratogacountyny.gov/departments/public-works/recycle/",
-   "kind": "html",
-   "title": "Recycle – County of Saratoga, New York",
-   "found_via": "menu link \"Recycle\" on County of Saratoga, New York",
-   "anchor": "Recycle",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=UTF-8",
-   "bytes": 147872,
-   "sha256": "86aef8c7d71e9aa257441820d41afef94ce9004d091409aadb332573ddca11d5",
-   "fetched_at": "2026-10-15T22:43:05.064Z",
-   "elapsed_ms": 922,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S7",
-   "url": "https://www.saratogacountyny.gov/departments/health/medication-disposal/",
-   "kind": "html",
-   "title": "Medication and Sharps Disposal – County of Saratoga, New York",
-   "found_via": "link \"https://www.saratogacountyny.gov/departments/health/medication-disposal/\" on Recycle – County of Saratoga, New York",
-   "anchor": "https://www.saratogacountyny.gov/departments/health/medication-disposal/",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=UTF-8",
-   "bytes": 134761,
-   "sha256": "5239a2bd9480ce4926d18aa1b09710c07994827fa2aeb7193e8f2afbd4cc5862",
-   "fetched_at": "2026-10-15T22:43:07.029Z",
-   "elapsed_ms": 875,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S8",
-   "url": "https://www.saratogacountyny.gov/departments/dmv/contact-us/",
-   "kind": "html",
-   "title": "Contact Us – County of Saratoga, New York",
-   "found_via": "link \"Contact Us\" on Department of Motor Vehicles – County of Saratoga, New York",
-   "anchor": "Contact Us",
-   "requested_url": null,
-   "status": 200,
-   "content_type": "text/html; charset=UTF-8",
-   "bytes": 141496,
-   "sha256": "fad9566813bbb05620fc4984b9a5be835da5d4b9cfac62db1da5e4f3af48c021",
-   "fetched_at": "2026-10-15T22:43:09.205Z",
-   "elapsed_ms": 1047,
-   "pdf_pages_read": null,
-   "pdf_page_count": null,
-   "hidden_emails": null,
-   "dataset": null
-  },
-  {
-   "id": "S9",
+   "id": "S4",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
    "kind": "dataset",
    "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
@@ -417,8 +255,8 @@
    "content_type": "application/json;charset=utf-8",
    "bytes": 8206,
    "sha256": "b997841263bc87fe6e531b711083cd2a9ee9289912f342dff3551c14cf9b42bf",
-   "fetched_at": "2026-10-15T22:43:15.572Z",
-   "elapsed_ms": 312,
+   "fetched_at": "2026-10-15T23:28:52.029Z",
+   "elapsed_ms": 172,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -438,8 +276,8 @@
      "content_type": "application/json; charset=utf-8",
      "bytes": 24118,
      "sha256": "d9bc77c0a138cd69c1438aa31cea3c34cc9bc664dda33f948e730884e1cae432",
-     "fetched_at": "2026-10-15T22:43:11.358Z",
-     "elapsed_ms": 92
+     "fetched_at": "2026-10-15T23:28:47.961Z",
+     "elapsed_ms": 109
     },
     "row_values": [
      "0",
@@ -504,6 +342,7 @@
      "km": 586.1,
      "centerline": true,
      "approximate": false,
+     "dataset": true,
      "why": "sum of county_mileage over 31 rows, 2020",
      "parts": [
       {
@@ -515,11 +354,11 @@
        "approximate": false,
        "cite": {
         "quote": "county_mileage: County-owned highway centerline mileage that is located within each city, town, and village",
-        "source": "S9",
+        "source": "S4",
         "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
         "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
         "pdf_page": null,
-        "fetched_at": "2026-10-15T22:43:15.572Z",
+        "fetched_at": "2026-10-15T23:28:52.029Z",
         "rows": 31,
         "year": "2020",
         "sum_mi": 364.21,
@@ -544,7 +383,7 @@
     "url": "https://www.saratogacountyny.gov/departments/public-works/",
     "title": "Public Works – County of Saratoga, New York",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T22:42:57.213Z"
+    "fetched_at": "2026-10-15T23:28:42.852Z"
    },
    "name": "Chad M. Cooke, P.E.",
    "title": "Commissioner of Public Works",
@@ -562,7 +401,7 @@
     "url": "https://www.saratogacountyny.gov/departments/public-works/",
     "title": "Public Works – County of Saratoga, New York",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T22:42:57.213Z"
+    "fetched_at": "2026-10-15T23:28:42.852Z"
    }
   },
   "key_documents": [
@@ -571,14 +410,14 @@
     "url": "https://www.saratogacountyny.gov/departments/public-works/",
     "source": "S2",
     "kind": "html",
-    "fetched_at": "2026-10-15T22:42:57.213Z"
+    "fetched_at": "2026-10-15T23:28:42.852Z"
    },
    {
     "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
     "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
-    "source": "S9",
+    "source": "S4",
     "kind": "dataset",
-    "fetched_at": "2026-10-15T22:43:15.572Z"
+    "fetched_at": "2026-10-15T23:28:52.029Z"
    }
   ]
  },
@@ -593,11 +432,11 @@
    "sources": [
     {
      "quote": "county_mileage: County-owned highway centerline mileage that is located within each city, town, and village",
-     "source": "S9",
+     "source": "S4",
      "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
      "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:43:15.572Z",
+     "fetched_at": "2026-10-15T23:28:52.029Z",
      "rows": 31,
      "year": "2020",
      "sum_mi": 364.21,
@@ -620,7 +459,7 @@
    "status": "not_found",
    "proposed": null,
    "sources": [],
-   "detail": "Not printed on the 8 pages read."
+   "detail": "Not printed on the 3 pages read."
   },
   {
    "field": "phone",
@@ -635,7 +474,7 @@
      "url": "https://www.saratogacountyny.gov/departments/public-works/",
      "title": "Public Works – County of Saratoga, New York",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:42:57.213Z"
+     "fetched_at": "2026-10-15T23:28:42.852Z"
     }
    ]
   },
@@ -650,7 +489,7 @@
      "url": "https://www.saratogacountyny.gov/departments/public-works/",
      "title": "Public Works – County of Saratoga, New York",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:42:57.213Z"
+     "fetched_at": "2026-10-15T23:28:42.852Z"
     }
    ],
    "proposed": "Chad M. Cooke, P.E., Commissioner of Public Works",
@@ -669,12 +508,12 @@
     {
      "url": "https://www.saratogacountyny.gov/departments/public-works/",
      "title": "Public Works",
-     "fetched_at": "2026-10-15T22:42:57.213Z"
+     "fetched_at": "2026-10-15T23:28:42.852Z"
     },
     {
      "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
      "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
-     "fetched_at": "2026-10-15T22:43:15.572Z"
+     "fetched_at": "2026-10-15T23:28:52.029Z"
     }
    ]
   },
@@ -682,24 +521,18 @@
    "field": "brief",
    "label": "Account brief",
    "current": null,
-   "status": "filled",
-   "proposed": "Next step: ask for Chad M. Cooke, P.E., Commissioner of Public Works, by calling the Public Works department at (518) 885-2235.",
-   "sources": []
+   "status": "not_found",
+   "proposed": null,
+   "sources": [],
+   "detail": "None of the 3 pages read says anything about the county's signs, so there's no brief. The fields above say who to reach."
   }
  ],
  "questions": [],
  "merge": null,
  "brief": {
-  "sentences": [
-   {
-    "text": "Next step: ask for Chad M. Cooke, P.E., Commissioner of Public Works, by calling the Public Works department at (518) 885-2235.",
-    "cites": [
-     "S2"
-    ]
-   }
-  ],
-  "model": "claude-opus-5-5",
-  "context": {}
+  "sentences": [],
+  "model": null,
+  "skipped": "None of the 3 pages read says anything about the county's signs, so there's no brief. The fields above say who to reach."
  },
  "writeback": {
   "sent": false,
@@ -713,11 +546,10 @@
       {
        "id": "sample-acct-004",
        "Enrichment_Status": "Done",
-       "Last_Enriched": "2026-10-15T22:43:28.102Z",
+       "Last_Enriched": "2026-10-15T23:28:59.282Z",
        "Road_Network_Centerline_km": 586.1,
        "Public_Works_Phone": "(518) 885-2235",
-       "Key_Documents": "Public Works: https://www.saratogacountyny.gov/departments/public-works/\nNYSDOT Highway Mileage, 2020 (data.ny.gov): https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
-       "Account_Brief": "Next step: ask for Chad M. Cooke, P.E., Commissioner of Public Works, by calling the Public Works department at (518) 885-2235."
+       "Key_Documents": "Public Works: https://www.saratogacountyny.gov/departments/public-works/\nNYSDOT Highway Mileage, 2020 (data.ny.gov): https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500"
       }
      ]
     }

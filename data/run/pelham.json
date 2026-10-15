@@ -10,30 +10,30 @@
   "example_public_account": true
  },
  "run": {
-  "started_at": "2026-10-15T22:42:11.582Z",
-  "finished_at": "2026-10-15T22:42:52.142Z",
+  "started_at": "2026-10-15T23:27:54.344Z",
+  "finished_at": "2026-10-15T23:28:37.858Z",
   "model": "claude-opus-5-5",
   "pages_read": 5,
   "page_fetches": 5,
   "page_budget": 15,
   "http_requests": 7,
-  "prompt_chars": 30189
+  "prompt_chars": 30292
  },
  "status": "needs_review",
  "steps": [
   {
-   "t": "2026-10-15T22:42:11.582Z",
+   "t": "2026-10-15T23:27:54.344Z",
    "step": "status",
    "msg": "Queued"
   },
   {
-   "t": "2026-10-15T22:42:11.582Z",
+   "t": "2026-10-15T23:27:54.344Z",
    "step": "status",
    "msg": "Running",
    "rate_rule": "One run per Account per day. Last run: never."
   },
   {
-   "t": "2026-10-15T22:42:11.582Z",
+   "t": "2026-10-15T23:27:54.344Z",
    "step": "allowlist",
    "msg": "www.pelham.ca is on the approved list",
    "approved": [
@@ -42,7 +42,7 @@
    ]
   },
   {
-   "t": "2026-10-15T22:42:11.906Z",
+   "t": "2026-10-15T23:27:54.707Z",
    "step": "robots",
    "msg": "robots.txt read for www.pelham.ca",
    "url": "https://www.pelham.ca/robots.txt",
@@ -50,55 +50,61 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T22:42:13.681Z",
+   "t": "2026-10-15T23:27:56.485Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.pelham.ca/",
    "status": 200,
    "bytes": 96305,
-   "ms": 92,
-   "waited_ms": 1687,
+   "ms": 109,
+   "waited_ms": 1640,
    "why": "the Account's website",
    "page": "1/15"
   },
   {
-   "t": "2026-10-15T22:42:15.857Z",
+   "t": "2026-10-15T23:27:56.546Z",
+   "step": "skip",
+   "msg": "off-list link skipped: \"Sign up for e-billing\"",
+   "url": "https://icityonline.pelham.ca/LinkRegister.aspx"
+  },
+  {
+   "t": "2026-10-15T23:27:58.400Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.pelham.ca/living-in-pelham/roads-parking/",
    "status": 200,
-   "bytes": 62550,
-   "ms": 265,
-   "waited_ms": 1827,
+   "bytes": 62551,
+   "ms": 47,
+   "waited_ms": 1812,
    "why": "menu link \"Roads & Parking\" on Home | Town of Pelham",
    "page": "2/15"
   },
   {
-   "t": "2026-10-15T22:42:17.833Z",
+   "t": "2026-10-15T23:28:00.458Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.pelham.ca/contacts-directory/",
    "status": 200,
-   "bytes": 292270,
-   "ms": 250,
-   "waited_ms": 1687,
+   "bytes": 292273,
+   "ms": 94,
+   "waited_ms": 1905,
    "why": "menu link \"Contact Us\" on Home | Town of Pelham",
    "page": "3/15"
   },
   {
-   "t": "2026-10-15T22:42:20.017Z",
+   "t": "2026-10-15T23:28:02.620Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/",
    "status": 200,
-   "bytes": 87647,
-   "ms": 296,
-   "waited_ms": 1577,
+   "bytes": 87645,
+   "ms": 141,
+   "waited_ms": 1750,
    "why": "menu link \"Municipal Plans, Reports & Studies\" on Home | Town of Pelham",
    "page": "4/15"
   },
   {
-   "t": "2026-10-15T22:42:20.675Z",
+   "t": "2026-10-15T23:28:03.188Z",
    "step": "robots",
    "msg": "robots.txt read for media-001-ca.cdn.govstack.com",
    "url": "https://media-001-ca.cdn.govstack.com/robots.txt",
@@ -106,88 +112,94 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T22:42:22.639Z",
+   "t": "2026-10-15T23:28:05.212Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
    "status": 200,
    "bytes": 9798522,
-   "ms": 375,
-   "waited_ms": 1579,
+   "ms": 469,
+   "waited_ms": 1530,
    "why": "link \"2025 Asset Management Plan\" on Municipal Plans, Reports & Studies | Town of Pelham",
    "page": "5/15"
   },
   {
-   "t": "2026-10-15T22:42:27.141Z",
+   "t": "2026-10-15T23:28:08.476Z",
    "step": "pdf",
    "msg": "PDF read: 174 pages",
    "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
    "pages": 174
   },
   {
-   "t": "2026-10-15T22:42:27.141Z",
+   "t": "2026-10-15T23:28:08.476Z",
    "step": "pdf",
    "msg": "PDF page 62 read (road-length lines: 2)",
    "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
    "pdf_page": 62
   },
   {
-   "t": "2026-10-15T22:42:27.141Z",
+   "t": "2026-10-15T23:28:08.476Z",
    "step": "pdf",
    "msg": "PDF page 68 read (road-length lines: 1)",
    "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
    "pdf_page": 68
   },
   {
-   "t": "2026-10-15T22:42:27.141Z",
+   "t": "2026-10-15T23:28:08.476Z",
    "step": "skip",
    "msg": "60 links pointed off the approved list and were not followed"
   },
   {
-   "t": "2026-10-15T22:42:27.141Z",
+   "t": "2026-10-15T23:28:08.476Z",
    "step": "read",
    "msg": "5 pages read, 5 of 15 page fetches used"
   },
   {
-   "t": "2026-10-15T22:42:27.141Z",
+   "t": "2026-10-15T23:28:08.476Z",
    "step": "extract",
    "msg": "sending 5 sources to the model"
   },
   {
-   "t": "2026-10-15T22:42:43.363Z",
+   "t": "2026-10-15T23:28:23.353Z",
    "step": "extract",
-   "msg": "model returned 1 road lines, a roads head, no email, 2 phone(s)",
+   "msg": "model returned 2 road lines, a roads head, no email, 2 phones",
    "model": "claude-opus-5-5"
   },
   {
-   "t": "2026-10-15T22:42:43.365Z",
+   "t": "2026-10-15T23:28:23.355Z",
    "step": "check",
-   "msg": "checks run: 0 value(s) rejected",
-   "rejected": 0
+   "msg": "checks run: 1 value rejected",
+   "rejected": 1
   },
   {
-   "t": "2026-10-15T22:42:43.365Z",
+   "t": "2026-10-15T23:28:23.355Z",
+   "step": "reject",
+   "msg": "road_length_km: 37 % (a ratio (%), not a length)",
+   "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf"
+  },
+  {
+   "t": "2026-10-15T23:28:23.355Z",
    "step": "question",
    "msg": "No source says centerline. Is 248 km centerline?"
   },
   {
-   "t": "2026-10-15T22:42:43.365Z",
+   "t": "2026-10-15T23:28:23.355Z",
    "step": "note",
    "msg": "phone: 2 different numbers printed for the department, left for a person"
   },
   {
-   "t": "2026-10-15T22:42:52.142Z",
+   "t": "2026-10-15T23:28:37.858Z",
    "step": "brief",
-   "msg": "2 sentence(s) kept",
+   "msg": "2 sentences kept",
    "model": "claude-opus-5-5"
   },
   {
-   "t": "2026-10-15T22:42:52.142Z",
+   "t": "2026-10-15T23:28:37.858Z",
    "step": "writeback",
-   "msg": "2 request(s) built, none sent"
+   "msg": "2 requests built, none sent"
   },
   {
-   "t": "2026-10-15T22:42:52.142Z",
+   "t": "2026-10-15T23:28:37.858Z",
    "step": "status",
    "msg": "Needs review"
   }
@@ -204,9 +216,9 @@
    "status": 200,
    "content_type": "text/html; charset=utf-8",
    "bytes": 96305,
-   "sha256": "011623e78be175230aea37d1939e61a00a8a8adc9e3131cbf2aad93b7578ff31",
-   "fetched_at": "2026-10-15T22:42:13.680Z",
-   "elapsed_ms": 92,
+   "sha256": "ec4c53d5686177dff09963908e285a633eb512ce412a7be3a0fe53fd3c8118d1",
+   "fetched_at": "2026-10-15T23:27:56.483Z",
+   "elapsed_ms": 109,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -222,10 +234,10 @@
    "requested_url": null,
    "status": 200,
    "content_type": "text/html; charset=utf-8",
-   "bytes": 62550,
-   "sha256": "b415414826196ddb79af5bd6c4e1ceb2e012d8015ce32e6182ee1808adfd9ded",
-   "fetched_at": "2026-10-15T22:42:15.856Z",
-   "elapsed_ms": 265,
+   "bytes": 62551,
+   "sha256": "45833328aa5df8fd28e9340fc9810644515ac3e3eb0afcf32a8a9b58da2bf552",
+   "fetched_at": "2026-10-15T23:27:58.399Z",
+   "elapsed_ms": 47,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -241,10 +253,10 @@
    "requested_url": null,
    "status": 200,
    "content_type": "text/html; charset=utf-8",
-   "bytes": 292270,
-   "sha256": "325300d6b3ede57ff933c86056b635a8f2546ef75070c4a47ff64c53cca7c79b",
-   "fetched_at": "2026-10-15T22:42:17.831Z",
-   "elapsed_ms": 250,
+   "bytes": 292273,
+   "sha256": "8924bcdf34cf0f51ebe6631a466bfebdf963f927119296cab212885a9fedfcbd",
+   "fetched_at": "2026-10-15T23:28:00.454Z",
+   "elapsed_ms": 94,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -260,10 +272,10 @@
    "requested_url": null,
    "status": 200,
    "content_type": "text/html; charset=utf-8",
-   "bytes": 87647,
-   "sha256": "87f355f81317b4957b579c36c23f04a56d5c04735f8ce530584096630ec97c9e",
-   "fetched_at": "2026-10-15T22:42:19.912Z",
-   "elapsed_ms": 296,
+   "bytes": 87645,
+   "sha256": "91eb99f39fa76ec147b34b7669499bb76f0f81582ad4c093436b9b3343e58fe2",
+   "fetched_at": "2026-10-15T23:28:02.493Z",
+   "elapsed_ms": 141,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -281,8 +293,8 @@
    "content_type": "application/pdf",
    "bytes": 9798522,
    "sha256": "0cbb34a27f53943640e61fc4ec15190bc1c459854f183aceb61ff4d064861c46",
-   "fetched_at": "2026-10-15T22:42:22.634Z",
-   "elapsed_ms": 375,
+   "fetched_at": "2026-10-15T23:28:05.209Z",
+   "elapsed_ms": 469,
    "pdf_pages_read": [
     62,
     68
@@ -303,6 +315,15 @@
     "quote": "Roadway 248 km $377.6 M",
     "source": "S5",
     "pdf_page": 62
+   },
+   {
+    "value": "37",
+    "unit": "%",
+    "measures": "ratio",
+    "road_type": "roads with PCI <50",
+    "quote": "Quality Km of roads have PCI <50 37%",
+    "source": "S5",
+    "pdf_page": 68
    }
   ],
   "road_totals": [
@@ -311,7 +332,7 @@
      0
     ],
     "covers_whole_network": true,
-    "why": "The asset inventory gives the Town's whole roadway as one 248 km figure, with no road types left out."
+    "why": "The asset management plan's transportation inventory lists Roadway as a single 248 km asset type covering all Town roads."
    }
   ],
   "roads_head": {
@@ -324,7 +345,7 @@
   "department_phones": [
    {
     "value": "905-892-2607 ext. 33",
-    "quote": "Public Works\nPhone: 905-892-2607 ext. 33",
+    "quote": "Phone: 905-892-2607 ext. 33",
     "source": "S3"
    },
    {
@@ -360,13 +381,13 @@
         "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
         "title": "2025 Asset Management Plan",
         "pdf_page": 62,
-        "fetched_at": "2026-10-15T22:42:22.634Z"
+        "fetched_at": "2026-10-15T23:28:05.209Z"
        }
       }
      ],
      "centerline": false,
      "approximate": false,
-     "why": "The asset inventory gives the Town's whole roadway as one 248 km figure, with no road types left out."
+     "why": "The asset management plan's transportation inventory lists Roadway as a single 248 km asset type covering all Town roads."
     }
    ],
    "partial": [],
@@ -402,7 +423,7 @@
     "url": "https://www.pelham.ca/contacts-directory/",
     "title": "Contacts Directory | Town of Pelham",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T22:42:17.831Z"
+    "fetched_at": "2026-10-15T23:28:00.454Z"
    },
    "name": null,
    "title": "Director of Public Works and Drainage Superintendent",
@@ -419,12 +440,12 @@
    ],
    "cites": [
     {
-     "quote": "Public Works\nPhone: 905-892-2607 ext. 33",
+     "quote": "Phone: 905-892-2607 ext. 33",
      "source": "S3",
      "url": "https://www.pelham.ca/contacts-directory/",
      "title": "Contacts Directory | Town of Pelham",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:42:17.831Z"
+     "fetched_at": "2026-10-15T23:28:00.454Z"
     },
     {
      "quote": "For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.",
@@ -432,7 +453,7 @@
      "url": "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/",
      "title": "Municipal Plans, Reports & Studies | Town of Pelham",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:42:19.912Z"
+     "fetched_at": "2026-10-15T23:28:02.493Z"
     }
    ]
   },
@@ -442,21 +463,21 @@
     "url": "https://www.pelham.ca/contacts-directory/",
     "source": "S3",
     "kind": "html",
-    "fetched_at": "2026-10-15T22:42:17.831Z"
+    "fetched_at": "2026-10-15T23:28:00.454Z"
    },
    {
     "title": "Municipal Plans, Reports & Studies",
     "url": "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/",
     "source": "S4",
     "kind": "html",
-    "fetched_at": "2026-10-15T22:42:19.912Z"
+    "fetched_at": "2026-10-15T23:28:02.493Z"
    },
    {
     "title": "2025 Asset Management Plan",
     "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
     "source": "S5",
     "kind": "pdf",
-    "fetched_at": "2026-10-15T22:42:22.634Z"
+    "fetched_at": "2026-10-15T23:28:05.209Z"
    }
   ]
  },
@@ -467,10 +488,24 @@
    "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
    "title": "2025 Asset Management Plan",
    "pdf_page": 62,
-   "fetched_at": "2026-10-15T22:42:22.634Z"
+   "fetched_at": "2026-10-15T23:28:05.209Z"
   }
  ],
- "rejected": [],
+ "rejected": [
+  {
+   "field": "road_length_km",
+   "value": "37 %",
+   "reason": "a ratio (%), not a length",
+   "quote": "Quality Km of roads have PCI <50 37%",
+   "source": "S5",
+   "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
+   "title": "2025 Asset Management Plan",
+   "pdf_page": 68,
+   "fetched_at": "2026-10-15T23:28:05.209Z",
+   "model_said": "ratio",
+   "road_type": "roads with PCI <50"
+  }
+ ],
  "proposed": [
   {
    "field": "road_length_km",
@@ -484,7 +519,7 @@
      "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
      "title": "2025 Asset Management Plan",
      "pdf_page": 62,
-     "fetched_at": "2026-10-15T22:42:22.634Z"
+     "fetched_at": "2026-10-15T23:28:05.209Z"
     }
    ],
    "proposed": "248 km",
@@ -528,12 +563,12 @@
    "proposed": null,
    "sources": [
     {
-     "quote": "Public Works\nPhone: 905-892-2607 ext. 33",
+     "quote": "Phone: 905-892-2607 ext. 33",
      "source": "S3",
      "url": "https://www.pelham.ca/contacts-directory/",
      "title": "Contacts Directory | Town of Pelham",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:42:17.831Z"
+     "fetched_at": "2026-10-15T23:28:00.454Z"
     },
     {
      "quote": "For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.",
@@ -541,7 +576,7 @@
      "url": "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/",
      "title": "Municipal Plans, Reports & Studies | Town of Pelham",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:42:19.912Z"
+     "fetched_at": "2026-10-15T23:28:02.493Z"
     }
    ],
    "detail": "The pages print 2 different numbers for the department. Left blank; a Note on the Account keeps each one with its page."
@@ -557,7 +592,7 @@
      "url": "https://www.pelham.ca/contacts-directory/",
      "title": "Contacts Directory | Town of Pelham",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T22:42:17.831Z"
+     "fetched_at": "2026-10-15T23:28:00.454Z"
     }
    ],
    "proposed": null,
@@ -578,17 +613,17 @@
     {
      "url": "https://www.pelham.ca/contacts-directory/",
      "title": "Contacts Directory",
-     "fetched_at": "2026-10-15T22:42:17.831Z"
+     "fetched_at": "2026-10-15T23:28:00.454Z"
     },
     {
      "url": "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/",
      "title": "Municipal Plans, Reports & Studies",
-     "fetched_at": "2026-10-15T22:42:19.912Z"
+     "fetched_at": "2026-10-15T23:28:02.493Z"
     },
     {
      "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
      "title": "2025 Asset Management Plan",
-     "fetched_at": "2026-10-15T22:42:22.634Z"
+     "fetched_at": "2026-10-15T23:28:05.209Z"
     }
    ]
   },
@@ -597,7 +632,7 @@
    "label": "Account brief",
    "current": null,
    "status": "filled",
-   "proposed": "Pelham's 2025 Asset Management Plan lists \"Signs 2,601 Each\" among its assets. Next step: ask Public Works for the Director of Public Works and Drainage Superintendent, who is listed in the Contacts Directory.",
+   "proposed": "Its 2025 Asset Management Plan lists \"Signs 2,601 Each\". Next step: ask Public Works for the Director of Public Works and Drainage Superintendent, listed in the Contacts Directory.",
    "sources": []
   }
  ],
@@ -629,20 +664,19 @@
  "brief": {
   "sentences": [
    {
-    "text": "Pelham's 2025 Asset Management Plan lists \"Signs 2,601 Each\" among its assets.",
+    "text": "Its 2025 Asset Management Plan lists \"Signs 2,601 Each\".",
     "cites": [
      "S5"
     ]
    },
    {
-    "text": "Next step: ask Public Works for the Director of Public Works and Drainage Superintendent, who is listed in the Contacts Directory.",
+    "text": "Next step: ask Public Works for the Director of Public Works and Drainage Superintendent, listed in the Contacts Directory.",
     "cites": [
      "S3"
     ]
    }
   ],
-  "model": "claude-opus-5-5",
-  "context": {}
+  "model": "claude-opus-5-5"
  },
  "writeback": {
   "sent": false,
@@ -656,9 +690,9 @@
       {
        "id": "sample-acct-002",
        "Enrichment_Status": "Needs review",
-       "Last_Enriched": "2026-10-15T22:42:52.142Z",
+       "Last_Enriched": "2026-10-15T23:28:37.858Z",
        "Key_Documents": "Contacts Directory: https://www.pelham.ca/contacts-directory/\nMunicipal Plans, Reports & Studies: https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/\n2025 Asset Management Plan: https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
-       "Account_Brief": "Pelham's 2025 Asset Management Plan lists \"Signs 2,601 Each\" among its assets. Next step: ask Public Works for the Director of Public Works and Drainage Superintendent, who is listed in the Contacts Directory."
+       "Account_Brief": "Its 2025 Asset Management Plan lists \"Signs 2,601 Each\". Next step: ask Public Works for the Director of Public Works and Drainage Superintendent, listed in the Contacts Directory."
       }
      ]
     }
@@ -686,7 +720,7 @@
         "id": "sample-acct-002"
        },
        "Note_Title": "Enrich Account: needs a person",
-       "Note_Content": "The pages print different numbers for the department. Which one reaches it?\n\n- \"Public Works\nPhone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/ (fetched 2026-10-15))\n- \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/ (fetched 2026-10-15))\n\nLeft blank by Enrich Account until someone confirms it."
+       "Note_Content": "The pages print different numbers for the department. Which one reaches it?\n\n- \"Phone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/ (fetched 2026-10-15))\n- \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/ (fetched 2026-10-15))\n\nLeft blank by Enrich Account until someone confirms it."
       }
      ]
     }
