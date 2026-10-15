@@ -8,6 +8,7 @@ import { FieldRow, SampleTag } from './Fields'
 import { RunLog } from './RunLog'
 import { Quote } from './Source'
 import { Chip, Dot, Glyph, Marks } from './Status'
+import { Tabs } from './Tabs'
 import { Tested } from './Tested'
 
 function statusWord(run: Run, st: AccountState): string {
@@ -267,6 +268,9 @@ function BriefRow({ run }: { run: Run }) {
         <p className="brief-by">
           Written by <code>{b.model}</code> on {fmtDate(run.run.finished_at)} from the checked fields and quoted lines only.
           Sentences that cited nothing, or used a number the checks hadn't passed, would have been dropped.
+          {run.account.jurisdiction === 'NY'
+            ? ' The rule sentence quotes the federal MUTCD; whether New York has adopted the 11th Edition is not settled here.'
+            : ''}
         </p>
         <ul className="brief-key">
           {ids.map((id) => {
@@ -361,30 +365,26 @@ function Write({ run, st }: { run: Run; st: AccountState }) {
       {written ? (
         <div className="payload">
           {plan.changedByAnswer ? <p className="payload-note">Changed on this page by your answer. The run's own output is in data/run/{run.account.slug}.json.</p> : null}
-          <div className="payload-tabs" role="tablist" aria-label="Requests">
-            {plan.requests.map((r, i) => (
-              <button
-                key={i}
-                type="button"
-                role="tab"
-                aria-selected={shown === i}
-                className="payload-tab"
-                onClick={() => setShown(i)}
-              >
+          <Tabs
+            label="Requests"
+            items={plan.requests.map((r) => (
+              <>
                 <span className="payload-method">{r.method}</span> {r.url.replace('https://www.zohoapis.com/crm/v8', '')}
-              </button>
+              </>
             ))}
-          </div>
-          {plan.requests[shown] ? (
-            <div role="tabpanel" className="payload-body">
-              <p className="payload-url">
-                <code>
-                  {plan.requests[shown].method} {plan.requests[shown].url}
-                </code>
-              </p>
-              <pre>{JSON.stringify(plan.requests[shown].body, null, 2)}</pre>
-            </div>
-          ) : null}
+            selected={shown}
+            onSelect={setShown}
+            listClass="payload-tabs"
+            tabClass="payload-tab"
+            panelClass="payload-body"
+          >
+            <p className="payload-url">
+              <code>
+                {plan.requests[shown].method} {plan.requests[shown].url}
+              </code>
+            </p>
+            <pre>{JSON.stringify(plan.requests[shown].body, null, 2)}</pre>
+          </Tabs>
         </div>
       ) : null}
     </section>

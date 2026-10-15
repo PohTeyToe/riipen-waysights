@@ -4,6 +4,7 @@ import writeback from '../../pipeline/writeback.py?raw'
 import service from '../../pipeline/service.py?raw'
 import { REPO } from '../lib/data'
 import { Dot } from './Status'
+import { Tabs } from './Tabs'
 
 const FILES = [
   { path: 'pipeline/zoho/enrich_account.deluge', what: 'The button’s function on the Account', code: deluge, comment: '//' },
@@ -33,7 +34,7 @@ function Code({ code, comment }: { code: string; comment: string }) {
   const lines = code.replace(/\n$/, '').split('\n')
   let inDoc = false
   return (
-    <pre className="code" tabIndex={0}>
+    <pre className="code">
       <code>
         {lines.map((l, i) => {
           // Comments and Python docstrings are dimmed; that's all the highlighting this needs.
@@ -86,14 +87,15 @@ export function ZohoTab() {
         <h2 id="code-h" className="doc-h2">
           The code, as it is in the repo
         </h2>
-        <div className="files" role="tablist" aria-label="Files">
-          {FILES.map((x, i) => (
-            <button key={x.path} type="button" role="tab" aria-selected={file === i} className="file-tab" onClick={() => setFile(i)}>
-              {x.path.split('/').at(-1)}
-            </button>
-          ))}
-        </div>
-        <div role="tabpanel" className="file">
+        <Tabs
+          label="Files"
+          items={FILES.map((x) => x.path.split('/').at(-1))}
+          selected={file}
+          onSelect={setFile}
+          listClass="files"
+          tabClass="file-tab"
+          panelClass="file"
+        >
           <p className="file-head">
             <a href={`${REPO}/blob/main/${f.path}`} target="_blank" rel="noreferrer">
               <code>{f.path}</code>
@@ -103,7 +105,7 @@ export function ZohoTab() {
             </span>
           </p>
           <Code code={f.code} comment={f.comment} />
-        </div>
+        </Tabs>
       </section>
     </div>
   )

@@ -164,8 +164,9 @@ function RoadRow({ run, row, onAnswer }: RowProps) {
   const options = run.validated.road_length_km.options
   let next: ReactNode
   let sub: ReactNode = null
+  const chosen = row.answered?.result === 'filled' && row.question?.kind === 'pick' ? options[row.question.options.indexOf(row.answered.option)] : null
   if (row.answered?.result === 'filled') {
-    next = `${fmtKm(row.answered.option.value_km!)} km`
+    next = chosen ? kmLabel(chosen) : `${fmtKm(row.answered.option.value_km!)} km`
     sub = (
       <>
         confirmed by you{' '}
@@ -184,8 +185,6 @@ function RoadRow({ run, row, onAnswer }: RowProps) {
   } else {
     next = row.status === 'needs_human' ? `${row.proposed} proposed` : row.proposed
   }
-
-  const chosen = row.answered?.result === 'filled' && row.question?.kind === 'pick' ? options[row.question.options.indexOf(row.answered.option)] : null
 
   return (
     <>

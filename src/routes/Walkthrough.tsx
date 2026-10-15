@@ -38,7 +38,7 @@ function LincolnCard() {
       <header className="card-head">
         <h2 id="card-h">Town of Lincoln, before and after</h2>
         <p>
-          Lincoln goes first. It borders St. Catharines, and its roads page lists{' '}
+          Lincoln goes first. Its roads page lists{' '}
           <q>Road signage inventory, inspections, maintenance and repairs</q> as a key Public Works activity.
         </p>
       </header>

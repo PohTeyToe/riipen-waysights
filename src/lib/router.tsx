@@ -26,8 +26,19 @@ export function navigate(to: string, { keepScroll = false } = {}) {
   window.history.pushState(null, '', to)
   window.dispatchEvent(new Event(EVENT))
   const hash = to.split('#')[1]
-  if (hash) requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ block: 'start' }))
-  else if (!keepScroll) window.scrollTo({ top: 0 })
+  if (hash) requestAnimationFrame(() => focusOn(document.getElementById(hash)))
+  else if (!keepScroll) {
+    window.scrollTo({ top: 0 })
+    // A new page: put keyboard and screen-reader focus on its heading.
+    requestAnimationFrame(() => focusOn(document.querySelector('main h1'), true))
+  }
+}
+
+function focusOn(el: Element | null, preventScroll = false) {
+  if (!(el instanceof HTMLElement)) return
+  if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1')
+  el.focus({ preventScroll })
+  if (!preventScroll) el.scrollIntoView({ block: 'start' })
 }
 
 type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { to: string; keepScroll?: boolean }
