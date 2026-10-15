@@ -22,13 +22,41 @@ from .allowlist import APPROVED, CONTEXT
 from .discover import Discovery, Source
 from .extract import extract
 from .fetch import MIN_DELAY_S, PAGE_BUDGET, USER_AGENT, Fetcher, HostClock, RunLog, now_iso
-from .validate import Checker, fmt_km, short_title
+from .validate import NEAR, Checker, fmt_km, short_title
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUT = DATA / "run"
 CACHE = Path(__file__).resolve().parent / ".cache" / "raw"
 STATES = {"ON": "Ontario", "NY": "New York"}
+
+
+def count(n: int, one: str, many: str | None = None) -> str:
+    """'1 road line', '2 road lines'."""
+    return f"{n} {one if n == 1 else many or one + 's'}"
+
+
+def agree_lines(keep: dict) -> str:
+    """Why the figures other sources give are shown beside the one kept instead of as second options."""
+    groups: dict[tuple, list[dict]] = {}
+    for a in keep.get("agrees", []):
+        groups.setdefault((a.get("agrees_by", "rounded"), a["value"], a["unit"]), []).append(a)
+    out = []
+    for (how, value, unit), parts in groups.items():
+        a = parts[0]
+        srcs = " and ".join(dict.fromkeys(short_title(p["cite"]["title"]) for p in parts))
+        if how == "rounded":
+            out.append(f"{srcs} {'says' if len(parts) == 1 else 'say'} about {value} {unit}: the same figure, "
+                       f"rounded, so it isn't a second option.")
+            continue
+        pct = abs(a["km"] - keep["km"]) / keep["km"] * 100
+        line = (f"{srcs} {'gives' if len(parts) == 1 else 'give'} {fmt_km(a['km'], a['approximate'])} ({value} {unit}), "
+                f"{pct:.1f}% {'more' if a['km'] > keep['km'] else 'less'}. Figures within {NEAR:.0%} are the same "
+                f"roads, so it isn't a second option.")
+        if a["centerline"] and not all(p["centerline"] for p in keep["parts"]):
+            line += " It says centerline, so this figure counts as centerline."
+        out.append(line)
+    return " ".join(out)
 
 
 def load_seed() -> dict:
@@ -77,9 +105,7 @@ def field_rows(account: dict, seed: dict, fields: dict, proposal: dict | None, b
                 "sources": [p["cite"] for o in road.get("options", []) for p in o["parts"] + o.get("agrees", [])]}
     agreeing = [o for o in road.get("options", []) if o.get("agrees")]
     if agreeing:
-        a = agreeing[0]["agrees"][0]
-        road_row["detail"] = (f"{short_title(a['cite']['title'])} says about {a['value']} {a['unit']}: the same figure, "
-                              f"rounded, so it isn't a second option.")
+        road_row["detail"] = agree_lines(agreeing[0])
     if road["status"] == "filled":
         road_row["proposed"] = fmt_km(road["value_km"])
     elif road["status"] == "needs_human":
@@ -132,9 +158,12 @@ def field_rows(account: dict, seed: dict, fields: dict, proposal: dict | None, b
     rows.append({"field": "key_documents", "label": "Key documents", "current": seed.get("Key_Documents"),
                  "status": "filled" if docs else "not_found", "proposed": [d["title"] for d in docs],
                  "sources": [{"url": d["url"], "title": d["title"], "fetched_at": d["fetched_at"]} for d in docs]})
-    rows.append({"field": "brief", "label": "Account brief", "current": seed.get("Account_Brief"),
+    brief_row = {"field": "brief", "label": "Account brief", "current": seed.get("Account_Brief"),
                  "status": "filled" if brief["sentences"] else "not_found",
-                 "proposed": " ".join(s["text"] for s in brief["sentences"]) or None, "sources": []})
+                 "proposed": " ".join(s["text"] for s in brief["sentences"]) or None, "sources": []}
+    if not brief["sentences"]:
+        brief_row["detail"] = brief.get("skipped") or "No sentence passed the checks."
+    rows.append(brief_row)
     return rows
 
 
@@ -151,7 +180,7 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
     f = Fetcher(APPROVED[slug], log, clock, cache_dir=CACHE, cached=cached)
     sources = Discovery(f, account["website"], wants_plan=account["jurisdiction"] == "ON").run()
     readable = [s for s in sources if s.kind in ("html", "pdf")]
-    log("read", f"{len(readable)} pages read, {f.used} of {f.budget} page fetches used")
+    log("read", f"{count(len(readable), 'page')} read, {f.used} of {f.budget} page fetches used")
     dataset, nyf = None, None
     if account["ny_county"]:
         # The state dataset is its own source with its own small budget, so a long crawl can't crowd it out.
@@ -162,12 +191,12 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
 
     contacts = [c for c in seed["contacts"] if c["account"] == slug]
     if readable:
-        log("extract", f"sending {len(readable)} sources to the model")
+        log("extract", f"sending {count(len(readable), 'source')} to the model")
         extraction, model_id, prompt = extract(account, sources)
-        log("extract", f"model returned {len(extraction.get('road_lines', []))} road lines, "
+        log("extract", f"model returned {count(len(extraction.get('road_lines') or []), 'road line')}, "
                        f"{'a' if extraction.get('roads_head') else 'no'} roads head, "
                        f"{'an' if extraction.get('department_email') else 'no'} email, "
-                       f"{len(extraction.get('department_phones') or [])} phone(s)", model=model_id)
+                       f"{count(len(extraction.get('department_phones') or []), 'phone')}", model=model_id)
     else:
         extraction, model_id, prompt = {"road_lines": [], "road_totals": [], "roads_head": None,
                                         "department_email": None, "department_phones": [], "sign_work": []}, None, ""
@@ -181,7 +210,7 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
     sign_work = chk.sign_work(extraction.get("sign_work"))
     fields["key_documents"] = key_documents(sources, fields, sign_work)
     rejected = chk.rejected
-    log("check", f"checks run: {len(rejected)} value(s) rejected", rejected=len(rejected))
+    log("check", f"checks run: {count(len(rejected), 'value')} rejected", rejected=len(rejected))
     for r in rejected:
         log("reject", f"{r['field']}: {r['value']} ({r['reason']})", url=r.get("url"))
 
@@ -205,10 +234,17 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
         log("dedupe", f"merge proposed with {proposal['contact_id']} ({proposal['matched_on']})"
             if proposal["action"] == "merge" else "no matching Contact; a new Contact is proposed")
 
-    if readable or dataset:
+    if (readable or dataset) and not sign_work:
+        # The brief says what the fields can't: what the town says about its signs. Without
+        # that it would only repeat the contact fields, so there is none.
+        brief = {"sentences": [], "model": None,
+                 "skipped": f"None of the {count(len(readable), 'page')} read says anything about the "
+                            f"{kind_of(account)}'s signs, so there's no brief. The fields above say who to reach."}
+        log("brief", "no sign work on the pages read, so no brief")
+    elif readable or dataset:
         try:
             brief = summarize.brief(account, fields, sign_work, context, sources, rejected)
-            log("brief", f"{len(brief['sentences'])} sentence(s) kept", model=brief["model"])
+            log("brief", f"{count(len(brief['sentences']), 'sentence')} kept", model=brief["model"])
         except RuntimeError as e:
             brief = {"sentences": [], "model": None, "error": str(e)}
             log("brief", f"brief failed: {e}")
@@ -220,7 +256,7 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
         "needs_review" if questions or fields["phone"]["status"] == "needs_human" else "done"
     run_at = now_iso()
     wb = writeback.build(account, fields, proposal, brief, questions, status, run_at, errors)
-    log("writeback", f"{len(wb['requests'])} request(s) built, none sent")
+    log("writeback", f"{count(len(wb['requests']), 'request')} built, none sent")
     log("status", writeback.STATUS_LABEL[status])
 
     result = {
@@ -259,6 +295,12 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
     (OUT / f"{slug}.json").write_text(json.dumps(result, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
     (OUT / "pages" / f"{slug}.json").write_text(json.dumps(pages, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
     return result
+
+
+def kind_of(account: dict) -> str:
+    """'town', 'township' or 'county', from the Account's name."""
+    first = account["name"].split()[0].lower()
+    return first if first in ("town", "township") else "county" if account["name"].endswith("County") else "municipality"
 
 
 def used_sources(result: dict) -> set[str]:

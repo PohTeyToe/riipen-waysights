@@ -65,8 +65,9 @@ def contact_request(account: dict, proposal: dict | None, head: dict) -> dict | 
     if not proposal:
         return None
     first, last = crm_name(head.get("name") or "")
-    record = {"First_Name": first or None, "Last_Name": last, "Title": head.get("title"),
-              F_SOURCE: _source_line(head["cite"])}
+    # Only what the run found: a key sent as null would wipe what the Contact already has.
+    found = {"First_Name": first, "Last_Name": last, "Title": head.get("title"), F_SOURCE: _source_line(head["cite"])}
+    record = {k: v for k, v in found.items() if v}
     if proposal["action"] == "merge":
         return {"method": "PUT", "url": f"{API}/Contacts",
                 "body": {"data": [{"id": proposal["contact_id"], **record}]}}

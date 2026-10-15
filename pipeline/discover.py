@@ -17,11 +17,13 @@ from .allowlist import is_allowed
 from .fetch import Fetcher, Refused
 from .pages import Link, clean_url, html_page, pdf_pages, pdf_title, pick_pdf_pages
 
-# Words that make a link worth reading. Anchor text counts in full, the URL path at half weight
-# (third item: whether the path counts). A bare "Contact" link is the site's own contact page;
-# "Sheriff Contact" is another department's. The plans-and-reports pattern finds that section
-# from its own link, not every page whose path sits under it.
+# Words that make a link worth reading. Anchor text counts in full, and the page's own name (the
+# last part of its path) at half weight; the folders above it don't count, because a Public Works
+# folder also holds its composting and solid waste pages (third item: whether the path counts).
+# A bare "Contact" link is the site's own contact page; "Sheriff Contact" is another department's.
+# The plans-and-reports pattern finds that section from its own link, not every page under it.
 WANT = [
+    (r"\bsigns?\b|\bsignage\b|\bsign ?shop\b", 5, True),  # the brief says what the town does with its signs
     (r"asset management plan", 10, True),
     (r"public works|\bdpw\b", 8, True),
     (r"\bhighway department\b|\bhighway division\b", 8, True),
@@ -37,7 +39,12 @@ WANT = [
 # Pages that are about one event or transaction, not the department or its plan.
 AVOID = r"\bnews\b|\bposts?\b|\bevents?\b|\bcareers?\b|\bjobs?\b|\btenders?\b|\bbids?\b|\bagendas?\b|\bminutes\b|" \
         r"\bclosures?\b|\bpermits?\b|\bpolic(y|ies)\b|natural asset|\bforms?\b|\blogin\b|\bsearch\b|\bsubscribe\b|" \
-        r"\bprojects?\b|\bconstruction\b"
+        r"\bprojects?\b|\bconstruction\b|\bsign (up|in|on)\b"
+# Another department's pages aren't about roads, even when they say "road" (a DMV's road tests,
+# a Sheriff's road patrol). Checked on the link text and the whole path.
+OTHER_DEPARTMENT = r"\bdmv\b|\bmotor vehicles?\b|\bsheriffs?\b|\bpolice\b|\bhealth\b|\belections?\b|\bcourts?\b|" \
+                   r"\bprobation\b|\blibrar(y|ies)\b|\bsocial services\b|\brecreation\b|\btourism\b|\bveterans?\b"
+PLAN_PDF = 15  # a plan PDF's score before its year
 MIN_SCORE = 3
 MAX_DEPTH = 3
 PLAN = re.compile(r"asset management plan", re.I)
@@ -50,21 +57,24 @@ def words(s: str) -> str:
 
 def score_link(text: str, url: str, avoid: bool = True) -> float:
     path = words(urlsplit(url).path).strip()
-    anchor = words(text).strip()
-    if avoid and (re.search(AVOID, anchor) or re.search(AVOID, path)):
+    name = words(urlsplit(url).path.rstrip("/").rsplit("/", 1)[-1]).strip()  # the page's own name
+    # A link whose text is just its URL has no words of its own.
+    anchor = "" if re.match(r"\s*(https?:|www\.)", text or "", re.I) else words(text).strip()
+    if avoid and any(re.search(p, anchor) or re.search(p, path) for p in (AVOID, OTHER_DEPARTMENT)):
         return -1
+    if is_pdf(url) or "pdf" in anchor:
+        # Only plans are worth a PDF download, and plans compete on their year alone,
+        # so the newest one is read whatever else its link says.
+        if not (PLAN.search(anchor) or PLAN.search(path)):
+            return -1
+        years = [int(y) for y in YEAR.findall(anchor + " " + path)]
+        return PLAN_PDF + (0.1 * (max(years) - 2000) if years else 0)
     s = 0.0
     for pattern, weight, in_path in WANT:
         if re.search(pattern, anchor):
             s += weight
-        if in_path and re.search(pattern, path):
+        if in_path and re.search(pattern, name):
             s += weight / 2
-    if is_pdf(url) or "pdf" in anchor:
-        # Only plans are worth a PDF download. Newest year wins among plans.
-        if not (PLAN.search(anchor) or PLAN.search(path)):
-            return -1
-        years = [int(y) for y in YEAR.findall(anchor + " " + path)]
-        s += 0.1 * (max(years) - 2000) if years else 0
     return s
 
 
@@ -176,7 +186,9 @@ class Discovery:
                 continue
             self._take(page, via, depth=c.depth, anchor=c.text)
         if self.offlist_count:
-            self.log("skip", f"{self.offlist_count} links pointed off the approved list and were not followed")
+            n = self.offlist_count
+            self.log("skip", f"{n} {'link' if n == 1 else 'links'} pointed off the approved list and "
+                             f"{'was' if n == 1 else 'were'} not followed")
         return self.sources
 
     def _take(self, page, via: str, depth: int, anchor: str = "") -> None:
@@ -206,8 +218,9 @@ class Discovery:
         title, text, links, notes = html_page(page.body, page.url)
         src = Source(sid, page.url, "html", title, via, page.record(), text=text, notes=notes, anchor=anchor)
         if notes.get("hidden_emails"):
-            self.log("note", f"{notes['hidden_emails']} email address(es) hidden from scripts by the site; not decoded",
-                     url=page.url)
+            n = notes["hidden_emails"]
+            self.log("note", f"{n} email {'address' if n == 1 else 'addresses'} hidden from scripts by the site; "
+                             f"not decoded", url=page.url)
         self.sources.append(src)
         self.add_links(links, depth + 1, f"{title or page.url}")
 

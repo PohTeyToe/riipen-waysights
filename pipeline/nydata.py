@@ -34,6 +34,11 @@ def county_mileage(f: Fetcher, county: str, sid: str) -> Source | None:
                                f"{county.title()} County rows for {year}")
     except (Refused, KeyError, ValueError, IndexError):
         return None
+    if not rows:
+        # No rows is no data, not 0 miles: a misspelled county or a year without it.
+        f.log("dataset", f"no rows for {county.title()} County in {year}, so the state data gives no road length",
+              url=page.url, rows=0, year=year)
+        return None
     columns = {c["fieldName"]: c.get("description", "") for c in meta.get("columns", [])}
     owned = round(sum(float(r.get(OWNED) or 0) for r in rows), 2)
     total = round(sum(float(r.get(ALL_ROADS) or 0) for r in rows), 2)

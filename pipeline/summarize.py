@@ -9,9 +9,11 @@ leave it out of date.
 The model writes from checked fields and quoted lines only. Then each sentence
 is checked the way validate.py checks a value: it must cite a page this run
 read, every number in it must be a checked value or printed in a checked quote,
-anything it puts in quotation marks must be printed on a page it cites, and it
-must share something with every page it cites (a checked value, words it quotes,
-or four words in a row). Sentences that fail are dropped and listed as rejected.
+anything it puts in quotation marks must be printed on a page it cites, it must
+share something with every page it cites (a checked value, words it quotes, or
+four words in a row), and every word in it must be printed on a page it cites,
+apart from a short list of connecting words. Sentences that fail are dropped and
+listed as rejected.
 """
 from __future__ import annotations
 
@@ -98,6 +100,23 @@ def facts_for(fields: dict, sign_work: list[dict]) -> tuple[str, list[str], dict
     return "\n".join(lines), allowed, values
 
 
+# The only words a sentence may add to what its pages print: grammar, and how a rep reaches someone.
+CONNECTING = set("""a an the and or but of to for in on at by with from as into its it their they this that these
+those who which where is are was be has have also both each next step ask asking call calling email emailing
+reach contact through says said lists listed shows counts among including keeps keeping page own""".split())
+
+
+def word_set(text: str) -> set[str]:
+    return set(re.findall(r"[a-z0-9]+", norm(text)))
+
+
+def unprinted_words(sentence: str, printed: set[str]) -> list[str]:
+    """Words in the sentence that none of its cited pages print (a plural or its singular counts)."""
+    def known(w: str) -> bool:
+        return w in CONNECTING or any(v in printed for v in {w, w + "s", w + "es", w[:-1], w[:-2]} if v)
+    return [w for w in re.findall(r"[a-z0-9]+", norm(sentence)) if not known(w)]
+
+
 def four_word_runs(text: str) -> set[tuple[str, ...]]:
     words = re.findall(r"[a-z0-9]+", norm(text))
     return {tuple(words[i:i + 4]) for i in range(len(words) - 3)}
@@ -133,6 +152,7 @@ def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Sour
     out, model_id = complete_json("You write short, sourced CRM notes. Every sentence cites its sources.",
                                   prompt, BRIEF_SCHEMA)
     texts = {s.id: s.text + "\n" + "\n".join(s.pdf_pages.values()) for s in [*sources, *company]}
+    titles = {s.id: s.title for s in [*sources, *company]}
     kept = []
     for s in out.get("sentences", []):
         text, cites = s.get("text", ""), s.get("cites") or []
@@ -140,10 +160,13 @@ def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Sour
         stray = [n for n in numbers_in(text) if n not in allowed_numbers]
         unbacked = [c for c in cites if c in texts and not backs(text, c, texts, values)]
         misquoted = [q for q in quoted(text) if not any(q in norm(texts.get(c, "")) for c in cites)]
+        printed = set().union(*(word_set(f"{texts.get(c, '')} {titles.get(c, '')}") for c in cites))
+        added = list(dict.fromkeys(unprinted_words(text, printed)))
         reason = ("cites no source this run read" if not cites or unknown else
                   f"has a number that isn't a checked value: {', '.join(f'{n:g}' for n in stray)}" if stray else
                   f"quotes words its pages don't print: \"{misquoted[0]}\"" if misquoted else
-                  f"nothing in it comes from {', '.join(unbacked)}" if unbacked else None)
+                  f"nothing in it comes from {', '.join(unbacked)}" if unbacked else
+                  f"uses words its pages don't print: {', '.join(added)}" if added else None)
         if reason:
             rejected.append({"field": "brief", "value": text, "reason": reason, "quote": "", "cites": cites})
             continue

@@ -22,7 +22,7 @@ The model step uses the Claude Code CLI (`claude -p`). Swap `extract.PROVIDER` f
 |---|---|
 | `allowlist.py` | The approved sites. Nothing else is fetched. |
 | `fetch.py` | Honest user agent, robots.txt, 2 s per host, 15 pages per Account (robots.txt and redirects counted separately), TLS verified by the OS trust store. Logs every request. |
-| `discover.py` | Follows the site's own links (menu first, sitemap if the menu runs out) to the roads pages, contacts and, in Ontario, the asset management plan. |
+| `discover.py` | Follows the site's own links (menu first, sitemap if the menu runs out) to the roads pages, contacts, sign pages and, in Ontario, the newest asset management plan. A link counts on its own words, not the folder it sits in or another department's name. |
 | `pages.py` | HTML and PDF to text. PDFs are read in reading order, so a table row keeps its label and number together. |
 | `nydata.py` | New York: a county's own roads are the sum of `county_mileage` in the NYSDOT dataset. |
 | `extract.py`, `prompts/extract.md` | The model step, behind one function. |
@@ -36,8 +36,8 @@ The model step uses the Claude Code CLI (`claude -p`). Swap `extract.PROVIDER` f
 
 ## The five rules (`validate.py`)
 
-1. Every value must appear in its quote, and the quote must appear in the saved source text. A road length's unit must be printed next to its number, and a money amount is never a length. A sum of printed parts is allowed if each part passes, each line once. Ratios, percentages and other derived numbers are rejected.
+1. Every value must appear in its quote, and the quote must appear in the saved source text. A road length's unit must be printed next to its number, and a money amount is never a length. A sum of printed parts is allowed if each part passes and uses each printed number once. Ratios, percentages, areas (m2 or km² included) and other derived numbers are rejected.
 2. Road length must be a length. Lane-km and area are rejected. A length that doesn't say centerline goes to a person.
 3. New York: a county's owned roads are the sum of `county_mileage`. The all-roads total is shown beside it, never used as the value.
-4. Sources that give different numbers go to a person with every quote. No tolerance rules: an approximate figure agrees with a precise one only if the precise one rounds to it at the precision it is printed with ("approximately 300 km" and 310 km agree). Two different phone numbers for the department go to a person too.
-5. Emails and phones must be printed on an approved page. Summary sentences must cite a page this run read, every number in them must be a checked value, and each must share a checked value or four words in a row with every page it cites.
+4. Sources that give different numbers go to a person with every quote. Two figures agree, and count as one, when they're within 2% of each other (the same roads measured twice; the 2% is one setting, `NEAR`) or when an approximate one is the precise one rounded at the precision it is printed with ("approximately 300 km" and 310 km). The precise figure is kept, from the Account's own pages before the state's data, and the other is shown beside it. Two different phone numbers for the department go to a person too.
+5. Emails and phones must be printed whole on an approved page: part of a longer address or extension doesn't count. Summary sentences must cite a page this run read, every number in them must be a checked value, each must share a checked value or four words in a row with every page it cites, and every word in them must be printed on a page they cite, apart from a short list of connecting words.

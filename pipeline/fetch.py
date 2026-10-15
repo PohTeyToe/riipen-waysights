@@ -135,6 +135,7 @@ class Fetcher:
         self.session.mount("https://", OSTrustAdapter())
         self.session.headers["User-Agent"] = USER_AGENT
         self.robots: dict[str, urllib.robotparser.RobotFileParser | None] = {}
+        self.robots_refused: dict[str, str] = {}  # origin -> why its robots.txt shut the site out
         self.crawl_delay: dict[str, float] = {}
         self.pages: list[Page] = []
         self.errors: list[dict] = []
@@ -162,6 +163,7 @@ class Fetcher:
                 raise Refused("robots.txt redirects more than five times")
         except Refused as e:
             self.log("robots", f"robots.txt unreadable, so nothing on {parts.netloc} is fetched", url=robots_url, reason=str(e))
+            self.robots_refused[origin] = f"robots.txt unreadable ({e}), so the site wasn't read"
             self.robots[origin] = None
             return None
         rp = urllib.robotparser.RobotFileParser()
@@ -171,6 +173,7 @@ class Fetcher:
             # 401/403/5xx: the site isn't letting scripts in. Treat as "don't crawl".
             self.log("robots", f"robots.txt answered HTTP {page.status}, so nothing on {parts.netloc} is fetched",
                      url=robots_url, status=page.status)
+            self.robots_refused[origin] = f"robots.txt answered HTTP {page.status}, so the site wasn't read"
             self.robots[origin] = None
             return None
         else:
@@ -250,8 +253,11 @@ class Fetcher:
             self.log("skip", f"page budget of {self.budget} reached", url=url)
             raise Refused("page budget reached")
         if not self.robots_allows(url):
-            self.log("skip", "robots.txt disallows this path", url=url)
-            raise Refused("robots.txt disallows")
+            parts = urlsplit(url)
+            reason = self.robots_refused.get(f"{parts.scheme}://{parts.netloc}", "robots.txt disallows this path")
+            self.log("skip", reason, url=url)
+            self.errors.append({"url": url, "reason": reason})
+            raise Refused(reason)
         self.used += 1
         current = url
         for _ in range(6):
@@ -266,6 +272,7 @@ class Fetcher:
                 self.log("redirect", f"HTTP {page.status} redirect", url=current, to=location, status=page.status)
                 if not is_allowed(location, self.approved) or not self.robots_allows(location):
                     self.log("skip", "redirect leaves the approved list or robots.txt disallows it", url=location)
+                    self.errors.append({"url": current, "reason": f"redirects to {location}, off the approved list or disallowed"})
                     raise Refused("redirect leaves the approved list")
                 current = location
                 continue

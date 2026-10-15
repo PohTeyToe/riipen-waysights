@@ -13,6 +13,7 @@ import sys
 from collections import Counter
 
 from .run import DATA, OUT, ROOT, git
+from .validate import NEAR, short_title
 
 FIELDS = ["road_length_km", "roads_head_name", "roads_head_title", "email", "phone", "key_document"]
 POST_NOMINALS = r"\b(p\.?\s?e\.?|p\.?\s?eng\.?|jr|sr|phd)\b"
@@ -72,9 +73,16 @@ def miss_reason(run: dict, field: str, outcome: str, key_field: dict) -> str:
     base = {"roads_head_name": "roads_head", "roads_head_title": "roads_head", "key_document": "key_documents"}
     f = base.get(field, field)
     row = next((r for r in run["proposed"] if r["field"] == f), {})
+    if outcome == "wrong" and field == "road_length_km" and key_field.get("expect") == "needs_human":
+        value = run["validated"]["road_length_km"].get("value_km")
+        if value is not None and round(value, 1) in [round(x, 1) for x in key_field.get("accepted_options_km", [])]:
+            return (f"The key sends this to a person because its sources print different figures. The run filled "
+                    f"{value:g} km, one of the values the key lists, because rule 4 now treats figures within "
+                    f"{NEAR:.0%} of each other as the same roads. That rule came after the key was written (see "
+                    f"SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong.")
     if outcome != "missed":
         cites = row.get("sources") or []
-        took = "; ".join(f"\"{c.get('quote', c.get('title', ''))}\" ({c['url']})" for c in cites[:2])
+        took = "; ".join(f"\"{c.get('quote', c.get('title', ''))}\" ({short_title(c['title'])})" for c in cites[:2])
         key_note = key_field.get("why") or (f"key source: {key_field['source']}" if key_field.get("source") else "")
         return " ".join(x for x in (f"The run took {took}." if took else "", f"Key: {key_note}" if key_note else "") if x)
     rejected = [f"{r['value']} ({r['reason']})" for r in run["rejected"] if r["field"] == f]

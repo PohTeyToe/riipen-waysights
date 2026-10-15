@@ -10,11 +10,15 @@
 3. New York: a county's owned roads are the sum of county_mileage over its rows.
    The all-roads total is shown beside it, never used as the value.
 4. Sources that give different numbers for the same field go to a person with
-   every quote. No tolerance rules: an approximate figure agrees with a precise
-   one only if the precise one rounds to it at the precision it is printed with
-   ("approximately 300 km" and 310 km agree; "close to 302 miles" and 300.62 don't).
-5. Emails and phones must be printed on an approved page. Never built from a
-   name. (Summary sentences are checked in summarize.py under the same rule.)
+   every quote. Two figures agree, and are one option, when they are within 2%
+   of each other (the same roads measured twice; NEAR below) or when
+   an approximate one is the precise one rounded at the precision it is printed
+   with ("approximately 300 km" and 310 km). The run keeps the precise figure,
+   from the Account's own pages before the state's data, and shows the other
+   beside it. If either says centerline, the figure counts as centerline.
+5. Emails and phones must be printed on an approved page, whole: a value cut out
+   of a longer address or extension doesn't count. Never built from a name.
+   (Summary sentences are checked in summarize.py under the same rule.)
 """
 from __future__ import annotations
 
@@ -26,7 +30,11 @@ from .discover import Source
 
 MI_KM = 1.609344
 NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+# A number as printed text: never the 2 of "m2" or "km²" (NFKC makes the superscript a 2).
+PRINTED_NUMBER = re.compile(r"(?<![a-z])\d[\d,]*(?:\.\d+)?")
 EMAIL = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
+EMAIL_IN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+NEAR = 0.02  # two road lengths this close are the same roads measured twice
 APPROX = re.compile(r"\b(approximately|approx\.?|about|around|close to|nearly|roughly|almost|over|more than)\b|~", re.I)
 CENTERLINE = re.compile(r"\bcent(er|re)[ -]?line\b", re.I)
 RATIO = re.compile(r"%|\bper\b|/\s*km|km\s*/|\bpercent", re.I)
@@ -39,6 +47,7 @@ PHRASE_END = re.compile(r";|[.!?](?:\s|$)")
 MONEY = ("$", "\u20ac", "\u00a3")
 PHONE_MAIN = re.compile(r"\(?\d{3}\)?[\s.-]*\d{3}[\s.-]*\d{4}")
 PHONE_EXT = re.compile(r"(?:\bext\.?|\bx|extension)\s*(\d+)", re.I)
+PHONE_EXT_AFTER = re.compile(r"\s*,?\s*(?:ext\.?|x|extension)\s*(\d+)", re.I)
 
 
 # Typographic variants that PDFs and web pages mix freely.
@@ -77,7 +86,7 @@ def printed_unit(quote: str, n: float, factor: float) -> tuple[str | None, bool]
     "kms of local roads 255"), cut at a semicolon or a sentence end. Returns the words
     that hold a unit of this size (or None), and whether the number is a money amount."""
     q = norm(quote)
-    nums = list(NUMBER.finditer(q))
+    nums = list(PRINTED_NUMBER.finditer(q))
     money = False
     for i, m in enumerate(nums):
         if float(m.group().replace(",", "")) != n:
@@ -100,6 +109,31 @@ def phone_line(value: str) -> tuple[str, str]:
         return digits(value), ""
     ext = PHONE_EXT.search(value[m.end():])
     return digits(m.group()), (ext.group(1) if ext else "")
+
+
+def printed_phones(quote: str) -> list[tuple[str, str]]:
+    """Every phone number the quote prints, as (main line, extension)."""
+    q = unicodedata.normalize("NFKC", quote or "")
+    out = []
+    for m in PHONE_MAIN.finditer(q):
+        ext = PHONE_EXT_AFTER.match(q, m.end())
+        out.append((digits(m.group()), ext.group(1) if ext else ""))
+    return out
+
+
+def printed_emails(quote: str) -> set[str]:
+    return {m.group().lower() for m in EMAIL_IN.finditer(unicodedata.normalize("NFKC", quote or ""))}
+
+
+def printed_at(text: str, quote: str, n: float, nth: int) -> int | None:
+    """Where in the source text the quote prints the nth copy of number n, so two
+    quotes that overlap still point at the same printed number."""
+    t, q = norm(text), norm(quote)
+    start = t.find(q)
+    hits = [m.start() for m in PRINTED_NUMBER.finditer(q) if float(m.group().replace(",", "")) == n]
+    if start < 0 or nth >= len(hits):
+        return None
+    return start + hits[nth]
 
 
 def same_line(a: str, b: str) -> bool:
@@ -204,13 +238,12 @@ class Checker:
         options, partial = [], []
         for total in extraction.get("road_totals") or []:
             idx = total.get("lines") or []
-            if len(set(idx)) != len(idx):
-                self.reject("road_length_km", " + ".join(str(lines[i].get("value")) for i in idx if 0 <= i < len(lines)),
-                            "a total that counts the same line twice")
-                continue
             parts = [ok.get(i) for i in idx]
             if not idx or any(p is None for p in parts):
                 continue  # a part already failed and was listed as rejected
+            if not self.each_printed_once(parts):
+                self.reject("road_length_km", " + ".join(p["value"] for p in parts), "a total that counts the same line twice")
+                continue
             km = sum(p["km"] for p in parts)
             entry = {"km": round(km, 1), "parts": parts, "centerline": all(p["centerline"] for p in parts),
                      "approximate": any(p["approximate"] for p in parts), "why": total.get("why")}
@@ -231,14 +264,17 @@ class Checker:
                 m["approximate"] = m["approximate"] and o["approximate"]
             else:
                 merged[o["km"]] = o
-        opts = list(merged.values())
-        # An approximate figure that a precise one rounds to is the same figure, rounded.
-        for a in [o for o in opts if o["approximate"]]:
-            match = next((o for o in opts if o is not a and agrees(a, o)), None)
-            if match:
-                match["agrees"] = match.get("agrees", []) + a["parts"]
-                match["centerline"] = match["centerline"] or a["centerline"]
-                opts.remove(a)
+        # Figures that agree are one option. The precise one is kept, the Account's own pages
+        # before the state's data, and the others are shown beside it.
+        opts: list[dict] = []
+        for o in sorted(merged.values(), key=lambda o: (o["approximate"], bool(o.get("dataset")))):
+            keep = next((k for k in opts if agree_how(o, k)), None)
+            if keep is None:
+                opts.append(o)
+                continue
+            how = agree_how(o, keep)
+            keep["agrees"] = keep.get("agrees", []) + [{**p, "agrees_by": how} for p in o["parts"]] + o.get("agrees", [])
+            keep["centerline"] = keep["centerline"] or o["centerline"]
         opts.sort(key=lambda o: (not o["centerline"], o["approximate"]))
         field = {"options": opts, "partial": partial}
         if dataset:
@@ -254,6 +290,21 @@ class Checker:
             field.update(status="needs_human", value_km=opts[0]["km"], question=road_question(opts))
         return field
 
+    def each_printed_once(self, parts: list[dict]) -> bool:
+        """A total may use each printed number once, however its lines quote it."""
+        seen, copies = set(), {}
+        for p in parts:
+            c = p["cite"]
+            n = as_number(p["value"])
+            key = (c["source"], c.get("pdf_page"), norm(c["quote"]), n)
+            nth = copies.get(key, 0)
+            copies[key] = nth + 1
+            at = printed_at(self.text_of(c["source"], c.get("pdf_page")), c["quote"], n, nth)
+            if at is None or (c["source"], c.get("pdf_page"), at) in seen:
+                return False
+            seen.add((c["source"], c.get("pdf_page"), at))
+        return True
+
     def ny_owned(self, ds: Source) -> dict:
         """Rule 3. The dataset says what its column measures; that's the centerline check."""
         n = ds.notes
@@ -262,6 +313,7 @@ class Checker:
         cite = self.cite(ds.id, quote)
         cite.update(rows=n["rows"], year=n["year"], sum_mi=n["owned_mi"], column=n["owned_column"])
         return {"km": round(n["owned_mi"] * MI_KM, 1), "centerline": bool(CENTERLINE.search(desc)), "approximate": False,
+                "dataset": True,
                 "why": f"sum of {n['owned_column']} over {n['rows']} rows, {n['year']}",
                 "parts": [{"km": n["owned_mi"] * MI_KM, "value": str(n["owned_mi"]), "unit": "mi",
                            "road_type": "county-owned roads", "centerline": bool(CENTERLINE.search(desc)),
@@ -293,7 +345,7 @@ class Checker:
         value, quote, sid = (e.get("value") or "").strip(), e.get("quote", ""), e.get("source", "")
         problem = self.quote_problem(quote, sid) or \
             (None if EMAIL.match(value) else "not an email address") or \
-            (None if norm(value) in norm(quote) else "email not printed in its quote")
+            (None if value.lower() in printed_emails(quote) else "email not printed in its quote")
         if problem:
             self.reject("email", value, problem, quote, sid)
             return {"status": "not_found"}
@@ -324,7 +376,7 @@ class Checker:
         value, quote, sid = (p.get("value") or "").strip(), p.get("quote", ""), p.get("source", "")
         problem = self.quote_problem(quote, sid) or \
             (None if len(digits(value)) >= 10 else "not a full phone number") or \
-            (None if digits(value) in digits(quote) else "phone not printed in its quote")
+            (None if phone_line(value) in printed_phones(quote) else "phone not printed in its quote")
         if problem:
             self.reject("phone", value, problem, quote, sid)
             return {"status": "not_found"}
@@ -341,13 +393,22 @@ class Checker:
         return kept
 
 
-def agrees(approx: dict, precise: dict) -> bool:
-    """Rule 4: an approximate total agrees with a precise one that rounds to it."""
-    if precise["approximate"] or len({(p["value"], p["unit"]) for p in approx["parts"]}) != 1:
+def rounds(approx: dict, precise: dict) -> bool:
+    """An approximate total that a precise one rounds to, at the precision it is printed with."""
+    if not approx["approximate"] or precise["approximate"] or len({(p["value"], p["unit"]) for p in approx["parts"]}) != 1:
         return False
     part = approx["parts"][0]
     per_unit = part["km"] / as_number(part["value"])  # km per printed unit
     return rounds_to(part["value"], precise["km"] / per_unit)
+
+
+def agree_how(o: dict, keep: dict) -> str | None:
+    """Rule 4: how figure o agrees with the one kept, or None if it's a second option."""
+    if rounds(o, keep):
+        return "rounded"
+    if abs(o["km"] - keep["km"]) <= NEAR * max(o["km"], keep["km"]):
+        return "near"
+    return None
 
 
 def fmt_km(km: float, approximate: bool = False) -> str:

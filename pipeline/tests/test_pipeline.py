@@ -121,11 +121,13 @@ def test_robots_redirect_is_read_where_it_lands():
     assert f.requests == 2 and f.used == 0  # robots.txt hops are requests, not pages
 
 
-def test_robots_403_means_dont_crawl():
+def test_robots_403_means_dont_crawl_and_says_so():
     f = fetcher({"https://example.ca/robots.txt": FakeResponse(403)})
     with pytest.raises(Refused):
         f.fetch("https://example.ca/")
     assert f.session.calls == ["https://example.ca/robots.txt"]
+    # The failed run's Note can say why nothing was read.
+    assert f.errors == [{"url": "https://example.ca/", "reason": "robots.txt answered HTTP 403, so the site wasn't read"}]
 
 
 def test_page_budget_holds():
@@ -163,6 +165,25 @@ def test_project_and_news_links_score_below_the_roads_page():
     older = score_link("Asset Management Plan - Core Assets 2021", "https://x.ca/media/b/2022-amp.pdf")
     assert newer > older
     assert score_link("Annual Budget", "https://x.ca/budget.pdf") < 0  # only plans are worth a PDF download
+
+
+def test_the_newest_plan_wins_whatever_else_its_link_says():
+    older = score_link("Roads Asset Management Plan 2022", "https://x.ca/media/a/roads-amp-2022.pdf")
+    newer = score_link("Asset Management Plan 2025", "https://x.ca/media/b/amp-2025.pdf")
+    assert newer > older
+
+
+def test_a_link_is_scored_on_its_own_words_not_its_folder_or_another_department():
+    # Under the Public Works folder, but about compost: the folder's name doesn't count.
+    assert score_link("Compost Workshop", "https://x.gov/dpw/compost") < MIN_SCORE
+    assert score_link("Sign Shop", "https://x.gov/dpw/signshop") >= MIN_SCORE  # the town's sign work is wanted
+    # "Road" on another department's page: a DMV's road tests, a Sheriff's road patrol.
+    assert score_link("Road Test", "https://x.gov/departments/dmv/") < 0
+    assert score_link("Road Patrol", "https://x.gov/All-Departments/Sheriffs-Office/Road-Patrol") < 0
+    # A link whose text is its own URL has no words of its own.
+    assert score_link("https://x.gov/departments/medication-disposal/", "https://x.gov/departments/medication-disposal/") \
+        < MIN_SCORE
+    assert score_link("Sign up for alerts", "https://x.gov/alerts") < 0
 
 
 def test_another_departments_contact_page_is_not_worth_reading():
@@ -248,6 +269,23 @@ def test_a_total_cannot_count_one_line_twice():
     assert c.rejected[-1]["reason"] == "a total that counts the same line twice"
 
 
+def test_the_same_printed_number_entered_as_two_lines_is_still_one_line():
+    text = "Quantity - kms of local roads 255\nQuantity - kms of collector roads 55"
+    plan = src("S1", text, kind="pdf", pdf={49: text})
+    twice = {"road_lines": [line("255", "kms", "Quantity - kms of local roads 255", page=49),
+                            line("255", "kms", "kms of local roads 255", page=49)],  # overlapping quotes, one number
+             "road_totals": [{"lines": [0, 1], "covers_whole_network": True, "why": "local twice"}]}
+    c = Checker([plan])
+    assert c.road_length(twice, None)["status"] == "not_found"
+    assert c.rejected[-1]["reason"] == "a total that counts the same line twice"
+    # A number printed twice in one quote can be used twice.
+    both = src("S2", "Centreline km: local roads 55, collector roads 55")
+    ext = {"road_lines": [line("55", "km", "Centreline km: local roads 55, collector roads 55", source="S2"),
+                          line("55", "km", "Centreline km: local roads 55, collector roads 55", source="S2")],
+           "road_totals": [{"lines": [0, 1], "covers_whole_network": True, "why": "local and collector"}]}
+    assert Checker([both]).road_length(ext, None)["value_km"] == 110
+
+
 def test_a_quote_cannot_cite_a_pdf_page_the_run_did_not_read():
     c = Checker([src("S1", kind="pdf", pdf={67: "Paved Roads 354,749 Meters $124,346,663 CPI"})])
     assert c.road_line(0, line("354,749", "Meters", "Paved Roads 354,749 Meters", page=999)) is None
@@ -267,6 +305,16 @@ def test_derived_number_is_rejected():
 
 
 # --- rule 2: lengths only ----------------------------------------------------------------
+
+def test_a_superscript_unit_is_an_area_not_a_length():
+    for quote, value, unit in (("Road area 400 m\u00b2", "400", "m"), ("Road density 3 km\u00b2", "3", "km"),
+                               ("Unpaved roads 612 m2", "612", "m")):
+        c = Checker([src("S1", quote)])
+        ext = {"road_lines": [line(value, unit, quote)],
+               "road_totals": [{"lines": [0], "covers_whole_network": True, "why": "labelled a length"}]}
+        assert c.road_length(ext, None)["status"] == "not_found", quote
+        assert c.rejected[-1]["reason"] == "an area, not a length"
+
 
 def test_lane_km_and_area_are_rejected():
     p67 = (FX / "west-lincoln-amp-2025-p67.txt").read_text(encoding="utf-8")
@@ -333,6 +381,10 @@ def ny_source(rows):
     return nydata.county_mileage(f, "SARATOGA", "S9")
 
 
+def test_a_county_with_no_rows_has_no_state_figure_not_zero_miles():
+    assert ny_source([]) is None
+
+
 def test_mi_to_km_is_exact():
     assert MI_KM == 1.609344
     assert round(364.21 * MI_KM, 1) == 586.1
@@ -350,16 +402,27 @@ def test_owned_vs_total_picks_county_mileage():
 
 # --- rule 4: disagreeing sources -----------------------------------------------------------
 
-def test_two_sources_that_disagree_go_to_a_person_with_a_pick():
-    page = src("S1", "Repair and upkeep of County Highways and appurtenances on 247.36 miles of highway;")
-    rows = [{"municipality": "Town of A", "county_mileage": "244.31", "total_centerline_highway_mileage": "1229.82"}]
-    ds = ny_source(rows)
-    ext = {"road_lines": [line("247.36", "miles", "on 247.36 miles of highway", road_type="county highways")],
+def county_page_and_state(miles: str, owned_mi: str):
+    page = src("S1", f"Repair and upkeep of County Highways and appurtenances on {miles} miles of highway;")
+    ds = ny_source([{"municipality": "Town of A", "county_mileage": owned_mi, "total_centerline_highway_mileage": "1229.82"}])
+    ext = {"road_lines": [line(miles, "miles", f"on {miles} miles of highway", road_type="county highways")],
            "road_totals": [{"lines": [0], "covers_whole_network": True, "why": "county highways"}]}
-    field = Checker([page, ds]).road_length(ext, ds)
+    return Checker([page, ds]).road_length(ext, ds)
+
+
+def test_two_figures_within_two_percent_are_one_and_the_countys_own_page_is_kept():
+    field = county_page_and_state("247.36", "244.31")  # Warren: 398.1 km and 393.2 km, 1.2% apart
+    assert field["status"] == "filled" and field["value_km"] == 398.1
+    [kept] = field["options"]
+    assert kept["centerline"]  # the state's centerline column agrees, so the county's figure counts as centerline
+    assert [(a["value"], a["agrees_by"]) for a in kept["agrees"]] == [("244.31", "near")]
+
+
+def test_two_figures_further_apart_go_to_a_person_with_a_pick():
+    field = county_page_and_state("260.00", "244.31")  # 6% apart
     assert field["status"] == "needs_human" and field["question"]["kind"] == "pick"
     kms = [o["value_km"] for o in field["question"]["options"] if o["value_km"]]
-    assert kms == [393.2, 398.1]  # the one the source calls centerline first
+    assert kms == [393.2, 418.4]  # the one the source calls centerline first
 
 
 def test_an_approximate_figure_that_rounds_the_precise_one_is_not_a_second_option():
@@ -377,13 +440,22 @@ def test_an_approximate_figure_that_rounds_the_precise_one_is_not_a_second_optio
     assert field["question"]["kind"] == "centerline"  # one figure, and no source says centerline
 
 
-def test_an_approximate_figure_that_does_not_round_to_it_still_asks():
-    page = src("S1", "The Highway Department maintains close to 302 highway miles and 109 bridges.")
-    rows = [{"municipality": "Town of A", "county_mileage": "300.62", "total_centerline_highway_mileage": "1500"}]
-    ds = ny_source(rows)
-    ext = {"road_lines": [line("302", "highway miles", "maintains close to 302 highway miles and 109 bridges")],
+def approximate_and_state(miles: str):
+    page = src("S1", f"The Highway Department maintains close to {miles} highway miles and 109 bridges.")
+    ds = ny_source([{"municipality": "Town of A", "county_mileage": "300.62", "total_centerline_highway_mileage": "1500"}])
+    ext = {"road_lines": [line(miles, "highway miles", f"maintains close to {miles} highway miles and 109 bridges")],
            "road_totals": [{"lines": [0], "covers_whole_network": True, "why": "one figure"}]}
-    field = Checker([page, ds]).road_length(ext, ds)
+    return Checker([page, ds]).road_length(ext, ds)
+
+
+def test_an_approximate_figure_within_two_percent_keeps_the_precise_one():
+    field = approximate_and_state("302")  # Tompkins: "close to 302" miles against 300.62
+    assert field["status"] == "filled" and field["value_km"] == round(300.62 * MI_KM, 1)
+    assert field["options"][0]["agrees"][0]["value"] == "302"
+
+
+def test_an_approximate_figure_that_neither_rounds_nor_comes_close_still_asks():
+    field = approximate_and_state("320")
     assert field["question"]["kind"] == "pick" and len(field["options"]) == 2
 
 
@@ -403,6 +475,18 @@ def test_phone_must_be_printed():
     c = Checker([src("S1", "Phone: (518) 885-2235")])
     assert c.phone({"value": "(518) 885-2235", "quote": "Phone: (518) 885-2235", "source": "S1"})["status"] == "filled"
     assert c.phone({"value": "(518) 885-9999", "quote": "Phone: (518) 885-2235", "source": "S1"})["status"] == "not_found"
+
+
+def test_a_value_cut_out_of_a_longer_one_is_not_printed():
+    c = Checker([src("S1", "Email: publicworks@lincoln.ca. Public Works & Utilities 905-892-2607 x332.")])
+    assert c.email({"value": "works@lincoln.ca", "quote": "Email: publicworks@lincoln.ca", "source": "S1"})["status"] \
+        == "not_found"
+    assert c.email({"value": "PublicWorks@lincoln.ca", "quote": "Email: publicworks@lincoln.ca.", "source": "S1"})[
+        "status"] == "filled"
+    assert c.phone({"value": "905-892-2607 x33", "quote": "Public Works & Utilities 905-892-2607 x332.",
+                    "source": "S1"})["status"] == "not_found"
+    assert c.phone({"value": "905-892-2607 ext. 332", "quote": "Public Works & Utilities 905-892-2607 x332.",
+                    "source": "S1"})["status"] == "filled"
 
 
 def test_two_different_department_numbers_go_to_a_person():
@@ -457,6 +541,9 @@ def test_writeback_updates_the_matched_contact_by_id():
     assert (req["body"]["data"][0]["First_Name"], req["body"]["data"][0]["Last_Name"]) == ("Kevin J.", "Hajos")
     new = writeback.contact_request({"crm_id": "sample-acct-005"}, {"action": "create", "contact": {}}, head)
     assert new["method"] == "POST" and "Phone" not in new["body"]["data"][0] and "Email" not in new["body"]["data"][0]
+    # A merge sends only what the run found: no title found leaves the Contact's title alone.
+    untitled = writeback.contact_request({"crm_id": "sample-acct-005"}, merge, {**head, "title": None})
+    assert "Title" not in untitled["body"]["data"][0]
 
 
 def test_no_merge_on_a_different_surname_or_surname_alone():
@@ -509,6 +596,7 @@ def test_brief_sentences_must_be_cited_checked_and_backed_by_what_they_cite(monk
         {"text": "Waysights finds signs 4x faster.", "cites": ["W1"]},
         {"text": "Next step: confirm with Public Works.", "cites": ["S7"]},
         {"text": "Next step: call the Highway Department at (607) 274-0300.", "cites": ["S2"]},
+        {"text": "The Highway Department signed with Waysights at (607) 274-0300.", "cites": ["S2"]},
     ]}
     monkeypatch.setattr(extract, "PROVIDER", lambda system, prompt, schema: (reply, "test-model"))
     rejected: list[dict] = []
@@ -517,9 +605,11 @@ def test_brief_sentences_must_be_cited_checked_and_backed_by_what_they_cite(monk
     out = summarize.brief(account, fields, sign, [w1], [page], rejected)
     assert [s["text"] for s in out["sentences"]] == [
         "The Highway Department says it maintains more than 5,000 signs.",
-        'It also says it "maintains more than" its share of signs.',  # backed by the words it quotes
         "Next step: call the Highway Department at (607) 274-0300."]
     reasons = [r["reason"] for r in rejected]
+    # Backed by a checked value or words it quotes, but adding words the page doesn't print.
+    assert "uses words its pages don't print: share" in reasons
+    assert "uses words its pages don't print: signed, waysights" in reasons
     assert "nothing in it comes from S2" in reasons  # a claim the cited page doesn't make
     assert 'quotes words its pages don\'t print: "replaced every sign"' in reasons
     assert "cites no source this run read" in reasons
