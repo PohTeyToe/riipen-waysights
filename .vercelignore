@@ -1,0 +1,4 @@
+# The Python side runs locally; only its source files are needed for the page build.
+pipeline/.venv/
+pipeline/.cache/
+**/__pycache__/
