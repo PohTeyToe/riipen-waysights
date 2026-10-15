@@ -160,7 +160,8 @@ def sources_md(meta: dict) -> str:
         f"Every page, PDF and dataset the run read, with the date, HTTP status and the first 16 hex digits of the "
         f"sha256 of what came back (the full hashes are in `run/pages/`). Run date {meta['run_date']}, user agent "
         f"`{meta['user_agent']}`, robots.txt obeyed, at least {meta['min_delay_s']:g} s between requests to one "
-        f"host, at most {meta['page_budget']} pages per Account. robots.txt files and redirect hops are extra "
+        f"host, at most {meta['page_budget']} pages per Account, plus 3 requests to data.ny.gov for a New York "
+        f"county. robots.txt files and redirect hops are extra "
         f"requests: each Account's run log lists every request, and `run/{{slug}}.json` counts them "
         f"(`http_requests`).",
         "",
@@ -269,7 +270,37 @@ DEV_NOTES = [
     "real. The extractor now returns only the number a page gives for the department itself, and sign lines must be "
     "about signs in general. A second repeat had the brief call Tompkins County's Highway Department \"Public "
     "Works\"; the brief now names the department the way its page does. The discovery change above came after the "
-    "third repeat, so the outputs here are from a fourth.",
+    "third repeat, so the outputs from that round came from a fourth.",
+    "",
+    "After review of that run (pipeline commit 731e55e; 24 right, 0 wrong, 7 correctly blank, 0 missed, 5 sent to "
+    "a person), these changes were made and the run was repeated from scratch:",
+    "",
+    "- Rule 4: two road lengths within 2% of each other are the same roads measured twice. The precise figure is "
+    "kept, the Account's own page before the state's data, and the other is shown beside it. Warren (398.1 km on "
+    "the county's page, 393.2 km in the 2020 state data) and Tompkins (\"close to 302 highway miles\" against "
+    "300.62 mi) no longer ask a person to pick between figures about 1% apart. The answer key, written before the "
+    "first run, sends both to a person, and its rules count filling them as wrong. The key is unchanged.",
+    "- Checks: emails and phones must be printed whole (a review found \"x33\" passing against \"x332\"), the 2 of "
+    "\"m2\" or \"km²\" is not read as a number, a total uses each printed number once however its lines quote "
+    "it, a county with no dataset rows gets no state figure instead of 0 km, and every word of a brief sentence "
+    "must be printed on a page it cites, apart from a short list of connecting words.",
+    "- Write-back: a Contact merge sends only the fields the run found, so a missing title is never sent as null.",
+    "- Fetching: robots.txt refusals and off-list redirects are recorded as fetch errors, so a failed run's Note "
+    "says why.",
+    "- Discovery: a link counts on its own words and its page's own name, not the folder it sits in (Warren's Public "
+    "Works folder also holds its composting and solid waste pages). Other departments' pages are skipped even when "
+    "they say \"road\" (Saratoga's DMV road tests, Tompkins' Sheriff road patrol), a link whose text is its URL has "
+    "no words, a bare \"Contact Us\" counts only near the site's root, sign pages are wanted, and plan PDFs compete "
+    "on their year alone, so the newest is read.",
+    "- Sign lines: a list that only names signs among other assets (Lincoln's \"parking lots, signs, playground "
+    "equipment\") is not sign work.",
+    "- No Account brief when the pages say nothing about signs, since it would only repeat the contact fields "
+    "(Saratoga). Waysights' own pages are no longer read: they were there for the brief's vocabulary, and no kept "
+    "sentence ever cited one.",
+    "",
+    "In the first repeat the stricter brief check dropped good sign sentences: the prompt still asked for "
+    "Waysights' words, and the check split \"County's\" into two words. The prompt now lists the connecting words "
+    "the check allows and the check reads a possessive as its word, so the outputs here are from a second repeat.",
 ]
 
 
