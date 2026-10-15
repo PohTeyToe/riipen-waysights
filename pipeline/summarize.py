@@ -21,17 +21,7 @@ import re
 
 from .discover import Source
 from .extract import complete_json, PROMPTS
-from .fetch import Fetcher, Refused
-from .pages import html_page
 from .validate import digits, norm, numbers_in
-
-# Waysights' own public pages: vocabulary only.
-COMPANY_PAGES = [
-    "https://waysights.com/faq/",
-    "https://waysights.com/how-it-works/",
-    "https://waysights.com/products/",
-    "https://waysights.com/pricing/",
-]
 
 BRIEF_SCHEMA = {
     "type": "object",
@@ -40,19 +30,6 @@ BRIEF_SCHEMA = {
         "required": ["text", "cites"]}}},
     "required": ["sentences"],
 }
-
-
-def load_context(f: Fetcher) -> list[Source]:
-    """Waysights' pages, read once per run."""
-    out: list[Source] = []
-    for url in COMPANY_PAGES:
-        try:
-            page = f.fetch(url, why="Waysights' own page, for the brief's vocabulary")
-        except Refused:
-            continue
-        title, text, _, _ = html_page(page.body, page.url)
-        out.append(Source(f"W{len(out) + 1}", page.url, "html", title, "company context", page.record(), text=text))
-    return out
 
 
 def facts_for(fields: dict, sign_work: list[dict]) -> tuple[str, list[str], dict[str, list[str]]]:
@@ -101,20 +78,26 @@ def facts_for(fields: dict, sign_work: list[dict]) -> tuple[str, list[str], dict
 
 
 # The only words a sentence may add to what its pages print: grammar, and how a rep reaches someone.
+# The prompt lists them too, so the writer knows the rule it is checked by.
 CONNECTING = set("""a an the and or but of to for in on at by with from as into its it their they this that these
 those who which where is are was be has have also both each next step ask asking call calling email emailing
 reach contact through says said lists listed shows counts among including keeps keeping page own""".split())
 
 
+def words_of(text: str) -> list[str]:
+    """Lowercase words, with a possessive 's dropped ("County's" is "county")."""
+    return re.findall(r"[a-z0-9]+", re.sub(r"'s\b", "", norm(text)))
+
+
 def word_set(text: str) -> set[str]:
-    return set(re.findall(r"[a-z0-9]+", norm(text)))
+    return set(words_of(text))
 
 
 def unprinted_words(sentence: str, printed: set[str]) -> list[str]:
     """Words in the sentence that none of its cited pages print (a plural or its singular counts)."""
     def known(w: str) -> bool:
         return w in CONNECTING or any(v in printed for v in {w, w + "s", w + "es", w[:-1], w[:-2]} if v)
-    return [w for w in re.findall(r"[a-z0-9]+", norm(sentence)) if not known(w)]
+    return [w for w in words_of(sentence) if not known(w)]
 
 
 def four_word_runs(text: str) -> set[tuple[str, ...]]:
@@ -139,20 +122,18 @@ def backs(sentence: str, sid: str, texts: dict[str, str], values: dict[str, list
     return bool(four_word_runs(sentence) & four_word_runs(page))
 
 
-def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Source], sources: list[Source],
-          rejected: list[dict]) -> dict:
+def brief(account: dict, fields: dict, sign_work: list[dict], sources: list[Source], rejected: list[dict]) -> dict:
     facts, allowed, values = facts_for(fields, sign_work)
-    company = [c for c in context if c.id.startswith("W")]
-    ctx = "\n\n".join(f"[{c.id}] {c.url}\n{c.text[:6000]}" for c in company)
     allowed_numbers = {n for a in allowed for n in numbers_in(a)}
     numbers = ", ".join(sorted({f"{n:g}" for n in allowed_numbers}, key=float)) or "none"
     prompt = (PROMPTS / "summarize.md").read_text(encoding="utf-8") \
         .replace("{account_name}", account["name"]).replace("{region}", account["region"]) \
-        .replace("{facts}", facts).replace("{numbers}", numbers).replace("{context}", ctx)
+        .replace("{facts}", facts).replace("{numbers}", numbers) \
+        .replace("{connecting}", ", ".join(sorted(CONNECTING)))
     out, model_id = complete_json("You write short, sourced CRM notes. Every sentence cites its sources.",
                                   prompt, BRIEF_SCHEMA)
-    texts = {s.id: s.text + "\n" + "\n".join(s.pdf_pages.values()) for s in [*sources, *company]}
-    titles = {s.id: s.title for s in [*sources, *company]}
+    texts = {s.id: s.text + "\n" + "\n".join(s.pdf_pages.values()) for s in sources}
+    titles = {s.id: s.title for s in sources}
     kept = []
     for s in out.get("sentences", []):
         text, cites = s.get("text", ""), s.get("cites") or []
@@ -171,6 +152,4 @@ def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Sour
             rejected.append({"field": "brief", "value": text, "reason": reason, "quote": "", "cites": cites})
             continue
         kept.append({"text": text, "cites": cites})
-    cited = {c for s in kept for c in s["cites"]}
-    return {"sentences": kept, "model": model_id,
-            "context": {c.id: {"url": c.url, "title": c.title} for c in company if c.id in cited}}
+    return {"sentences": kept, "model": model_id}

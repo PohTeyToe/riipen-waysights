@@ -22,10 +22,6 @@ APPROVED = {
     "tompkins": ["tompkinscountyny.gov", "data.ny.gov"],
 }
 
-# Read once per run for the Account brief's vocabulary: Waysights' own public
-# pages. Never used as a source for an Account field.
-CONTEXT = ["waysights.com"]
-
 
 def _host(h: str) -> str:
     h = h.lower()

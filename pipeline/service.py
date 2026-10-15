@@ -19,10 +19,9 @@ import uuid
 from fastapi import BackgroundTasks, FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
-from . import summarize
-from .allowlist import APPROVED, CONTEXT, is_allowed
-from .fetch import Fetcher, HostClock, RunLog
-from .run import CACHE, enrich, load_seed
+from .allowlist import APPROVED, is_allowed
+from .fetch import HostClock
+from .run import enrich, load_seed
 
 RUN_EVERY_S = 24 * 3600
 
@@ -53,8 +52,7 @@ def run_job(job_id: str, row: dict) -> None:
     job["status"] = "running"
     try:
         seed = load_seed()
-        context = summarize.load_context(Fetcher(CONTEXT, RunLog("context"), clock, budget=10, cache_dir=CACHE))
-        result = enrich(row, seed, clock, context, cached=False)
+        result = enrich(row, seed, clock, cached=False)
         job.update(status=result["status"], proposed=result["proposed"], questions=result["questions"],
                    writeback=result["writeback"])
     except Exception as e:  # the job reports failure; the service keeps running

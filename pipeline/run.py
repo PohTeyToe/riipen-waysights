@@ -5,7 +5,7 @@
     python -m pipeline.run --cached        # reuse pages already in the local fetch cache (dev only)
 
 Writes data/run/{slug}.json, data/run/pages/{slug}.json (the exact text every
-quote was checked against), data/run/context.json and data/run/meta.json.
+quote was checked against) and data/run/meta.json.
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from . import dedupe, nydata, summarize, writeback
-from .allowlist import APPROVED, CONTEXT
+from .allowlist import APPROVED
 from .discover import Discovery, Source
 from .extract import extract
 from .fetch import MIN_DELAY_S, PAGE_BUDGET, USER_AGENT, Fetcher, HostClock, RunLog, now_iso
@@ -167,7 +167,7 @@ def field_rows(account: dict, seed: dict, fields: dict, proposal: dict | None, b
     return rows
 
 
-def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cached: bool) -> dict:
+def enrich(row: dict, seed: dict, clock: HostClock, cached: bool) -> dict:
     account = account_from_seed(row)
     slug = account["slug"]
     log = RunLog(slug)
@@ -243,7 +243,7 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
         log("brief", "no sign work on the pages read, so no brief")
     elif readable or dataset:
         try:
-            brief = summarize.brief(account, fields, sign_work, context, sources, rejected)
+            brief = summarize.brief(account, fields, sign_work, sources, rejected)
             log("brief", f"{count(len(brief['sentences']), 'sentence')} kept", model=brief["model"])
         except RuntimeError as e:
             brief = {"sentences": [], "model": None, "error": str(e)}
@@ -336,17 +336,8 @@ def main() -> None:
     commit = git("rev-parse", "HEAD")
     dirty = bool(git("status", "--porcelain", "--", "pipeline"))
 
-    ctx_log = RunLog("context")
-    ctx_fetcher = Fetcher(CONTEXT, ctx_log, clock, budget=10, cache_dir=CACHE, cached=args.cached)
-    context = summarize.load_context(ctx_fetcher)
-    (OUT / "context.json").write_text(json.dumps({
-        "steps": ctx_log.lines,
-        "sources": [{"id": c.id, "url": c.url, "title": c.title, **c.record, "notes": c.notes or None,
-                     "text": c.text} for c in context]},
-        indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
-
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
-        results = list(pool.map(lambda r: enrich(r, seed, clock, context, args.cached), rows))
+        results = list(pool.map(lambda r: enrich(r, seed, clock, args.cached), rows))
 
     models = sorted({m for r in results for m in (r["run"]["model"], r["brief"].get("model")) if m})
     meta_path = OUT / "meta.json"

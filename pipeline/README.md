@@ -21,7 +21,7 @@ The model step uses the Claude Code CLI (`claude -p`). Swap `extract.PROVIDER` f
 | File | Does |
 |---|---|
 | `allowlist.py` | The approved sites. Nothing else is fetched. |
-| `fetch.py` | Honest user agent, robots.txt, 2 s per host, 15 pages per Account (robots.txt and redirects counted separately), TLS verified by the OS trust store. Logs every request. |
+| `fetch.py` | Honest user agent, robots.txt, 2 s per host, 15 pages per Account plus 3 requests to the state dataset (robots.txt and redirects counted separately), TLS verified by the OS trust store. Logs every request. |
 | `discover.py` | Follows the site's own links (menu first, sitemap if the menu runs out) to the roads pages, contacts, sign pages and, in Ontario, the newest asset management plan. A link counts on its own words, not the folder it sits in or another department's name. |
 | `pages.py` | HTML and PDF to text. PDFs are read in reading order, so a table row keeps its label and number together. |
 | `nydata.py` | New York: a county's own roads are the sum of `county_mileage` in the NYSDOT dataset. |

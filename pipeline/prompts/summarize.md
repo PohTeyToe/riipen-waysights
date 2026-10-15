@@ -2,7 +2,7 @@ Write a short Account brief for a sales rep at Waysights, a company that helps m
 
 Account: {account_name} ({region})
 
-Use only the facts below. Each fact has a source id. Every sentence must cite the source ids it relies on, and only those. Don't add anything that isn't in a fact: no numbers, names, dates or claims of your own, no guesses about what the municipality does beyond what it says, and nothing from Waysights' marketing. Use Waysights' own words where they fit (sign inventory, retroreflectivity, jurisdiction), but keep the municipality's own words for its sign work, quoting a few of them.
+Use only the facts below. Each fact has a source id. Every sentence must cite the source ids it relies on, and only those. Don't add anything that isn't in a fact: no numbers, names, dates or claims of your own, no guesses about what the municipality does beyond what it says, and nothing from Waysights' marketing. Write with the municipality's own words, quoting a few of them. Use only words the facts give (their quotes, names, titles and document titles) and these connecting words: {connecting}. Each sentence is checked against the pages it cites, and one with any other word is dropped.
 
 Write one or two sentences, in this order:
 1. Only if a sign-work fact is given: what the municipality itself says about its signs, such as an inventory, inspections, records, a sign shop or how many signs it has. If no fact covers sign work, leave this sentence out.
@@ -16,6 +16,3 @@ Facts:
 {facts}
 
 Numbers a sentence may contain (anything else gets the sentence dropped): {numbers}
-
-Waysights' own pages, for vocabulary only (cite one only if a sentence really uses its words):
-{context}

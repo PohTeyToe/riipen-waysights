@@ -19,7 +19,7 @@ What to find:
 
 5. department_phones: the department's own number: the one a page gives for the department as a whole ("Public Works: 905-...", "contact the Public Works Department at ..."), exactly as printed (keep the extension), with its quote. Never a named person's or a role's line, an after-hours or emergency line, a fax, another program's office, or the general town hall number (unless the page gives it as the department's number). Most sites give the department one number: list it once even if several pages print it. If different pages give the department itself different numbers or extensions, list each one, so a person can see that they disagree.
 
-6. sign_work: up to three lines where the municipality says something about its road signs in general: an inventory, inspections, maintenance or replacement, records, a sign shop, or how many signs it has. Not signs for one program or event. Quote exactly.
+6. sign_work: up to three lines where the municipality says something about its road signs in general: an inventory, inspections, maintenance or replacement, records, a sign shop, or how many signs it has. Not signs for one program or event, and not a list that only names signs among other assets ("parking lots, signs, playground equipment"). Quote exactly.
 
 Rules:
 - Every quote must be copied from the source text with the same words in the same order. Keep it to one sentence, table row or contact block line run; don't join text from different places.

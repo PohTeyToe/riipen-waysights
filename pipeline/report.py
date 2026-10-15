@@ -153,8 +153,7 @@ def run_tests() -> dict:
 
 def sources_md(meta: dict) -> str:
     runs = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted(OUT.glob("*.json"))
-            if p.stem not in ("meta", "context")}
-    ctx = json.loads((OUT / "context.json").read_text(encoding="utf-8"))
+            if p.stem != "meta"}
     out = [
         "# Sources",
         "",
@@ -205,12 +204,7 @@ def sources_md(meta: dict) -> str:
         if fails:
             out += ["", "Requests that failed: " + "; ".join(f"{ln.get('url')} ({ln['msg']})" for ln in fails) + "."]
         out.append("")
-    out += ["## Context for the Account briefs", "",
-            "Waysights' own pages, read once per run, for the briefs' vocabulary only.", "",
-            "| ID | URL | Fetched (UTC) | HTTP | sha256 (first 16) |", "|---|---|---|---|---|"]
-    for c in ctx["sources"]:
-        out.append(f"| {c['id']} | {c['url']} | {c['fetched_at']} | {c['status']} | `{c['sha256'][:16]}` |")
-    out += ["", "## How the run was made", ""] + DEV_NOTES
+    out += ["## How the run was made", ""] + DEV_NOTES
     out += ["", "## Changes to the answer key after the run", "", "None."]
     return "\n".join(out) + "\n"
 

@@ -190,6 +190,9 @@ def test_another_departments_contact_page_is_not_worth_reading():
     assert score_link("Contact Us", "https://x.gov/Contact") >= MIN_SCORE
     assert score_link("Sheriff Contact", "https://x.gov/sheriff/contact") < MIN_SCORE
     assert score_link("Contact Information", "https://x.gov/Board-of-Elections/Contact-Information") < MIN_SCORE
+    # A Contact Us inside another department's folder is that department's.
+    assert score_link("Contact Us", "https://x.gov/All-Departments/Recycling-Materials-Management/Contact-Us") < MIN_SCORE
+    assert score_link("Contact Us", "https://x.gov/About/Contact-Us") >= MIN_SCORE
     # The plans and reports section is worth reading; every page under it isn't.
     assert score_link("Plans, Studies and Reports", "https://x.ca/township-office/plans-studies-and-reports/") >= MIN_SCORE
     assert score_link("Drinking Water Reports", "https://x.ca/plans-studies-and-reports/drinking-water-reports/") < MIN_SCORE
@@ -593,19 +596,20 @@ def test_brief_sentences_must_be_cited_checked_and_backed_by_what_they_cite(monk
         {"text": 'The department says it "replaced every sign".', "cites": ["S2"]},
         {"text": 'It also says it "maintains more than" its share of signs.', "cites": ["S2"]},
         {"text": "Signs matter a great deal.", "cites": []},
-        {"text": "Waysights finds signs 4x faster.", "cites": ["W1"]},
+        {"text": "The Highway Department finds signs 4x faster.", "cites": ["S2"]},
         {"text": "Next step: confirm with Public Works.", "cites": ["S7"]},
         {"text": "Next step: call the Highway Department at (607) 274-0300.", "cites": ["S2"]},
         {"text": "The Highway Department signed with Waysights at (607) 274-0300.", "cites": ["S2"]},
+        {"text": "Tompkins County's Highway Department says it maintains more than 5,000 signs.", "cites": ["S2"]},
     ]}
     monkeypatch.setattr(extract, "PROVIDER", lambda system, prompt, schema: (reply, "test-model"))
     rejected: list[dict] = []
     account = {"name": "Tompkins County", "region": "New York", "jurisdiction": "NY"}
-    w1 = src("W1", "Inspect signs four times faster.", url="https://waysights.com/faq/")
-    out = summarize.brief(account, fields, sign, [w1], [page], rejected)
+    out = summarize.brief(account, fields, sign, [page], rejected)
     assert [s["text"] for s in out["sentences"]] == [
         "The Highway Department says it maintains more than 5,000 signs.",
-        "Next step: call the Highway Department at (607) 274-0300."]
+        "Next step: call the Highway Department at (607) 274-0300.",
+        "Tompkins County's Highway Department says it maintains more than 5,000 signs."]  # a possessive is its word
     reasons = [r["reason"] for r in rejected]
     # Backed by a checked value or words it quotes, but adding words the page doesn't print.
     assert "uses words its pages don't print: share" in reasons

@@ -20,7 +20,8 @@ from .pages import Link, clean_url, html_page, pdf_pages, pdf_title, pick_pdf_pa
 # Words that make a link worth reading. Anchor text counts in full, and the page's own name (the
 # last part of its path) at half weight; the folders above it don't count, because a Public Works
 # folder also holds its composting and solid waste pages (third item: whether the path counts).
-# A bare "Contact" link is the site's own contact page; "Sheriff Contact" is another department's.
+# A bare "Contact" link is the site's own contact page when it sits near the root (SITE_CONTACT);
+# "Sheriff Contact", or a Contact Us inside another department's folder, is that department's.
 # The plans-and-reports pattern finds that section from its own link, not every page under it.
 WANT = [
     (r"\bsigns?\b|\bsignage\b|\bsign ?shop\b", 5, True),  # the brief says what the town does with its signs
@@ -33,7 +34,6 @@ WANT = [
     (r"\btransportation\b", 3, True),
     (r"\b(contacts?|staff) directory\b|\bdirectory of officials\b", 6, True),
     (r"\bdepartments\b", 4, True),
-    (r"^contacts?( us)?$", 3, True),
     (r"\bplans?\b.*\b(reports?|studies)\b|\b(reports?|studies)\b.*\bplans?\b", 6, False),
 ]
 # Pages that are about one event or transaction, not the department or its plan.
@@ -44,6 +44,7 @@ AVOID = r"\bnews\b|\bposts?\b|\bevents?\b|\bcareers?\b|\bjobs?\b|\btenders?\b|\b
 # a Sheriff's road patrol). Checked on the link text and the whole path.
 OTHER_DEPARTMENT = r"\bdmv\b|\bmotor vehicles?\b|\bsheriffs?\b|\bpolice\b|\bhealth\b|\belections?\b|\bcourts?\b|" \
                    r"\bprobation\b|\blibrar(y|ies)\b|\bsocial services\b|\brecreation\b|\btourism\b|\bveterans?\b"
+SITE_CONTACT = re.compile(r"^contacts?( us)?$")
 PLAN_PDF = 15  # a plan PDF's score before its year
 MIN_SCORE = 3
 MAX_DEPTH = 3
@@ -75,6 +76,8 @@ def score_link(text: str, url: str, avoid: bool = True) -> float:
             s += weight
         if in_path and re.search(pattern, name):
             s += weight / 2
+    if len([p for p in urlsplit(url).path.split("/") if p]) <= 2:
+        s += 3 * bool(SITE_CONTACT.search(anchor)) + 1.5 * bool(SITE_CONTACT.search(name))
     return s
 
 
