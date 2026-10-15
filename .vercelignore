@@ -2,3 +2,8 @@
 pipeline/.venv/
 pipeline/.cache/
 **/__pycache__/
+# Local-only files
+BRIEF.md
+_review_screenshots/
+node_modules/
+dist/
