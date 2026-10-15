@@ -9,7 +9,7 @@ Which sites count as approved is Waysights' call (question 2 in the plan).
 This list is the demo's answer: each municipality's own site, the folder its
 site links its PDFs from, and the New York State open data portal.
 """
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 APPROVED = {
     "lincoln": ["lincoln.ca"],
@@ -22,13 +22,9 @@ APPROVED = {
     "tompkins": ["tompkinscountyny.gov", "data.ny.gov"],
 }
 
-# Read once per run for the Account brief: Waysights' own public pages and the
-# two sign rules the brief cites. Never used as a source for an Account field.
-CONTEXT = [
-    "waysights.com",
-    "www.ontario.ca/laws/",
-    "mutcd.fhwa.dot.gov/pdfs/",
-]
+# Read once per run for the Account brief's vocabulary: Waysights' own public
+# pages. Never used as a source for an Account field.
+CONTEXT = ["waysights.com"]
 
 
 def _host(h: str) -> str:
@@ -43,8 +39,18 @@ def matches(url: str, entry: str) -> bool:
     host, _, prefix = entry.partition("/")
     if _host(parts.hostname or "") != _host(host):
         return False
+    # "/folder/../other/" is resolved by the HTTP client before it is sent, so the request
+    # would leave the approved folder while the log kept the original URL. Refuse it.
+    if any(seg in (".", "..") for seg in unquote(parts.path).split("/")):
+        return False
     return parts.path.startswith("/" + prefix) if prefix else True
 
 
 def is_allowed(url: str, entries: list[str]) -> bool:
     return any(matches(url, e) for e in entries)
+
+
+def host_allowed(url: str, entries: list[str]) -> bool:
+    """The host alone is on the list (robots.txt lives at a host's root, outside any approved folder)."""
+    parts = urlsplit(url)
+    return parts.scheme == "https" and any(_host(parts.hostname or "") == _host(e.partition("/")[0]) for e in entries)

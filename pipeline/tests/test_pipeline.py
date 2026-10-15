@@ -78,6 +78,9 @@ def test_allowlist_blocks_off_list_links():
     pelham = APPROVED["pelham"]
     assert is_allowed("https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/x/plan.pdf", pelham)
     assert not is_allowed("https://media-001-ca.cdn.govstack.com/other-town/media/x/plan.pdf", pelham)
+    # The HTTP client would resolve "..", so the request would leave the approved folder.
+    assert not is_allowed("https://media-001-ca.cdn.govstack.com/pelham-007-ca/../other-town/plan.pdf", pelham)
+    assert not is_allowed("https://media-001-ca.cdn.govstack.com/pelham-007-ca/%2e%2e/other-town/plan.pdf", pelham)
 
 
 def test_discovery_skips_off_list_links_without_fetching():
@@ -91,11 +94,31 @@ def test_discovery_skips_off_list_links_without_fetching():
     assert any("off-list link skipped" in ln["msg"] for ln in f.log.lines)
 
 
+def test_a_broken_pdf_is_skipped_not_fatal():
+    home = b'<a href="/media/2025-asset-management-plan.pdf">2025 Asset Management Plan</a>'
+    f = fetcher({"https://example.ca/robots.txt": FakeResponse(404),
+                 "https://example.ca/": FakeResponse(200, home),
+                 "https://example.ca/media/2025-asset-management-plan.pdf":
+                     FakeResponse(200, b"<html>Not found</html>", {"Content-Type": "application/pdf"})})
+    sources = Discovery(f, "https://example.ca/", wants_plan=True).run()
+    assert [s.kind for s in sources] == ["html"]
+    assert any("PDF unreadable" in ln["msg"] for ln in f.log.lines)
+
+
 def test_robots_disallow_is_obeyed():
     f = fetcher({"https://example.ca/robots.txt": FakeResponse(200, b"User-agent: *\nDisallow: /search/\n")})
     with pytest.raises(Refused):
         f.fetch("https://example.ca/search/?q=roads")
     assert f.session.calls == ["https://example.ca/robots.txt"]
+
+
+def test_robots_redirect_is_read_where_it_lands():
+    f = fetcher({"https://example.ca/robots.txt": FakeResponse(301, b"", {"Location": "https://www.example.ca/robots.txt"}),
+                 "https://www.example.ca/robots.txt": FakeResponse(200, b"User-agent: *\nDisallow: /private/\n")})
+    with pytest.raises(Refused):
+        f.fetch("https://example.ca/private/plan")
+    assert f.session.calls == ["https://example.ca/robots.txt", "https://www.example.ca/robots.txt"]
+    assert f.requests == 2 and f.used == 0  # robots.txt hops are requests, not pages
 
 
 def test_robots_403_means_dont_crawl():
@@ -197,6 +220,31 @@ def test_value_must_be_printed_in_its_quote():
     assert c.rejected[-1]["reason"] == "value not printed in its quote"
 
 
+def test_the_unit_must_be_printed_next_to_the_number():
+    c = Checker([src("S1", "Centerline roads 25 km; replacement cost $100. Paved 40 km; total 100.")])
+    assert c.road_line(0, line("100", "miles", "Centerline roads 25 km; replacement cost $100")) is None
+    assert c.rejected[-1]["reason"] == "a money amount, not a length"
+    assert c.road_line(1, line("100", "km", "Paved 40 km; total 100.")) is None
+    assert c.rejected[-1]["reason"] == "no km printed next to 100"
+    # Table rows put the unit in the label.
+    lincoln = Checker([src("S1", "Quantity - kms of local roads 255")])
+    assert lincoln.road_line(0, line("255", "kms", "Quantity - kms of local roads 255"))["km"] == 255
+
+
+def test_a_total_cannot_count_one_line_twice():
+    c = Checker([src("S1", "Centreline roads 25 km")])
+    ext = {"road_lines": [line("25", "km", "Centreline roads 25 km")],
+           "road_totals": [{"lines": [0, 0], "covers_whole_network": True, "why": "twice"}]}
+    assert c.road_length(ext, None)["status"] == "not_found"
+    assert c.rejected[-1]["reason"] == "a total that counts the same line twice"
+
+
+def test_a_quote_cannot_cite_a_pdf_page_the_run_did_not_read():
+    c = Checker([src("S1", kind="pdf", pdf={67: "Paved Roads 354,749 Meters $124,346,663 CPI"})])
+    assert c.road_line(0, line("354,749", "Meters", "Paved Roads 354,749 Meters", page=999)) is None
+    assert c.rejected[-1]["reason"] == "cites PDF page 999, which this run didn't read"
+
+
 def test_derived_number_is_rejected():
     text = (FX / "pelham-road-rehabilitation.txt").read_text(encoding="utf-8")
     quote = ("with an average of 7 km of pavement being rehabilitated each year, which equates to approximately "
@@ -219,6 +267,10 @@ def test_lane_km_and_area_are_rejected():
                                                  "(km/km2) 0.84", measures="ratio")) is None
     assert c.road_line(1, line("612,230", "Square Meters", "Unpaved Roads 612,230 Square Meters $15,851,105 CPI",
                                source="S2", measures="area", page=67)) is None
+    assert c.rejected[-1]["reason"] == "an area, not a length"
+    # The printed words decide, even when the extractor drops "Square" from the unit and calls it a length.
+    assert c.road_line(3, line("612,230", "Meters", "Unpaved Roads 612,230 Square Meters $15,851,105 CPI",
+                               source="S2", page=67)) is None
     assert c.rejected[-1]["reason"] == "an area, not a length"
     paved = c.road_line(2, line("354,749", "Meters", "Paved Roads 354,749 Meters $124,346,663 CPI", source="S2",
                                 road_type="paved roads", page=67))
@@ -301,6 +353,31 @@ def test_two_sources_that_disagree_go_to_a_person_with_a_pick():
     assert kms == [393.2, 398.1]  # the one the source calls centerline first
 
 
+def test_an_approximate_figure_that_rounds_the_precise_one_is_not_a_second_option():
+    plan = src("S1", "Quantity - kms of local roads 255\nQuantity - kms of collector roads 55", kind="pdf",
+               pdf={49: "Quantity - kms of local roads 255\nQuantity - kms of collector roads 55"})
+    page = src("S2", "Currently, Public Works oversees approximately 300km of roadway including 49 bridges.")
+    ext = {"road_lines": [line("255", "kms", "Quantity - kms of local roads 255", page=49),
+                          line("55", "kms", "Quantity - kms of collector roads 55", page=49),
+                          line("300", "km", "oversees approximately 300km of roadway", source="S2")],
+           "road_totals": [{"lines": [0, 1], "covers_whole_network": True, "why": "local and collector"},
+                           {"lines": [2], "covers_whole_network": True, "why": "approximate total"}]}
+    field = Checker([plan, page]).road_length(ext, None)
+    assert [o["km"] for o in field["options"]] == [310]
+    assert field["options"][0]["agrees"][0]["value"] == "300"
+    assert field["question"]["kind"] == "centerline"  # one figure, and no source says centerline
+
+
+def test_an_approximate_figure_that_does_not_round_to_it_still_asks():
+    page = src("S1", "The Highway Department maintains close to 302 highway miles and 109 bridges.")
+    rows = [{"municipality": "Town of A", "county_mileage": "300.62", "total_centerline_highway_mileage": "1500"}]
+    ds = ny_source(rows)
+    ext = {"road_lines": [line("302", "highway miles", "maintains close to 302 highway miles and 109 bridges")],
+           "road_totals": [{"lines": [0], "covers_whole_network": True, "why": "one figure"}]}
+    field = Checker([page, ds]).road_length(ext, ds)
+    assert field["question"]["kind"] == "pick" and len(field["options"]) == 2
+
+
 # --- rule 5: emails and phones ------------------------------------------------------------------
 
 def test_unprinted_email_is_rejected():
@@ -317,6 +394,19 @@ def test_phone_must_be_printed():
     c = Checker([src("S1", "Phone: (518) 885-2235")])
     assert c.phone({"value": "(518) 885-2235", "quote": "Phone: (518) 885-2235", "source": "S1"})["status"] == "filled"
     assert c.phone({"value": "(518) 885-9999", "quote": "Phone: (518) 885-2235", "source": "S1"})["status"] == "not_found"
+
+
+def test_two_different_department_numbers_go_to_a_person():
+    plans = src("S2", "please contact the Public Works & Utilities Department at 905-892-2607 x332.")
+    directory = src("S5", "Public Works\nPhone: 905-892-2607 ext. 33\nFax: 905-892-5055")
+    c = Checker([plans, directory])
+    got = c.phones([{"value": "905-892-2607 x332", "quote": "Department at 905-892-2607 x332.", "source": "S2"},
+                    {"value": "905-892-2607 ext. 33", "quote": "Phone: 905-892-2607 ext. 33", "source": "S5"}])
+    assert got["status"] == "needs_human" and got["values"] == ["905-892-2607 x332", "905-892-2607 ext. 33"]
+    # The same line with and without its extension is one number, and the extension is kept.
+    one = c.phones([{"value": "905-892-2607", "quote": "905-892-2607 x332", "source": "S2"},
+                    {"value": "905-892-2607 x332", "quote": "905-892-2607 x332", "source": "S2"}])
+    assert one["status"] == "filled" and one["value"] == "905-892-2607 x332"
 
 
 def test_roads_head_name_must_be_in_its_quote():
@@ -365,25 +455,60 @@ def test_no_merge_on_a_different_surname_or_surname_alone():
     assert dedupe.propose({"name": "Martin Hajos", "phone": "(518) 555-0100"}, [SEED_CONTACT])["action"] == "create"
 
 
+def test_different_full_first_names_never_match():
+    karen = {"id": "c2", "name": "Karen Hajos", "title": "Clerk", "phone": "(518) 761-6556", "email": None}
+    assert dedupe.propose({"name": "Kevin J. Hajos", "phone": "(518) 555-0199"}, [karen])["action"] == "create"
+    # Not even on the department's shared line.
+    assert dedupe.propose({"name": "Kevin J. Hajos", "phone": "(518) 761-6556"}, [karen])["action"] == "create"
+
+
+def test_the_account_is_updated_by_its_id_and_the_department_phone_has_its_own_field():
+    from pipeline import writeback
+    fields = {"road_length_km": {"status": "needs_human"}, "email": {"status": "not_found"},
+              "phone": {"status": "filled", "value": "905-563-2799"}, "key_documents": [],
+              "roads_head": {"status": "not_found"}}
+    req = writeback.account_update({"crm_id": "sample-acct-001", "name": "Town of Lincoln"}, fields, {}, "needs_review",
+                                   FETCHED)
+    assert (req["method"], req["url"].rsplit("/", 1)[1]) == ("PUT", "Accounts")
+    record = req["body"]["data"][0]
+    assert record["id"] == "sample-acct-001" and "Account_Name" not in record
+    assert record["Public_Works_Phone"] == "905-563-2799" and "Phone" not in record
+    failed = writeback.build({"crm_id": "sample-acct-001", "name": "x"}, {**fields, "phone": {"status": "not_found"}},
+                             None, {}, [], "failed", FETCHED, [{"url": "https://example.ca/", "reason": "HTTP 503"}])
+    first = failed["requests"][0]["body"]["data"][0]
+    assert first["Enrichment_Status"] == "Failed" and "Last_Enriched" not in first  # a failed run can be retried
+    assert "HTTP 503" in failed["requests"][-1]["body"]["data"][0]["Note_Content"]
+
+
 # --- the brief ----------------------------------------------------------------------------------------
 
-def test_uncited_or_unchecked_sentences_are_dropped(monkeypatch):
-    fields = {"road_length_km": {"status": "filled", "value_km": 586.1, "options": [], "partial": []},
-              "roads_head": {"status": "not_found"}, "email": {"status": "not_found"},
-              "phone": {"status": "not_found"}, "key_documents": []}
+def test_brief_sentences_must_be_cited_checked_and_backed_by_what_they_cite(monkeypatch):
+    page = src("S2", "The Tompkins County Highway Department also maintains more than 5,000 signs.\n"
+                     "Non-Emergency\n(607) 274-0300")
+    phone_cite = {"quote": "(607) 274-0300", "source": "S2", "url": page.url, "title": "Highway", "pdf_page": None,
+                  "fetched_at": FETCHED}
+    fields = {"road_length_km": {"status": "needs_human"}, "roads_head": {"status": "not_found"},
+              "email": {"status": "not_found"}, "phone": {"status": "filled", "value": "(607) 274-0300", "cite": phone_cite},
+              "key_documents": []}
+    sign = [{"quote": "The Tompkins County Highway Department also maintains more than 5,000 signs.", "source": "S2"}]
     reply = {"sentences": [
-        {"text": "The county maintains 586.1 centerline km of its own roads.", "cites": ["S1"]},
+        {"text": "The Highway Department says it maintains more than 5,000 signs.", "cites": ["S2"]},
+        {"text": "The county bought a sign inventory system last year.", "cites": ["S2"]},
         {"text": "Signs matter a great deal.", "cites": []},
         {"text": "Waysights finds signs 4x faster.", "cites": ["W1"]},
         {"text": "Next step: confirm with Public Works.", "cites": ["S7"]},
+        {"text": "Next step: call the Highway Department at (607) 274-0300.", "cites": ["S2"]},
     ]}
     monkeypatch.setattr(extract, "PROVIDER", lambda system, prompt, schema: (reply, "test-model"))
     rejected: list[dict] = []
-    account = {"name": "Example County", "region": "New York", "jurisdiction": "NY"}
-    w1 = src("W1", "x", url="https://waysights.com/faq/")
-    out = summarize.brief(account, fields, [], [w1], {"S1"}, rejected)
-    assert [s["text"] for s in out["sentences"]] == ["The county maintains 586.1 centerline km of its own roads."]
+    account = {"name": "Tompkins County", "region": "New York", "jurisdiction": "NY"}
+    w1 = src("W1", "Inspect signs four times faster.", url="https://waysights.com/faq/")
+    out = summarize.brief(account, fields, sign, [w1], [page], rejected)
+    assert [s["text"] for s in out["sentences"]] == [
+        "The Highway Department says it maintains more than 5,000 signs.",
+        "Next step: call the Highway Department at (607) 274-0300."]
     reasons = [r["reason"] for r in rejected]
+    assert "nothing in it comes from S2" in reasons  # a claim the cited page doesn't make
     assert "cites no source this run read" in reasons
     assert any(r.startswith("has a number that isn't a checked value") for r in reasons)
     assert out["model"] == "test-model"

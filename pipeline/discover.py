@@ -113,7 +113,9 @@ class Discovery:
     def _key(self, url: str) -> str:
         p = urlsplit(url)
         # Query strings on a municipal page are language switches, sorting or print views:
-        # the same page. (The state dataset is queried directly, not discovered.)
+        # the same page. A development run spent the budget on those copies. A site that
+        # routes pages by query string ("/?page=roads") would need this changed; none of
+        # the six does. (The state dataset is queried directly, not discovered.)
         return p.netloc.lower().removeprefix("www.") + p.path.rstrip("/").lower()
 
     def push(self, url: str, text: str, depth: int, via: str, score: float | None = None,
@@ -179,7 +181,11 @@ class Discovery:
         self.seen.add(self._key(page.url))
         sid = f"S{len(self.sources) + 1}"
         if page.kind == "pdf":
-            texts = pdf_pages(page.body)
+            try:
+                texts = pdf_pages(page.body)
+            except Exception as e:  # third-party bytes: a broken or mislabelled PDF is skipped, not fatal
+                self.log("pdf", f"PDF unreadable ({e.__class__.__name__}), skipped", url=page.url)
+                return
             chosen = pick_pdf_pages(texts)
             src = Source(sid, page.url, "pdf", anchor or pdf_title(page.body) or page.url, via, page.record(),
                          pdf_pages={n: texts[n - 1] for n, _ in chosen}, anchor=anchor)

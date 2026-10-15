@@ -59,6 +59,9 @@ def run_job(job_id: str, row: dict) -> None:
                    writeback=result["writeback"])
     except Exception as e:  # the job reports failure; the service keeps running
         job.update(status="failed", error=f"{e.__class__.__name__}: {e}")
+    if job["status"] == "failed":
+        with lock:
+            last_run.pop(job["account_id"], None)  # a failed run can be retried the same day
     job["finished_at"] = time.time()
 
 

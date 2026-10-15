@@ -1,19 +1,26 @@
-"""The four-sentence Account brief.
+"""The Account brief: one or two sentences a rep reads before calling.
 
-The model writes from validated fields and quoted lines only. Then the same
-rule as validate.py applies to each sentence: it must cite a source this run
-read, and every number in it must be a validated value (or come from the rule
-it cites). Sentences that fail are dropped and listed as rejected.
+The record already shows the road length, the department's phone and email, the
+roads head and the key documents, so the brief says what those fields can't:
+what the municipality says about its own signs, and who to ask for. It never
+repeats the road length or an open question, so answering a question can't
+leave it out of date.
+
+The model writes from checked fields and quoted lines only. Then each sentence
+is checked the way validate.py checks a value: it must cite a page this run
+read, every number in it must be a checked value or printed in a checked quote,
+and it must share a checked value or four words in a row with every page it
+cites. Sentences that fail are dropped and listed as rejected.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+import re
 
 from .discover import Source
 from .extract import complete_json, PROMPTS
 from .fetch import Fetcher, Refused
-from .pages import doc_text, html_page, pdf_pages
-from .validate import norm, numbers_in
+from .pages import html_page
+from .validate import digits, norm, numbers_in
 
 # Waysights' own public pages: vocabulary only.
 COMPANY_PAGES = [
@@ -21,26 +28,6 @@ COMPANY_PAGES = [
     "https://waysights.com/how-it-works/",
     "https://waysights.com/products/",
     "https://waysights.com/pricing/",
-]
-
-
-@dataclass
-class Rule:
-    jurisdiction: str
-    label: str
-    url: str
-    quote: str
-
-
-RULES = [
-    Rule("ON", "O. Reg. 239/02, s. 12(1)", "https://www.ontario.ca/laws/docs/020239_e.doc",
-         "The standard for the frequency of inspecting regulatory signs or warning signs to check to see that they "
-         "meet the retro-reflectivity requirements of the Ontario Traffic Manual is once per calendar year, with each "
-         "inspection taking place not more than 16 months from the previous inspection."),
-    Rule("NY", "Federal MUTCD, 11th Edition, Section 2A.22, paragraph 02",
-         "https://mutcd.fhwa.dot.gov/pdfs/11th_Edition/Chapter2a.pdf",
-         "Public agencies or officials having jurisdiction shall use an assessment or management method that is "
-         "designed to maintain sign retroreflectivity at or above the minimum levels in Table 2A-5."),
 ]
 
 BRIEF_SCHEMA = {
@@ -53,7 +40,7 @@ BRIEF_SCHEMA = {
 
 
 def load_context(f: Fetcher) -> list[Source]:
-    """Read once per run. A rule is kept only if its quote is really in the fetched file."""
+    """Waysights' pages, read once per run."""
     out: list[Source] = []
     for url in COMPANY_PAGES:
         try:
@@ -62,72 +49,68 @@ def load_context(f: Fetcher) -> list[Source]:
             continue
         title, text, _, _ = html_page(page.body, page.url)
         out.append(Source(f"W{len(out) + 1}", page.url, "html", title, "company context", page.record(), text=text))
-    for rule in RULES:
-        try:
-            page = f.fetch(rule.url, why=f"{rule.label}, for the brief")
-        except Refused:
-            continue
-        if page.kind == "pdf":
-            texts = pdf_pages(page.body)
-            hit = next((i + 1 for i, t in enumerate(texts) if norm(rule.quote) in norm(t)), None)
-            text = texts[hit - 1] if hit else ""
-        else:
-            hit, text = None, doc_text(page.body)
-        if norm(rule.quote) not in norm(text):
-            f.log("check", f"{rule.label}: quote not found in the fetched file, rule not used", url=page.url)
-            continue
-        f.log("check", f"{rule.label}: quote found in the fetched file", url=page.url, pdf_page=hit)
-        src = Source(f"R{rule.jurisdiction}", page.url, "pdf" if hit else "doc", rule.label, "rule", page.record(),
-                     text=rule.quote)
-        src.notes = {"jurisdiction": rule.jurisdiction, "label": rule.label, "pdf_page": hit}
-        out.append(src)
     return out
 
 
-def facts_for(fields: dict, sign_work: list[dict], rule: Source | None) -> tuple[str, list[str]]:
-    """Plain-text facts for the prompt, and the numbers a sentence may use."""
+def facts_for(fields: dict, sign_work: list[dict]) -> tuple[str, list[str], dict[str, list[str]]]:
+    """Plain-text facts for the prompt, the strings whose numbers a sentence may use,
+    and the checked values each source id backs."""
     lines, allowed = [], []
-    road = fields["road_length_km"]
-    if road["status"] == "filled":
-        lines.append(f"- Road network: {road['value_km']} centerline km. Status: settled.")
-        allowed.append(str(road["value_km"]))
-    elif road["status"] == "needs_human":
-        lines.append(f"- Road network: not settled, a person has to confirm it. Question: {road['question']['text']}")
-    else:
-        lines.append("- Road network: no total road length found in the sources read.")
-    for o in road.get("options", []) + road.get("partial", []):
-        for p in o["parts"]:
-            c = p["cite"]
-            lines.append(f"  - [{c['source']}] \"{c['quote']}\" ({p['road_type']}, {o['km']} km in total"
-                         f"{', centerline' if o['centerline'] else ', not marked centerline'})")
-            allowed += [str(o["km"]), p["value"]]
-    if road.get("within_km"):
-        lines.append(f"  - All roads inside the county, any owner: {road['within_km']} km ({road['data_year']}). "
-                     f"Not used as the value.")
-        allowed += [str(road["within_km"]), str(road["data_year"])]
+    values: dict[str, list[str]] = {}
+
+    def back(cite: dict, *vals: str | None) -> None:
+        values.setdefault(cite["source"], []).extend(v for v in vals if v)
+
+    for s in sign_work:
+        lines.append(f"- Sign work: \"{s['quote']}\" [{s['source']}]")
+        allowed.append(s["quote"])
+    if not sign_work:
+        lines.append("- Sign work: nothing on the pages read.")
     head = fields["roads_head"]
     if head.get("cite"):
         who = ", ".join(x for x in (head.get("name"), head.get("title")) if x)
         lines.append(f"- Roads head: {who} [{head['cite']['source']}]")
-    for key, label in (("email", "Public Works email"), ("phone", "Public Works phone")):
-        if fields[key].get("status") == "filled":
-            lines.append(f"- {label}: {fields[key]['value']} [{fields[key]['cite']['source']}]")
-            allowed.append(fields[key]["value"])
+        back(head["cite"], head.get("name"), head.get("title"))
+    else:
+        lines.append("- Roads head: not named on the pages read.")
+    email = fields["email"]
+    if email.get("status") == "filled":
+        lines.append(f"- Public Works email: {email['value']} [{email['cite']['source']}]")
+        allowed.append(email["value"])
+        back(email["cite"], email["value"])
+    phone = fields["phone"]
+    if phone.get("status") == "filled":
+        lines.append(f"- Public Works phone: {phone['value']} [{phone['cite']['source']}]")
+        allowed.append(phone["value"])
+        back(phone["cite"], phone["value"])
+    elif phone.get("status") == "needs_human":
+        printed = "; ".join(f"{v} [{c['source']}]" for v, c in zip(phone["values"], phone["cites"]))
+        lines.append(f"- Public Works phone: not settled. The pages print different numbers ({printed}); "
+                     f"give neither.")
     for d in fields["key_documents"]:
         lines.append(f"- Key document: {d['title']} [{d['source']}]")
         allowed.append(d["title"])
-    for s in sign_work:
-        lines.append(f"- Sign work: \"{s['quote']}\" [{s['source']}]")
-    if rule:
-        lines.append(f"- Rule ({rule.notes['label']}): \"{rule.text}\" [{rule.id}]")
-        allowed += [rule.notes["label"], rule.text]
-    return "\n".join(lines), allowed
+        back(d, d["title"])
+    return "\n".join(lines), allowed, values
 
 
-def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Source], run_ids: set[str],
+def four_word_runs(text: str) -> set[tuple[str, ...]]:
+    words = re.findall(r"[a-z0-9]+", norm(text))
+    return {tuple(words[i:i + 4]) for i in range(len(words) - 3)}
+
+
+def backs(sentence: str, sid: str, texts: dict[str, str], values: dict[str, list[str]]) -> bool:
+    """Does the cited page support the sentence: a checked value from that page, or four words in a row?"""
+    s = norm(sentence)
+    for v in values.get(sid, []):
+        if norm(v) in s or (len(digits(v)) >= 10 and digits(v) in digits(sentence)):
+            return True
+    return bool(four_word_runs(sentence) & four_word_runs(texts.get(sid, "")))
+
+
+def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Source], sources: list[Source],
           rejected: list[dict]) -> dict:
-    rule = next((c for c in context if c.notes.get("jurisdiction") == account["jurisdiction"]), None)
-    facts, allowed = facts_for(fields, sign_work, rule)
+    facts, allowed, values = facts_for(fields, sign_work)
     company = [c for c in context if c.id.startswith("W")]
     ctx = "\n\n".join(f"[{c.id}] {c.url}\n{c.text[:6000]}" for c in company)
     allowed_numbers = {n for a in allowed for n in numbers_in(a)}
@@ -137,18 +120,20 @@ def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Sour
         .replace("{facts}", facts).replace("{numbers}", numbers).replace("{context}", ctx)
     out, model_id = complete_json("You write short, sourced CRM notes. Every sentence cites its sources.",
                                   prompt, BRIEF_SCHEMA)
-    known = run_ids | {c.id for c in context}
-    url_of = {c.id: c.url for c in context}
+    texts = {s.id: s.text + "\n" + "\n".join(s.pdf_pages.values()) for s in [*sources, *company]}
     kept = []
     for s in out.get("sentences", []):
         text, cites = s.get("text", ""), s.get("cites") or []
-        bad_cites = [c for c in cites if c not in known]
+        unknown = [c for c in cites if c not in texts]
         stray = [n for n in numbers_in(text) if n not in allowed_numbers]
-        reason = ("cites no source this run read" if not cites or bad_cites else
-                  f"has a number that isn't a checked value: {', '.join(f'{n:g}' for n in stray)}" if stray else None)
+        unbacked = [c for c in cites if c in texts and not backs(text, c, texts, values)]
+        reason = ("cites no source this run read" if not cites or unknown else
+                  f"has a number that isn't a checked value: {', '.join(f'{n:g}' for n in stray)}" if stray else
+                  f"nothing in it comes from {', '.join(unbacked)}" if unbacked else None)
         if reason:
             rejected.append({"field": "brief", "value": text, "reason": reason, "quote": "", "cites": cites})
             continue
         kept.append({"text": text, "cites": cites})
-    return {"sentences": kept, "model": model_id, "url_of_context": {c: url_of[c] for s in kept for c in s["cites"]
-                                                                       if c in url_of}}
+    cited = {c for s in kept for c in s["cites"]}
+    return {"sentences": kept, "model": model_id,
+            "context": {c.id: {"url": c.url, "title": c.title} for c in company if c.id in cited}}

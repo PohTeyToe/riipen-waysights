@@ -40,12 +40,12 @@ EXTRACT_SCHEMA = {
             "quote": QUOTE, "source": SRC}, "required": ["name", "title", "quote", "source"]},
         "department_email": {"type": ["object", "null"], "properties": {
             "value": {"type": "string"}, "quote": QUOTE, "source": SRC}, "required": ["value", "quote", "source"]},
-        "department_phone": {"type": ["object", "null"], "properties": {
-            "value": {"type": "string"}, "quote": QUOTE, "source": SRC}, "required": ["value", "quote", "source"]},
+        "department_phones": {"type": "array", "items": {"type": "object", "properties": {
+            "value": {"type": "string"}, "quote": QUOTE, "source": SRC}, "required": ["value", "quote", "source"]}},
         "sign_work": {"type": "array", "items": {"type": "object", "properties": {
             "quote": QUOTE, "source": SRC}, "required": ["quote", "source"]}},
     },
-    "required": ["road_lines", "road_totals", "roads_head", "department_email", "department_phone", "sign_work"],
+    "required": ["road_lines", "road_totals", "roads_head", "department_email", "department_phones", "sign_work"],
 }
 
 

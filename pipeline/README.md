@@ -21,23 +21,23 @@ The model step uses the Claude Code CLI (`claude -p`). Swap `extract.PROVIDER` f
 | File | Does |
 |---|---|
 | `allowlist.py` | The approved sites. Nothing else is fetched. |
-| `fetch.py` | Honest user agent, robots.txt, 2 s per host, 15 requests per Account, TLS verified by the OS trust store. Logs every request. |
+| `fetch.py` | Honest user agent, robots.txt, 2 s per host, 15 pages per Account (robots.txt and redirects counted separately), TLS verified by the OS trust store. Logs every request. |
 | `discover.py` | Follows the site's own links (menu first, sitemap if the menu runs out) to the roads pages, contacts and, in Ontario, the asset management plan. |
 | `pages.py` | HTML and PDF to text. PDFs are read in reading order, so a table row keeps its label and number together. |
 | `nydata.py` | New York: a county's own roads are the sum of `county_mileage` in the NYSDOT dataset. |
 | `extract.py`, `prompts/extract.md` | The model step, behind one function. |
 | `validate.py` | The five rules. |
 | `dedupe.py` | Matches a found person to existing Contacts. Proposes, never merges. |
-| `summarize.py`, `prompts/summarize.md` | The four-sentence Account brief, checked sentence by sentence. |
-| `writeback.py` | The Zoho requests the run would send. Nothing is sent. |
+| `summarize.py`, `prompts/summarize.md` | The Account brief: what the municipality says about its signs, and who to ask for. Checked sentence by sentence. |
+| `writeback.py` | The Zoho requests the run would send: the Account updated by its id, the Contact, the Notes. Nothing is sent. |
 | `service.py` | The FastAPI service the button calls. Not hosted. |
 | `zoho/enrich_account.deluge` | The button's function. Draft, never run in a Zoho org. |
 | `run.py`, `report.py` | The offline run and the scorecard. |
 
 ## The five rules (`validate.py`)
 
-1. Every value must appear in its quote, and the quote must appear in the saved source text. A sum of printed parts is allowed if each part passes. Ratios, percentages and other derived numbers are rejected.
+1. Every value must appear in its quote, and the quote must appear in the saved source text. A road length's unit must be printed next to its number, and a money amount is never a length. A sum of printed parts is allowed if each part passes, each line once. Ratios, percentages and other derived numbers are rejected.
 2. Road length must be a length. Lane-km and area are rejected. A length that doesn't say centerline goes to a person.
 3. New York: a county's owned roads are the sum of `county_mileage`. The all-roads total is shown beside it, never used as the value.
-4. Sources that give different numbers go to a person with both quotes and a one-click pick. No tolerance rules.
-5. Emails and phones must be printed on an approved page. Summary sentences must cite a page this run read, and every number in them must be a checked value.
+4. Sources that give different numbers go to a person with every quote. No tolerance rules: an approximate figure agrees with a precise one only if the precise one rounds to it at the precision it is printed with ("approximately 300 km" and 310 km agree). Two different phone numbers for the department go to a person too.
+5. Emails and phones must be printed on an approved page. Summary sentences must cite a page this run read, every number in them must be a checked value, and each must share a checked value or four words in a row with every page it cites.

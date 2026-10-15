@@ -46,6 +46,7 @@ def key_documents(sources: list[Source], fields: dict, sign_work: list[dict]) ->
     """The plan (if read), the page each checked value came from (the first one, when
     several pages print the same thing), and the pages where the town describes its sign work."""
     cited = {c["source"] for f in ("roads_head", "email", "phone") for c in [fields[f].get("cite")] if c}
+    cited |= {c["source"] for c in fields["phone"].get("cites", [])}
     cited |= {o["parts"][0]["cite"]["source"] for o in fields["road_length_km"].get("options", [])}
     cited |= {s["source"] for s in sign_work}
     docs = []
@@ -73,7 +74,12 @@ def field_rows(account: dict, seed: dict, fields: dict, proposal: dict | None, b
     road = fields["road_length_km"]
     road_row = {"field": "road_length_km", "label": "Road network (centerline km)",
                 "current": seed.get("Road_Network_Centerline_km"), "status": road["status"],
-                "sources": [p["cite"] for o in road.get("options", []) for p in o["parts"]]}
+                "sources": [p["cite"] for o in road.get("options", []) for p in o["parts"] + o.get("agrees", [])]}
+    agreeing = [o for o in road.get("options", []) if o.get("agrees")]
+    if agreeing:
+        a = agreeing[0]["agrees"][0]
+        road_row["detail"] = (f"{short_title(a['cite']['title'])} says about {a['value']} {a['unit']}: the same figure, "
+                              f"rounded, so it isn't a second option.")
     if road["status"] == "filled":
         road_row["proposed"] = fmt_km(road["value_km"])
     elif road["status"] == "needs_human":
@@ -95,12 +101,15 @@ def field_rows(account: dict, seed: dict, fields: dict, proposal: dict | None, b
 
     rows = [road_row]
     for f, label, seed_key in (("email", "Public Works email", "Public_Works_Email"),
-                               ("phone", "Public Works phone", "Phone")):
+                               ("phone", "Public Works phone", "Public_Works_Phone")):
         v = fields[f]
         row = {"field": f, "label": label, "current": seed.get(seed_key), "status": v["status"],
-               "proposed": v.get("value"), "sources": [v["cite"]] if v.get("cite") else []}
+               "proposed": v.get("value"), "sources": [v["cite"]] if v.get("cite") else v.get("cites", [])}
         if v["status"] == "not_found":
             row["detail"] = why_blank(f)
+        elif v["status"] == "needs_human":
+            row["detail"] = (f"The pages print {len(v['values'])} different numbers for the department. Left blank; "
+                             f"a Note on the Account keeps each one with its page.")
         rows.append(row)
 
     head = fields["roads_head"]
@@ -158,17 +167,17 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
         log("extract", f"model returned {len(extraction.get('road_lines', []))} road lines, "
                        f"{'a' if extraction.get('roads_head') else 'no'} roads head, "
                        f"{'an' if extraction.get('department_email') else 'no'} email, "
-                       f"{'a' if extraction.get('department_phone') else 'no'} phone", model=model_id)
+                       f"{len(extraction.get('department_phones') or [])} phone(s)", model=model_id)
     else:
         extraction, model_id, prompt = {"road_lines": [], "road_totals": [], "roads_head": None,
-                                        "department_email": None, "department_phone": None, "sign_work": []}, None, ""
+                                        "department_email": None, "department_phones": [], "sign_work": []}, None, ""
         log("extract", "nothing readable, so the model was not called")
 
     chk = Checker(sources)
     fields = {"road_length_km": chk.road_length(extraction, dataset),
               "roads_head": chk.roads_head(extraction.get("roads_head")),
               "email": chk.email(extraction.get("department_email")),
-              "phone": chk.phone(extraction.get("department_phone"))}
+              "phone": chk.phones(extraction.get("department_phones"))}
     sign_work = chk.sign_work(extraction.get("sign_work"))
     fields["key_documents"] = key_documents(sources, fields, sign_work)
     rejected = chk.rejected
@@ -180,6 +189,9 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
     questions = [road["question"]] if road["status"] == "needs_human" else []
     for q in questions:
         log("question", q["text"])
+    if fields["phone"]["status"] == "needs_human":
+        log("note", f"phone: {len(fields['phone']['values'])} different numbers printed for the department, "
+                    f"left for a person")
 
     head = fields["roads_head"]
     proposal = None
@@ -195,23 +207,27 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
 
     if readable or dataset:
         try:
-            brief = summarize.brief(account, fields, sign_work, context, {s.id for s in sources}, rejected)
+            brief = summarize.brief(account, fields, sign_work, context, sources, rejected)
             log("brief", f"{len(brief['sentences'])} sentence(s) kept", model=brief["model"])
         except RuntimeError as e:
             brief = {"sentences": [], "model": None, "error": str(e)}
             log("brief", f"brief failed: {e}")
     else:
         brief = {"sentences": [], "model": None}
-    status = "needs_review" if questions else "done"
+    errors = f.errors + (nyf.errors if nyf else [])
+    # Nothing read at all is a failed run, not a finished one with empty fields.
+    status = "failed" if not (readable or dataset) else \
+        "needs_review" if questions or fields["phone"]["status"] == "needs_human" else "done"
     run_at = now_iso()
-    wb = writeback.build(account, fields, proposal, brief, questions, status, run_at)
+    wb = writeback.build(account, fields, proposal, brief, questions, status, run_at, errors)
     log("writeback", f"{len(wb['requests'])} request(s) built, none sent")
-    log("status", "Needs review" if status == "needs_review" else "Done")
+    log("status", writeback.STATUS_LABEL[status])
 
     result = {
         "account": {**account, "example_public_account": True},
         "run": {"started_at": started, "finished_at": now_iso(), "model": model_id, "pages_read": len(readable),
-                "requests_used": f.used, "page_budget": f.budget, "prompt_chars": len(prompt)},
+                "page_fetches": f.used, "page_budget": f.budget,
+                "http_requests": f.requests + (nyf.requests if nyf else 0), "prompt_chars": len(prompt)},
         "status": status,
         "steps": log.lines,
         "sources": [{"id": s.id, "url": s.url, "kind": s.kind, "title": s.title, "found_via": s.found_via,
@@ -219,7 +235,7 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
                      "pdf_pages_read": sorted(s.pdf_pages) or None, "pdf_page_count": s.notes.get("pdf_page_count"),
                      "hidden_emails": s.notes.get("hidden_emails") or None,
                      "dataset": s.notes if s.kind == "dataset" else None} for s in sources],
-        "fetch_errors": f.errors + (nyf.errors if nyf else []),
+        "fetch_errors": errors,
         "extracted": extraction,
         "validated": fields,
         "sign_work": sign_work,
@@ -231,8 +247,8 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
         "writeback": wb,
     }
     # The text of every page the run took something from (or refused something from) is kept,
-    # so each quote can be checked. Pages it read but took nothing from keep only their hash:
-    # some print private people's contact details that this repo has no reason to copy.
+    # so each quote can be checked in place. Pages it read but took nothing from keep only
+    # their hash: there's no reason to copy them.
     used = used_sources(result)
     pages = [{"id": s.id, "url": s.url, "kind": s.kind, "sha256": s.record["sha256"], "fetched_at": s.record["fetched_at"],
               "used": s.id in used, "chars": len(s.text) + sum(len(t) for t in s.pdf_pages.values()),
@@ -240,8 +256,8 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
               "pdf_pages": ({str(k): v for k, v in s.pdf_pages.items()} or None) if s.id in used else None}
              for s in sources]
     (OUT / "pages").mkdir(parents=True, exist_ok=True)
-    (OUT / f"{slug}.json").write_text(json.dumps(result, indent=1, ensure_ascii=False), encoding="utf-8")
-    (OUT / "pages" / f"{slug}.json").write_text(json.dumps(pages, indent=1, ensure_ascii=False), encoding="utf-8")
+    (OUT / f"{slug}.json").write_text(json.dumps(result, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
+    (OUT / "pages" / f"{slug}.json").write_text(json.dumps(pages, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
     return result
 
 
@@ -284,8 +300,8 @@ def main() -> None:
     (OUT / "context.json").write_text(json.dumps({
         "steps": ctx_log.lines,
         "sources": [{"id": c.id, "url": c.url, "title": c.title, **c.record, "notes": c.notes or None,
-                     "text": c.text if c.id.startswith("R") else None} for c in context]},
-        indent=1, ensure_ascii=False), encoding="utf-8")
+                     "text": c.text} for c in context]},
+        indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
 
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
         results = list(pool.map(lambda r: enrich(r, seed, clock, context, args.cached), rows))
@@ -304,7 +320,7 @@ def main() -> None:
         "accounts": [{"slug": r["account"]["slug"], "status": r["status"], "pages_read": r["run"]["pages_read"],
                       "rejected": len(r["rejected"])} for r in results],
     })
-    meta_path.write_text(json.dumps(meta, indent=1), encoding="utf-8")
+    meta_path.write_text(json.dumps(meta, indent=1), encoding="utf-8", newline="\n")
     print(json.dumps(meta["accounts"], indent=1))
 
 

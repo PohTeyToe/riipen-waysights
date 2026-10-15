@@ -1,19 +1,24 @@
 """The checks. Five rules, each readable in a minute:
 
 1. Every value must appear in its quote, and the quote must appear in the saved
-   source text (case and spacing ignored). A sum of printed parts is allowed if
-   each part passes. Ratios, percentages and other derived numbers are rejected.
+   source text (case and spacing ignored). A road length's unit must be printed
+   next to its number, and a money amount is never a length. A sum of printed
+   parts is allowed if each part passes, each line once. Ratios, percentages and
+   other derived numbers are rejected.
 2. Road length must be a length. Lane-km and area are rejected for this field.
    A length that doesn't say centerline goes to a person.
 3. New York: a county's owned roads are the sum of county_mileage over its rows.
    The all-roads total is shown beside it, never used as the value.
 4. Sources that give different numbers for the same field go to a person with
-   both quotes and a one-click pick. No tolerance rules.
+   every quote. No tolerance rules: an approximate figure agrees with a precise
+   one only if the precise one rounds to it at the precision it is printed with
+   ("approximately 300 km" and 310 km agree; "close to 302 miles" and 300.62 don't).
 5. Emails and phones must be printed on an approved page. Never built from a
    name. (Summary sentences are checked in summarize.py under the same rule.)
 """
 from __future__ import annotations
 
+import math
 import re
 import unicodedata
 
@@ -30,6 +35,10 @@ AREA = re.compile(r"\bsquare\b|\bsq\.?\b|m2\b|m²|km2\b|km²|\bhectares?\b|\bacr
 UNIT_KM = [(re.compile(r"^(km|kms|kilomet(er|re)s?)$", re.I), 1.0),
            (re.compile(r"^(m|meters?|metres?)$", re.I), 0.001),
            (re.compile(r"^(mi|miles?)$", re.I), MI_KM)]
+PHRASE_END = re.compile(r";|[.!?](?:\s|$)")
+MONEY = ("$", "\u20ac", "\u00a3")
+PHONE_MAIN = re.compile(r"\(?\d{3}\)?[\s.-]*\d{3}[\s.-]*\d{4}")
+PHONE_EXT = re.compile(r"(?:\bext\.?|\bx|extension)\s*(\d+)", re.I)
 
 
 # Typographic variants that PDFs and web pages mix freely.
@@ -56,6 +65,55 @@ def as_number(value: str) -> float | None:
 
 def digits(s: str) -> str:
     return re.sub(r"\D", "", s or "")
+
+
+def unit_factor(word: str) -> float | None:
+    return next((f for pat, f in UNIT_KM if pat.match(word)), None)
+
+
+def printed_unit(quote: str, n: float, factor: float) -> tuple[str | None, bool]:
+    """Where the quote prints this number's unit: the words between the number and the
+    next number after it, or the one before it (table rows put the unit in the label,
+    "kms of local roads 255"), cut at a semicolon or a sentence end. Returns the words
+    that hold a unit of this size (or None), and whether the number is a money amount."""
+    q = norm(quote)
+    nums = list(NUMBER.finditer(q))
+    money = False
+    for i, m in enumerate(nums):
+        if float(m.group().replace(",", "")) != n:
+            continue
+        if q[max(0, m.start() - 1):m.start()] in MONEY:
+            money = True
+            continue
+        after = PHRASE_END.split(q[m.end():nums[i + 1].start() if i + 1 < len(nums) else len(q)])[0]
+        before = PHRASE_END.split(q[nums[i - 1].end() if i else 0:m.start()])[-1]
+        for side in (after, before):
+            if any(unit_factor(w) == factor for w in re.findall(r"[a-z]+", side)):
+                return side.strip(), False
+    return None, money
+
+
+def phone_line(value: str) -> tuple[str, str]:
+    """'905-892-2607 x332' -> ('9058922607', '332'): the main line and the extension, apart."""
+    m = PHONE_MAIN.search(value or "")
+    if not m:
+        return digits(value), ""
+    ext = PHONE_EXT.search(value[m.end():])
+    return digits(m.group()), (ext.group(1) if ext else "")
+
+
+def same_line(a: str, b: str) -> bool:
+    """One phone line: the same main number, and the same extension or one without any."""
+    (ma, ea), (mb, eb) = phone_line(a), phone_line(b)
+    return ma == mb and (ea == eb or not ea or not eb)
+
+
+def rounds_to(printed: str, x: float) -> bool:
+    """Does x round to this printed figure, at the precision it is printed with?
+    "300" is to the hundred, "302" to the unit, "247.36" to the hundredth."""
+    p = printed.replace(",", "")
+    step = 10.0 ** -len(p.split(".")[1]) if "." in p else 10.0 ** (len(p) - len(p.rstrip("0")))
+    return abs(math.floor(x / step + 0.5) * step - float(p)) < 1e-9
 
 
 class Checker:
@@ -93,6 +151,9 @@ class Checker:
         """Rule 1, second half: the quote must be in the saved source text."""
         if sid not in self.by_id:
             return f"cites {sid or 'no source'}, which this run didn't read"
+        s = self.by_id[sid]
+        if s.kind == "pdf" and pdf_page is not None and pdf_page not in s.pdf_pages:
+            return f"cites PDF page {pdf_page}, which this run didn't read"
         if not quote or norm(quote) not in norm(self.text_of(sid, pdf_page)):
             return "quote not found in the saved source text"
         return None
@@ -120,9 +181,16 @@ class Checker:
             return r("an area, not a length")
         # The unit as printed can carry a word in front ("highway miles", "centreline km"): read the last word.
         unit_word = unit.split()[-1].rstrip(".") if unit.split() else ""
-        factor = next((f for pat, f in UNIT_KM if pat.match(unit_word)), None)
+        factor = unit_factor(unit_word)
         if factor is None:
             return r(f"unit \"{unit}\" is not a length")
+        phrase, money = printed_unit(quote, n, factor)
+        if phrase is None:
+            return r("a money amount, not a length" if money else f"no {unit_word} printed next to {value}")
+        if AREA.search(phrase):
+            return r("an area, not a length")
+        if RATIO.search(phrase):
+            return r("a ratio, not a length")
         if line.get("measures") != "length":
             # The extractor can only make a line stricter, never pass one the checks would refuse.
             return r(f"the extractor marked it \"{line.get('measures')}\", not a road length")
@@ -136,6 +204,10 @@ class Checker:
         options, partial = [], []
         for total in extraction.get("road_totals") or []:
             idx = total.get("lines") or []
+            if len(set(idx)) != len(idx):
+                self.reject("road_length_km", " + ".join(str(lines[i].get("value")) for i in idx if 0 <= i < len(lines)),
+                            "a total that counts the same line twice")
+                continue
             parts = [ok.get(i) for i in idx]
             if not idx or any(p is None for p in parts):
                 continue  # a part already failed and was listed as rejected
@@ -159,7 +231,15 @@ class Checker:
                 m["approximate"] = m["approximate"] and o["approximate"]
             else:
                 merged[o["km"]] = o
-        opts = sorted(merged.values(), key=lambda o: (not o["centerline"], o["approximate"]))
+        opts = list(merged.values())
+        # An approximate figure that a precise one rounds to is the same figure, rounded.
+        for a in [o for o in opts if o["approximate"]]:
+            match = next((o for o in opts if o is not a and agrees(a, o)), None)
+            if match:
+                match["agrees"] = match.get("agrees", []) + a["parts"]
+                match["centerline"] = match["centerline"] or a["centerline"]
+                opts.remove(a)
+        opts.sort(key=lambda o: (not o["centerline"], o["approximate"]))
         field = {"options": opts, "partial": partial}
         if dataset:
             field["within_km"] = round(dataset.notes["all_roads_mi"] * MI_KM, 1)
@@ -219,6 +299,25 @@ class Checker:
             return {"status": "not_found"}
         return {"status": "filled", "value": value, "cite": self.cite(sid, quote)}
 
+    def phones(self, items: list[dict] | None) -> dict:
+        """Rule 5 for each number found for the department, then rule 4: different
+        numbers go to a person. A number and the same number with an extension are
+        one line, and the extension is kept."""
+        lines: list[dict] = []
+        for v in (self.phone(p) for p in items or []):
+            if v["status"] != "filled":
+                continue
+            same = next((x for x in lines if same_line(x["value"], v["value"])), None)
+            if same is None:
+                lines.append(v)
+            elif not phone_line(same["value"])[1] and phone_line(v["value"])[1]:
+                lines[lines.index(same)] = v
+        if not lines:
+            return {"status": "not_found"}
+        if len(lines) == 1:
+            return lines[0]
+        return {"status": "needs_human", "values": [x["value"] for x in lines], "cites": [x["cite"] for x in lines]}
+
     def phone(self, p: dict | None) -> dict:
         if not p:
             return {"status": "not_found"}
@@ -240,6 +339,15 @@ class Checker:
             else:
                 kept.append(self.cite(it["source"], it["quote"]))
         return kept
+
+
+def agrees(approx: dict, precise: dict) -> bool:
+    """Rule 4: an approximate total agrees with a precise one that rounds to it."""
+    if precise["approximate"] or len({(p["value"], p["unit"]) for p in approx["parts"]}) != 1:
+        return False
+    part = approx["parts"][0]
+    per_unit = part["km"] / as_number(part["value"])  # km per printed unit
+    return rounds_to(part["value"], precise["km"] / per_unit)
 
 
 def fmt_km(km: float, approximate: bool = False) -> str:

@@ -126,15 +126,3 @@ def pick_pdf_pages(texts: list[str], k: int = 3) -> list[tuple[int, int]]:
     scored.sort(key=lambda s: (-s[1], s[0]))
     return scored[:k]
 
-
-DOC_RUN_8BIT = re.compile(rb"[\x20-\x7e\xa0-\xff\t\r\n]{12,}")
-DOC_RUN_UTF16 = re.compile(rb"(?:[\x20-\x7e\xa0-\xff]\x00|[\t\r\n]\x00){12,}")
-
-
-def doc_text(body: bytes) -> str:
-    """Text runs from a legacy Word .doc, which stores text as 8-bit (cp1252)
-    or UTF-16 runs. Good enough to check that a quoted sentence is in the
-    file; not a full .doc reader."""
-    runs = [m.group().decode("cp1252", "replace") for m in DOC_RUN_8BIT.finditer(body)]
-    runs += [m.group().decode("utf-16-le", "replace") for m in DOC_RUN_UTF16.finditer(body)]
-    return "\n".join(" ".join(r.split()) for r in runs)

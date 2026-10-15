@@ -1,13 +1,16 @@
 """Match a person the run found to Contacts already on the Account.
 
 A match needs the surname plus one more thing: the same phone, or the same
-first initial. A surname alone is never enough. A match becomes a merge
+first initial where one side gives only an initial. A surname alone is never
+enough, and two different full first names never match. A match becomes a merge
 proposal (keep the record id, update name and title, store the source);
 nothing is merged automatically.
 """
 from __future__ import annotations
 
 import re
+
+from .validate import phone_line
 
 POST_NOMINALS = {"pe", "p.e", "p.eng", "peng", "jr", "sr", "ii", "iii", "phd", "mba", "cpa"}
 
@@ -33,20 +36,18 @@ def split_name(full: str) -> tuple[str, str]:
     return (words[0] if len(words) > 1 else ""), words[-1]
 
 
-def digits(s: str | None) -> str:
-    return re.sub(r"\D", "", s or "")[-10:]
-
-
 def match(found: dict, contact: dict) -> str | None:
     """Why `found` is the same person as `contact`, or None."""
     f_first, f_last = split_name(found.get("name", ""))
     c_first, c_last = split_name(contact.get("name", ""))
     if not f_last or f_last != c_last:
         return None
-    if found.get("phone") and digits(found["phone"]) == digits(contact.get("phone")):
+    if len(f_first) > 1 and len(c_first) > 1 and f_first != c_first:
+        return None  # two full first names that differ are two people, even on a shared department line
+    if found.get("phone") and contact.get("phone") and phone_line(found["phone"]) == phone_line(contact["phone"]):
         return "same surname and phone"
     if f_first and c_first and f_first[0] == c_first[0]:
-        return "same surname and first initial"
+        return "same surname and first name" if f_first == c_first else "same surname and first initial"
     return None
 
 

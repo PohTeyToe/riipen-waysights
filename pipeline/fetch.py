@@ -1,5 +1,6 @@
 """Polite fetcher: approved sites only, robots.txt obeyed, 2 s between requests
-to the same host, a page budget per Account, TLS always verified.
+to the same host, a page budget per Account (robots.txt and redirect hops are
+counted separately), TLS always verified.
 
 Every request becomes a log line, so the run can be replayed as it happened.
 """
@@ -20,7 +21,7 @@ import requests
 import truststore
 from requests.adapters import HTTPAdapter
 
-from .allowlist import is_allowed
+from .allowlist import host_allowed, is_allowed
 
 USER_AGENT = "enrich-account-demo/0.1 (+https://github.com/PohTeyToe/riipen-waysights)"
 MIN_DELAY_S = 2.0
@@ -126,7 +127,8 @@ class Fetcher:
         self.log = log
         self.clock = clock
         self.budget = budget
-        self.used = 0
+        self.used = 0       # page fetches, counted against the budget
+        self.requests = 0   # every HTTP request, robots.txt and redirect hops included
         self.cache_dir = cache_dir
         self.cached = cached  # dev only: reuse cached bytes instead of refetching
         self.session = session or requests.Session()
@@ -146,6 +148,18 @@ class Fetcher:
         robots_url = origin + "/robots.txt"
         try:
             page = self._get(robots_url)
+            # A redirected robots.txt is read where it lands (RFC 9309: follow up to five hops),
+            # so the rules come from the file, never from the redirect response itself.
+            for _ in range(5):
+                location = getattr(page, "location", None)
+                if not location:
+                    break
+                self.log("redirect", f"HTTP {page.status} redirect", url=page.url, to=location, status=page.status)
+                if not host_allowed(location, self.approved):
+                    raise Refused("robots.txt redirects off the approved list")
+                page = self._get(location)
+            if getattr(page, "location", None):
+                raise Refused("robots.txt redirects more than five times")
         except Refused as e:
             self.log("robots", f"robots.txt unreadable, so nothing on {parts.netloc} is fetched", url=robots_url, reason=str(e))
             self.robots[origin] = None
@@ -184,6 +198,7 @@ class Fetcher:
         """One HTTP GET. Redirects are returned, not followed, so each hop can be checked."""
         host = urlsplit(url).netloc
         cache = self._cache_paths(url)
+        self.requests += 1
         if self.cached and cache and cache[1].exists():
             meta = json.loads(cache[1].read_text())
             body = cache[0].read_bytes()
