@@ -1,5 +1,5 @@
-import { meta, REPO, runBySlug, type Cite } from '../lib/data'
-import { fmtDate, fmtKm, prettyUrl } from '../lib/format'
+import { meta, REPO, runBySlug, type Cite, type DocLink } from '../lib/data'
+import { cleanTitle, fmtDate, fmtKm, prettyUrl } from '../lib/format'
 import { shownRows } from '../lib/record'
 import { Link } from '../lib/router'
 import { useStore } from '../lib/store'
@@ -19,6 +19,19 @@ function LincolnCard() {
   const [plan, roadsPage] = run.validated.road_length_km.options
   const q = road.question!
   const contact = email.sources[0] as Cite
+  // The plan's full title is long, so the card shortens it; the link goes to the PDF itself.
+  const docLinks = (docs.sources as DocLink[]).map((d) => ({
+    url: d.url,
+    label: d.url === plan.parts[0].cite.url ? '2025 Asset Management Plan' : cleanTitle(d.title),
+  }))
+  const planCite = plan.parts[0].cite
+  const pageCite = roadsPage.parts[0].cite
+  const picked = road.answered ? run.validated.road_length_km.options[q.options.indexOf(road.answered.option)] : undefined
+  const roadValue = picked
+    ? `${picked.approximate ? 'about ' : ''}${fmtKm(picked.km)} km`
+    : road.answered
+      ? null
+      : `${fmtKm(plan.km)} km proposed`
 
   return (
     <article className="card" aria-labelledby="card-h">
@@ -41,25 +54,23 @@ function LincolnCard() {
               <span className="diff-arrow" aria-label="becomes">
                 →
               </span>
-              <strong>
-                {road.answered?.result === 'filled' ? `${fmtKm(road.answered.option.value_km!)} km` : `${fmtKm(plan.km)} km proposed`}
-              </strong>
+              {roadValue ? <strong>{roadValue}</strong> : <span className="nil">stays empty</span>}
             </p>
             <p className="ba-quote">
               <q>{plan.parts[0].cite.quote.replace('Quantity - ', '')}</q>, <q>{plan.parts[1].cite.quote.replace('Quantity - ', '')}</q>
-              <span className="ba-src">
-                2025 Asset Management Plan, Table 21, PDF p. {plan.parts[0].cite.pdf_page}
-              </span>
+              <a className="ba-src" href={planCite.url} target="_blank" rel="noreferrer">
+                2025 Asset Management Plan, Table 21, PDF p. {planCite.pdf_page}
+              </a>
             </p>
             <p className="ba-quote">
               roads page: <q>approximately 300km of roadway</q>
-              <span className="ba-src">{prettyUrl(roadsPage.parts[0].cite.url)}</span>
+              <a className="ba-src" href={pageCite.url} target="_blank" rel="noreferrer">
+                {prettyUrl(pageCite.url)}
+              </a>
             </p>
             {road.answered ? (
               <p className="ba-said">
-                {road.answered.result === 'filled'
-                  ? `${fmtKm(road.answered.option.value_km!)} km, confirmed by you.`
-                  : 'Left blank. It becomes a Note on the Account for a person to check.'}{' '}
+                {picked ? 'Confirmed by you.' : 'Left blank. It becomes a Note on the Account for a person to check.'}{' '}
                 <button type="button" className="linkish" onClick={() => store.answer('lincoln', 'road_length_km', null)}>
                   Change
                 </button>
@@ -98,7 +109,13 @@ function LincolnCard() {
               </strong>
             </p>
             <p className="ba-quote">
-              <span className="ba-src">printed on {prettyUrl(contact.url)}, fetched {fmtDate(contact.fetched_at)}</span>
+              <span className="ba-src">
+                printed on{' '}
+                <a href={contact.url} target="_blank" rel="noreferrer">
+                  {prettyUrl(contact.url)}
+                </a>
+                , fetched {fmtDate(contact.fetched_at)}
+              </span>
             </p>
           </dd>
         </div>
@@ -114,7 +131,19 @@ function LincolnCard() {
                 →
               </span>
               <span className="ba-docs">
-                2025 Asset Management Plan <Dot /> Roads & Transportation <Dot /> Contact Us
+                {docLinks.map((d, i) => (
+                  <span key={d.url}>
+                    {i > 0 ? (
+                      <>
+                        {' '}
+                        <Dot />{' '}
+                      </>
+                    ) : null}
+                    <a href={d.url} target="_blank" rel="noreferrer">
+                      {d.label}
+                    </a>
+                  </span>
+                ))}
               </span>
             </p>
           </dd>

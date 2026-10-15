@@ -147,7 +147,7 @@ function Ask({ row, run, onAnswer }: RowProps) {
       <div className="ask-actions">
         {q.options.map((opt, i) =>
           q.kind === 'pick' && opt.result === 'filled' ? null : (
-            <button key={i} type="button" className={`btn btn--answer${opt.result === 'filled' ? ' btn--yes' : ''}`} onClick={() => onAnswer(i)}>
+            <button key={i} type="button" className="btn btn--answer" onClick={() => onAnswer(i)}>
               {opt.label}
             </button>
           ),
