@@ -151,7 +151,7 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
     f = Fetcher(APPROVED[slug], log, clock, cache_dir=CACHE, cached=cached)
     sources = Discovery(f, account["website"], wants_plan=account["jurisdiction"] == "ON").run()
     readable = [s for s in sources if s.kind in ("html", "pdf")]
-    log("read", f"{len(readable)} pages read, {f.used} of {f.budget} requests used")
+    log("read", f"{len(readable)} pages read, {f.used} of {f.budget} page fetches used")
     dataset, nyf = None, None
     if account["ny_county"]:
         # The state dataset is its own source with its own small budget, so a long crawl can't crowd it out.

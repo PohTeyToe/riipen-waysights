@@ -9,7 +9,7 @@ import pytest
 
 from pipeline import dedupe, extract, nydata, summarize
 from pipeline.allowlist import APPROVED, is_allowed
-from pipeline.discover import Discovery, Source, score_link
+from pipeline.discover import MIN_SCORE, Discovery, Source, score_link
 from pipeline.fetch import Fetcher, HostClock, Refused, RunLog
 from pipeline.pages import html_page, pdf_pages, pick_pdf_pages
 from pipeline.validate import MI_KM, Checker
@@ -163,6 +163,15 @@ def test_project_and_news_links_score_below_the_roads_page():
     older = score_link("Asset Management Plan - Core Assets 2021", "https://x.ca/media/b/2022-amp.pdf")
     assert newer > older
     assert score_link("Annual Budget", "https://x.ca/budget.pdf") < 0  # only plans are worth a PDF download
+
+
+def test_another_departments_contact_page_is_not_worth_reading():
+    assert score_link("Contact Us", "https://x.gov/Contact") >= MIN_SCORE
+    assert score_link("Sheriff Contact", "https://x.gov/sheriff/contact") < MIN_SCORE
+    assert score_link("Contact Information", "https://x.gov/Board-of-Elections/Contact-Information") < MIN_SCORE
+    # The plans and reports section is worth reading; every page under it isn't.
+    assert score_link("Plans, Studies and Reports", "https://x.ca/township-office/plans-studies-and-reports/") >= MIN_SCORE
+    assert score_link("Drinking Water Reports", "https://x.ca/plans-studies-and-reports/drinking-water-reports/") < MIN_SCORE
 
 
 # --- reading pages ----------------------------------------------------------------

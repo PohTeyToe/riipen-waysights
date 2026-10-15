@@ -17,19 +17,22 @@ from .allowlist import is_allowed
 from .fetch import Fetcher, Refused
 from .pages import Link, clean_url, html_page, pdf_pages, pdf_title, pick_pdf_pages
 
-# Words that make a link worth reading. Anchor text counts in full, the URL path at half weight.
+# Words that make a link worth reading. Anchor text counts in full, the URL path at half weight
+# (third item: whether the path counts). A bare "Contact" link is the site's own contact page;
+# "Sheriff Contact" is another department's. The plans-and-reports pattern finds that section
+# from its own link, not every page whose path sits under it.
 WANT = [
-    (r"asset management plan", 10),
-    (r"public works|\bdpw\b", 8),
-    (r"\bhighway department\b|\bhighway division\b", 8),
-    (r"\bhighways?\b", 5),
-    (r"\broads?\b", 5),
-    (r"\binfrastructure\b", 4),
-    (r"\btransportation\b", 3),
-    (r"\b(contacts?|staff) directory\b|\bdirectory of officials\b", 6),
-    (r"\bdepartments\b", 4),
-    (r"\bcontact( us)?\b", 3),
-    (r"\bplans?\b.*\b(reports?|studies)\b|\b(reports?|studies)\b.*\bplans?\b", 6),
+    (r"asset management plan", 10, True),
+    (r"public works|\bdpw\b", 8, True),
+    (r"\bhighway department\b|\bhighway division\b", 8, True),
+    (r"\bhighways?\b", 5, True),
+    (r"\broads?\b", 5, True),
+    (r"\binfrastructure\b", 4, True),
+    (r"\btransportation\b", 3, True),
+    (r"\b(contacts?|staff) directory\b|\bdirectory of officials\b", 6, True),
+    (r"\bdepartments\b", 4, True),
+    (r"^contacts?( us)?$", 3, True),
+    (r"\bplans?\b.*\b(reports?|studies)\b|\b(reports?|studies)\b.*\bplans?\b", 6, False),
 ]
 # Pages that are about one event or transaction, not the department or its plan.
 AVOID = r"\bnews\b|\bposts?\b|\bevents?\b|\bcareers?\b|\bjobs?\b|\btenders?\b|\bbids?\b|\bagendas?\b|\bminutes\b|" \
@@ -46,15 +49,15 @@ def words(s: str) -> str:
 
 
 def score_link(text: str, url: str, avoid: bool = True) -> float:
-    path = words(urlsplit(url).path)
-    anchor = words(text)
+    path = words(urlsplit(url).path).strip()
+    anchor = words(text).strip()
     if avoid and (re.search(AVOID, anchor) or re.search(AVOID, path)):
         return -1
     s = 0.0
-    for pattern, weight in WANT:
+    for pattern, weight, in_path in WANT:
         if re.search(pattern, anchor):
             s += weight
-        if re.search(pattern, path):
+        if in_path and re.search(pattern, path):
             s += weight / 2
     if is_pdf(url) or "pdf" in anchor:
         # Only plans are worth a PDF download. Newest year wins among plans.

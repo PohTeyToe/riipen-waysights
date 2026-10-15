@@ -257,12 +257,17 @@ DEV_NOTES = [
     "- Duplicate check: two different full first names never match.",
     "- Fetching: a redirected robots.txt is read where it lands, `..` in a path is refused, a broken PDF is skipped, "
     "and a run that reads nothing is marked Failed instead of Done.",
+    "- Discovery spent Warren's and Tompkins' budgets on other departments' contact pages (Sheriff, Social Services, "
+    "Board of Elections) and West Lincoln's on every page under \"Plans, Studies and Reports\". A bare \"Contact\" "
+    "link now counts only as the site's own contact page, and the plans-and-reports words count on a link's text, "
+    "not on every path under that section.",
     "",
     "The first repeat asked the extractor for every number printed for the department, and it listed staff "
     "extensions, after-hours lines and another program's office, so four Accounts got a phone conflict that wasn't "
     "real. The extractor now returns only the number a page gives for the department itself, and sign lines must be "
     "about signs in general. A second repeat had the brief call Tompkins County's Highway Department \"Public "
-    "Works\"; the brief now names the department the way its page does. The outputs here are from the third repeat.",
+    "Works\"; the brief now names the department the way its page does. The discovery change above came after the "
+    "third repeat, so the outputs here are from a fourth.",
 ]
 
 
