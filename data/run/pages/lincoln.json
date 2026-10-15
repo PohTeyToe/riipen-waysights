@@ -1,0 +1,158 @@
+[
+ {
+  "id": "S1",
+  "url": "https://www.lincoln.ca/",
+  "kind": "html",
+  "sha256": "4a452dc9212f00feb181d9ef9088bd6d046c4dae22f0c21f8ed79c7746ce4d1b",
+  "fetched_at": "2026-10-15T19:10:29.548Z",
+  "used": false,
+  "chars": 2813,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S2",
+  "url": "https://www.lincoln.ca/council-administration/community-plans/asset-management-plan",
+  "kind": "html",
+  "sha256": "7738cb23fe4df414f24f062056d1dd6b2b945b5181a371af25303e4bfde2fbc5",
+  "fetched_at": "2026-10-15T19:10:31.508Z",
+  "used": false,
+  "chars": 2718,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S3",
+  "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+  "kind": "pdf",
+  "sha256": "a6d1dbe1dd3c263fe7910f21585a8a7690c02810250f4c77d4166ff0bdf03ea7",
+  "fetched_at": "2026-10-15T19:10:33.656Z",
+  "used": true,
+  "chars": 1322,
+  "text": null,
+  "pdf_pages": {
+   "49": " \n \n \nAPPENDIX A ROAD NETWORK     \n \n44 44 \nTable 21 Road Network Current Level of Service \nCommunity LOS Service \nAttribute Technical LOS \nDescription, which \nmay include maps of \nthe road network in \nthe municipality and \nits level of \nconnectivity \nSee Figure 20 Map of Roads Scope \nReplacement Cost $372,849,146 \nQuantity - kms of local roads 255 \nQuantity - kms of collector \nroads \n55 \nQuantity - number of lights 3,023 \nLane-km of arterial roads \n(MMS classes 1 and 2) per \nland area (km/km2) \n0 \nLane-km of collector roads \n(MMS classes 3 and 4) per \nland area (km/km2) \n0.43 \nLane-km of local roads (MMS \nclasses 5 and 6) per land \narea (km/km2) \n0.84 \nInfrastructure will be managed with the practice of \nmeeting present needs without compromising the \nability of future generations to meet their own, by \nprioritizing long-term planning, resource efficiency, \nand responsible decision-making. \nSustainability % Risk that is High and Very \nHigh \n0.90 \nAverage Risk 14.74 \nAnnual reinvestment  $2,940,651  \n(Actual) Capital reinvestment \nrate \n0.79% \nServices will be provided with the obligation and \naccountability to ensure assets and services are \nsafe to operate and in compliance with all \napplicable laws, regulations, standards, and \nguidelines \nResponsibility Minimum Maintenance \nStandards are met \nYes "
+  }
+ },
+ {
+  "id": "S4",
+  "url": "https://www.lincoln.ca/services/roads-transportation",
+  "kind": "html",
+  "sha256": "b445d94b0a59228d9c99a0f586a84edd623f3ca07f986d52f0838d220fb484ad",
+  "fetched_at": "2026-10-15T19:10:37.719Z",
+  "used": true,
+  "chars": 1305,
+  "text": "Skip to main content Skip to main menu Skip to footer\nAlert\nSearch\nMenu\nClose\nSearch\nPublic Works\n4800 South Service Rd\nBeamsville, ON L3J 1L3\n905-563-2799\npublicworks@lincoln.ca\nRoads & Transportation\nThe Town of Lincoln’s Public Works department is responsible for the operation and maintenance of Lincoln’s road network. Currently, Public Works oversees approximately 300km of roadway including 49 bridges and 130 culverts. Lincoln’s Public Works Department strives to provide residents with the highest quality of service for public infrastructure.\nKey activities include:\nRoad signage inventory, inspections, maintenance and repairs\nRoad surface repairs (ie. potholes, hot asphalt, tar & chip spraying, etc.)\nRural tree maintenance (ie. brushing, trimming, removals, etc.)\nLitter pick-up and animal carcass removal\nSidewalk inspections and maintenance\nGuardrail maintenance\nStreet cleaning/sweeping\nDitching and culvert installations and repairs\nWinter maintenance\nCatch basin and ditch inlet maintenance\nGravel shoulder maintenance\nRoad patrolling\nRural roadside mowing\nConnect with Us\n4800 South Service Road\nBeamsville, ON L3J 1L3\ninfo@lincoln.ca\n905-563-2799\n905-641-0971 (After-Hours for Urgent Infrastructure-Related Issues)\n905-563-6566\nMonday to Friday\n8:30am to 4:30pm\n© 2026 Town of Lincoln",
+  "pdf_pages": null
+ },
+ {
+  "id": "S5",
+  "url": "https://www.lincoln.ca/services/roads-transportation/24-hour-emergency-service-roads",
+  "kind": "html",
+  "sha256": "2faafbc76f8d84c63dcb996734bf8bac7fffa9f7c4e1eabc08a794053a6fba18",
+  "fetched_at": "2026-10-15T19:10:39.779Z",
+  "used": false,
+  "chars": 1070,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S6",
+  "url": "https://www.lincoln.ca/services/roads-transportation/active-transportation",
+  "kind": "html",
+  "sha256": "11250e22144c7e845a1dd96290fdb0d2f0d7fbfb099616cb5bb5118a4c1c08f1",
+  "fetched_at": "2026-10-15T19:10:41.856Z",
+  "used": false,
+  "chars": 3942,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S7",
+  "url": "https://www.lincoln.ca/RoadRehabilitationProgram",
+  "kind": "html",
+  "sha256": "01aa714837429f8302f06fb4ec4bd469908d9b9db1cf10a453ea69edd59c409d",
+  "fetched_at": "2026-10-15T19:10:45.761Z",
+  "used": false,
+  "chars": 4088,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S8",
+  "url": "https://www.lincoln.ca/Contact",
+  "kind": "html",
+  "sha256": "6abce75a2eee02c3e88782cb6a124c42c98bb73b419b7048be94d613f0c5d54a",
+  "fetched_at": "2026-10-15T19:10:47.805Z",
+  "used": true,
+  "chars": 4750,
+  "text": "Skip to main content Skip to main menu Skip to footer\nAlert\nSearch\nMenu\nClose\nSearch\nRelated Links\nTell Us About Your Customer Service Experience\nAbove & Beyond Employee Recognition Program\nContact Us\nTown of Lincoln General Inquiries\nEmail: info@lincoln.ca\nPhone: 905-563-2799\n4800 South Service Road Beamsville, ON L3J 1L3\nAbove & Beyond Employee Recognition Program\nThe Above & Beyond Employee Recognition Program is your opportunity to recognize the exceptional contributions of Town of Lincoln staff. You can nominate any staff member who goes above and beyond in their role, whether through a standout achievement or consistent day-to-day excellence.\nNominate an employee today!\nSearch\nPlanning and Community Development\nPlanning and Community Development\nEmail: treebylaw@lincoln.ca\nPhone: 905-563-2799\nBuilding Permit Applications\nPlanning and Community Development\nEmail: buildingpermitinfo@lincoln.ca\nPhone: 905-563-2799\nMunicipal Law Enforcement\nPlanning and Community Development\nEmail: MLE@lincoln.ca\nPhone: 905-563-2799 ext. 289\nParking Inquires\nPlanning and Community Development\nEmail: parking@lincoln.ca\nPhone: 905-563-2799\nPlanning & Development\nPlanning and Community Development\nEmail: planningapplications@lincoln.ca\nPhone: 905-563-2799\nShort Term Accommodation and Bed & Breakfast Establishment Licensing\nPlanning and Community Development\nEmail: accommodationlicensing@lincoln.ca\nPhone: 905-563-2799\nTree Inquiries\nPlanning and Community Development\nEmail: trees@lincoln.ca\nPhone: 905-563-2799\nFinance\nAccounts Payable\nFinance\nEmail: AccountsPayable@lincoln.ca\nPhone: 905-563-2799\nCashier Inquiries\nFinance\nEmail: cashinquiries@lincoln.ca\nPhone: 905-563-2799\nFinance Inquiries\nFinance\nEmail: finance@lincoln.ca\nPhone: 905-563-2799 ext. 222\nProcurement\nFinance\nEmail: procurement@lincoln.ca\nPhone: 905-563-2799\nProperty Information Request Inquiries\nFinance\nEmail: propinfo@lincoln.ca\nPhone: 905-563-2799 ext. 241\nProperty Tax Inquiries\nFinance\nEmail: propertytaxinquiries@lincoln.ca\nPhone: 905-563-2799\nWater Billing Inquiries\nFinance\nEmail: waterinquiries@lincoln.ca\nPhone: 905-563-2799 ext. 222\nCommunity Services\nBooking & Rental Inquiries\nCommunity Services\nEmail: bookings@lincoln.ca\nPhone: 905-563-2799 ext. 319\nProgram Inquiries\nCommunity Services\nEmail: recreation@lincoln.ca\nPhone: 905-563-2799 ext. 319\nPublic Works\nCemeteries\nPublic Works\nEmail: cemeteries@lincoln.ca\nPhone: 905-563-2799\nEngineering Permit Applications\nPublic Works\nEmail: publicworks@lincoln.ca\nPhone: 905-563-2799 ext. 234\nPark Inquires\nPublic Works\nEmail: parks@lincoln.ca\nPhone: 905-563-2799\nPublic Works\nPublic Works\nEmail: publicworks@lincoln.ca\nPhone: 905-563-2799\nSummer Garden Showcase\nPublic Works\nEmail: jsheldon@lincoln.ca\nPhone: 905-563-2799 ext.247\nOffice of The Chief Administrative Officer\nChief Administrative Officer: Michael Kirkopoulos\nOffice of The Chief Administrative Officer\nEmail: mkirkopoulos@lincoln.ca\nPhone: 905-563-2798\nExecutive Assistant: Andrea Chambers\nOffice of The Chief Administrative Officer\nEmail: achambers@lincoln.ca\nRecruiting\nOffice of The Chief Administrative Officer\nEmail: recruiting@lincoln.ca\nPhone: 905-563-2799\nTown of Lincoln Events\nOffice of The Chief Administrative Officer\nEmail: events@lincoln.ca\nPhone: 905-563-2799\nLegislative & Information Services\nClerks\nLegislative & Information Services\nEmail: clerks@lincoln.ca\nPhone: 905-563-2799 ext. 513\nElections\nLegislative & Information Services\nEmail: elections@lincoln.ca\nPhone: 905-563-2799\nEconomic Development & Communications\nCommunications\nEconomic Development & Communications\nEmail: communications@lincoln.ca\nPhone: 905-563-2799\nEconomic Development\nEconomic Development & Communications\nEmail: economicdevelopment@lincoln.ca\nPhone: 905-563-2799\nLincoln Museum & Cultural Centre\nEconomic Development & Communications\nEmail: museum@lincoln.ca\nPhone: 905-563-2799 ext. 292\nTourism\nEconomic Development & Communications\nEmail: tourism@niagarabenchlands.ca\nPhone: 905-563-2799\nEmergency Management Coordinator\nEmail: cemc@lincoln.ca\nPhone: 905-563-2799 ext. 604\nFire Prevention Officer\nEmail: fpo@lincoln.ca\nPhone: 905-563-2799 ext. 601\nLincoln Fire Rescue Service\nEmail: firerescue@lincoln.ca\nPhone: 905-563-2799 ext. 601\nLincoln Fire Rescue Service\nEmail: cemc@lincoln.ca\nPhone: 905-563-2799 ext. 604\nTown of Lincoln Vaccine Clinic\nEmail: vaccineclinic@lincoln.ca\nPhone: 905-563-2799 ext. 604\nTown of Lincoln Council\nTown of Lincoln Council\nTown of Lincoln Council\nEmail: council@lincoln.ca\nPhone: 905-563-2799\nConnect with Us\n4800 South Service Road\nBeamsville, ON L3J 1L3\ninfo@lincoln.ca\n905-563-2799\n905-641-0971 (After-Hours for Urgent Infrastructure-Related Issues)\n905-563-6566\nMonday to Friday\n8:30am to 4:30pm\n© 2026 Town of Lincoln",
+  "pdf_pages": null
+ },
+ {
+  "id": "S9",
+  "url": "https://www.lincoln.ca/council-administration/community-plans/transportation-master-plan",
+  "kind": "html",
+  "sha256": "aa89a085cecbeecdf964507bdd78a760957e8a0f187ff08d4b3f7334741174d0",
+  "fetched_at": "2026-10-15T19:10:49.736Z",
+  "used": false,
+  "chars": 2263,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S10",
+  "url": "https://www.lincoln.ca/services/fire-emergency-services/fire-department/non-emergency-contact-information",
+  "kind": "html",
+  "sha256": "2b53d7fcdb5a2163b6d8838da2366134dce0f037e85f31f0e88e1d4c0ec295c0",
+  "fetched_at": "2026-10-15T19:10:51.627Z",
+  "used": false,
+  "chars": 1013,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S11",
+  "url": "https://www.lincoln.ca/investinginfrastructure",
+  "kind": "html",
+  "sha256": "2b5441def3c952f96417c48d57d3b7ce8eb506d626a1533e92a43d1b54b14552",
+  "fetched_at": "2026-10-15T19:10:53.662Z",
+  "used": false,
+  "chars": 4897,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S12",
+  "url": "https://www.lincoln.ca/services/roads-transportation/report-potholes-sod-damage-streetlights-damaged-signs",
+  "kind": "html",
+  "sha256": "1c83b5bb820d2b9dc0236bf1c59680d69896d6b31280e85bd0624968c9ee5de8",
+  "fetched_at": "2026-10-15T19:10:55.634Z",
+  "used": false,
+  "chars": 1777,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S13",
+  "url": "https://www.lincoln.ca/services/roads-transportation/snow-ice-removal",
+  "kind": "html",
+  "sha256": "87e6905b27fa35b30fc70c70beae09f616f181cf6612a46b8f22880f2e9b78b2",
+  "fetched_at": "2026-10-15T19:10:57.632Z",
+  "used": true,
+  "chars": 1748,
+  "text": "Skip to main content Skip to main menu Skip to footer\nAlert\nSearch\nMenu\nClose\nSearch\nPublic Works\n4800 South Service Rd\nBeamsville, ON L3J 1L3\n905-563-2799\npublicworks@lincoln.ca\nRelated Links\nWinter Sidewalk Maintenance\nKeep it Clear\nSnow & Ice Removal\nThe Town of Lincoln’s Public Works department is responsible for maintaining Lincoln’s Road network.\nDid you know Public Works oversees approximately 300km of roadway, including 49 bridges and 130 culverts? That is an important job, and the Town is committed to improving safe passage for residents, visitors, and businesses during the winter season with a priority to ensure roads are clear for emergency services response in the frosty weather.\nWinter maintenance and operations begin approximately mid-November and extend to mid-April every year.\nLincoln is divided into nine primary and secondary roads, with the urban centres treated as priority areas. Town staff monitor weather and road conditions to respond to snow/ice removal accordingly.\nThe Town staff are busy out in our plows, focusing on making sure roads are passable. As such, the Town annually contracts out other snow removal services.\nContracted services for salting and snow removal activities at the following general locations:\nTown facility parking lots and sidewalks\nMunicipal parking lots\nFire halls\nMunicipal walkways\nAll Town-owned sidewalks\nLearn more about when and why the Town declares Keep It Clear events.\nLearn more about when and why the Town declares Significant Winter Events.\nConnect with Us\n4800 South Service Road\nBeamsville, ON L3J 1L3\ninfo@lincoln.ca\n905-563-2799\n905-641-0971 (After-Hours for Urgent Infrastructure-Related Issues)\n905-563-6566\nMonday to Friday\n8:30am to 4:30pm\n© 2026 Town of Lincoln",
+  "pdf_pages": null
+ },
+ {
+  "id": "S14",
+  "url": "https://www.lincoln.ca/services/roads-transportation/transit",
+  "kind": "html",
+  "sha256": "566915e35f60ef1b26170ba33b6877f4f60f488c14a9c291834eae0ff1c0e861",
+  "fetched_at": "2026-10-15T19:10:59.645Z",
+  "used": false,
+  "chars": 2899,
+  "text": null,
+  "pdf_pages": null
+ }
+]

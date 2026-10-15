@@ -1,0 +1,207 @@
+{
+ "steps": [
+  {
+   "t": "2026-10-15T19:10:09.787Z",
+   "step": "robots",
+   "msg": "robots.txt read for waysights.com",
+   "url": "https://waysights.com/robots.txt",
+   "status": 200,
+   "delay_s": 2.0
+  },
+  {
+   "t": "2026-10-15T19:10:11.021Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://waysights.com/faq/",
+   "status": 200,
+   "bytes": 41752,
+   "ms": 702,
+   "waited_ms": 531,
+   "why": "Waysights' own page, for the brief's vocabulary",
+   "page": "1/10"
+  },
+  {
+   "t": "2026-10-15T19:10:13.650Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://waysights.com/how-it-works/",
+   "status": 200,
+   "bytes": 36990,
+   "ms": 1327,
+   "waited_ms": 1281,
+   "why": "Waysights' own page, for the brief's vocabulary",
+   "page": "2/10"
+  },
+  {
+   "t": "2026-10-15T19:10:15.259Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://waysights.com/products/",
+   "status": 200,
+   "bytes": 35672,
+   "ms": 937,
+   "waited_ms": 641,
+   "why": "Waysights' own page, for the brief's vocabulary",
+   "page": "3/10"
+  },
+  {
+   "t": "2026-10-15T19:10:17.082Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://waysights.com/pricing/",
+   "status": 200,
+   "bytes": 39237,
+   "ms": 765,
+   "waited_ms": 1047,
+   "why": "Waysights' own page, for the brief's vocabulary",
+   "page": "4/10"
+  },
+  {
+   "t": "2026-10-15T19:10:17.250Z",
+   "step": "robots",
+   "msg": "robots.txt read for www.ontario.ca",
+   "url": "https://www.ontario.ca/robots.txt",
+   "status": 200,
+   "delay_s": 2.0
+  },
+  {
+   "t": "2026-10-15T19:10:19.346Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.ontario.ca/laws/docs/020239_e.doc",
+   "status": 200,
+   "bytes": 254464,
+   "ms": 234,
+   "waited_ms": 1858,
+   "why": "O. Reg. 239/02, s. 12(1), for the brief",
+   "page": "5/10"
+  },
+  {
+   "t": "2026-10-15T19:10:19.401Z",
+   "step": "check",
+   "msg": "O. Reg. 239/02, s. 12(1): quote found in the fetched file",
+   "url": "https://www.ontario.ca/laws/docs/020239_e.doc"
+  },
+  {
+   "t": "2026-10-15T19:10:21.366Z",
+   "step": "robots",
+   "msg": "robots.txt read for mutcd.fhwa.dot.gov",
+   "url": "https://mutcd.fhwa.dot.gov/robots.txt",
+   "status": 200,
+   "delay_s": 2.0
+  },
+  {
+   "t": "2026-10-15T19:10:21.810Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://mutcd.fhwa.dot.gov/pdfs/11th_Edition/Chapter2a.pdf",
+   "status": 200,
+   "bytes": 689166,
+   "ms": 405,
+   "waited_ms": 30,
+   "why": "Federal MUTCD, 11th Edition, Section 2A.22, paragraph 02, for the brief",
+   "page": "6/10"
+  },
+  {
+   "t": "2026-10-15T19:10:27.340Z",
+   "step": "check",
+   "msg": "Federal MUTCD, 11th Edition, Section 2A.22, paragraph 02: quote found in the fetched file",
+   "url": "https://mutcd.fhwa.dot.gov/pdfs/11th_Edition/Chapter2a.pdf",
+   "pdf_page": 24
+  }
+ ],
+ "sources": [
+  {
+   "id": "W1",
+   "url": "https://waysights.com/faq/",
+   "title": "FAQ - Waysights Inc.",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 41752,
+   "sha256": "7e8bb9d5657a5d1d6b932cae5f79c81c64b301c6005b02cbebce868cb36caa7c",
+   "fetched_at": "2026-10-15T19:10:11.020Z",
+   "elapsed_ms": 702,
+   "notes": null,
+   "text": null
+  },
+  {
+   "id": "W2",
+   "url": "https://waysights.com/how-it-works/",
+   "title": "How It Works - Waysights Inc.",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 36990,
+   "sha256": "144e8c489b4d77c2e0b0fe449f0bc8b14da5957ed347e9f0856dffa1f2f04448",
+   "fetched_at": "2026-10-15T19:10:13.649Z",
+   "elapsed_ms": 1327,
+   "notes": null,
+   "text": null
+  },
+  {
+   "id": "W3",
+   "url": "https://waysights.com/products/",
+   "title": "Products - Waysights Inc.",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 35672,
+   "sha256": "c6297a94cafed290103dfa533052163e7705340891c716dd2ccd912882526285",
+   "fetched_at": "2026-10-15T19:10:15.258Z",
+   "elapsed_ms": 937,
+   "notes": null,
+   "text": null
+  },
+  {
+   "id": "W4",
+   "url": "https://waysights.com/pricing/",
+   "title": "Pricing - Waysights Inc.",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 39237,
+   "sha256": "9638da75ea22e2ab09c81d38c02469c40f785714f17077aff4749c19c92f2aaa",
+   "fetched_at": "2026-10-15T19:10:17.081Z",
+   "elapsed_ms": 765,
+   "notes": null,
+   "text": null
+  },
+  {
+   "id": "RON",
+   "url": "https://www.ontario.ca/laws/docs/020239_e.doc",
+   "title": "O. Reg. 239/02, s. 12(1)",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "application/msword",
+   "bytes": 254464,
+   "sha256": "6add1052933496da0c77aa981087c4dadbfd887c2747247728cd1e8686744d74",
+   "fetched_at": "2026-10-15T19:10:19.344Z",
+   "elapsed_ms": 234,
+   "notes": {
+    "jurisdiction": "ON",
+    "label": "O. Reg. 239/02, s. 12(1)",
+    "pdf_page": null
+   },
+   "text": "The standard for the frequency of inspecting regulatory signs or warning signs to check to see that they meet the retro-reflectivity requirements of the Ontario Traffic Manual is once per calendar year, with each inspection taking place not more than 16 months from the previous inspection."
+  },
+  {
+   "id": "RNY",
+   "url": "https://mutcd.fhwa.dot.gov/pdfs/11th_Edition/Chapter2a.pdf",
+   "title": "Federal MUTCD, 11th Edition, Section 2A.22, paragraph 02",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "application/pdf",
+   "bytes": 689166,
+   "sha256": "b82bde8ab21ab3f3e19d7ce9c0c04d1aae2979feb223d9bf3f14e5cd4192ba56",
+   "fetched_at": "2026-10-15T19:10:21.808Z",
+   "elapsed_ms": 405,
+   "notes": {
+    "jurisdiction": "NY",
+    "label": "Federal MUTCD, 11th Edition, Section 2A.22, paragraph 02",
+    "pdf_page": 24
+   },
+   "text": "Public agencies or officials having jurisdiction shall use an assessment or management method that is designed to maintain sign retroreflectivity at or above the minimum levels in Table 2A-5."
+  }
+ ]
+}

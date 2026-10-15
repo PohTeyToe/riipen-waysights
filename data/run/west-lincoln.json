@@ -1,0 +1,1082 @@
+{
+ "account": {
+  "slug": "west-lincoln",
+  "crm_id": "sample-acct-003",
+  "name": "Township of West Lincoln",
+  "website": "https://www.westlincoln.ca/",
+  "jurisdiction": "ON",
+  "region": "Ontario",
+  "ny_county": null,
+  "example_public_account": true
+ },
+ "run": {
+  "started_at": "2026-10-15T19:10:27.342Z",
+  "finished_at": "2026-10-15T19:11:44.931Z",
+  "model": "claude-opus-5-5",
+  "pages_read": 15,
+  "requests_used": 15,
+  "page_budget": 15,
+  "prompt_chars": 63060
+ },
+ "status": "done",
+ "steps": [
+  {
+   "t": "2026-10-15T19:10:27.342Z",
+   "step": "status",
+   "msg": "Queued"
+  },
+  {
+   "t": "2026-10-15T19:10:27.342Z",
+   "step": "status",
+   "msg": "Running",
+   "rate_rule": "One run per Account per day. Last run: never."
+  },
+  {
+   "t": "2026-10-15T19:10:27.342Z",
+   "step": "allowlist",
+   "msg": "www.westlincoln.ca is on the approved list",
+   "approved": [
+    "westlincoln.ca",
+    "media-003-ca.cdn.govstack.com/westlincoln-002-ca/"
+   ]
+  },
+  {
+   "t": "2026-10-15T19:10:27.634Z",
+   "step": "robots",
+   "msg": "robots.txt read for www.westlincoln.ca",
+   "url": "https://www.westlincoln.ca/robots.txt",
+   "status": 200,
+   "delay_s": 2.0
+  },
+  {
+   "t": "2026-10-15T19:10:29.582Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/",
+   "status": 200,
+   "bytes": 80710,
+   "ms": 187,
+   "waited_ms": 1702,
+   "why": "the Account's website",
+   "page": "1/15"
+  },
+  {
+   "t": "2026-10-15T19:10:31.696Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/",
+   "status": 200,
+   "bytes": 66259,
+   "ms": 265,
+   "waited_ms": 1562,
+   "why": "menu link \"Plans, Studies and Reports\" on Home | Township of West Lincoln",
+   "page": "2/15"
+  },
+  {
+   "t": "2026-10-15T19:10:33.587Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/asset-management-plans/",
+   "status": 200,
+   "bytes": 66247,
+   "ms": 250,
+   "waited_ms": 1562,
+   "why": "link \"Asset Management Plans\" on Plans, Studies and Reports | Township of West Lincoln",
+   "page": "3/15"
+  },
+  {
+   "t": "2026-10-15T19:10:34.138Z",
+   "step": "robots",
+   "msg": "robots.txt read for media-003-ca.cdn.govstack.com",
+   "url": "https://media-003-ca.cdn.govstack.com/robots.txt",
+   "status": 404,
+   "delay_s": 2.0
+  },
+  {
+   "t": "2026-10-15T19:10:41.345Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "status": 200,
+   "bytes": 9717111,
+   "ms": 5547,
+   "waited_ms": 1500,
+   "why": "link \"2025 Asset Management Plan\" on Asset Management Plans | Township of West Lincoln",
+   "page": "4/15"
+  },
+  {
+   "t": "2026-10-15T19:10:50.343Z",
+   "step": "pdf",
+   "msg": "PDF read: 158 pages",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "pages": 158
+  },
+  {
+   "t": "2026-10-15T19:10:50.343Z",
+   "step": "pdf",
+   "msg": "PDF page 46 read (road-length lines: 7)",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "pdf_page": 46
+  },
+  {
+   "t": "2026-10-15T19:10:50.343Z",
+   "step": "pdf",
+   "msg": "PDF page 67 read (road-length lines: 4)",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "pdf_page": 67
+  },
+  {
+   "t": "2026-10-15T19:10:50.599Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/contacts-directory/",
+   "status": 200,
+   "bytes": 206390,
+   "ms": 265,
+   "waited_ms": 0,
+   "why": "menu link \"Contacts Directory\" on Home | Township of West Lincoln",
+   "page": "5/15"
+  },
+  {
+   "t": "2026-10-15T19:10:52.546Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+   "status": 200,
+   "bytes": 75115,
+   "ms": 202,
+   "waited_ms": 1532,
+   "why": "menu link \"Roads and Sidewalks\" on Home | Township of West Lincoln",
+   "page": "6/15"
+  },
+  {
+   "t": "2026-10-15T19:10:52.631Z",
+   "step": "skip",
+   "msg": "off-list link skipped: \"Road Occupancy Permit Application Form\"",
+   "url": "https://forms.westlincoln.ca/Infrastructure/Road-Occupancy-Permit-Application"
+  },
+  {
+   "t": "2026-10-15T19:10:52.632Z",
+   "step": "skip",
+   "msg": "off-list link skipped: \"Regional Public Works Operation\"",
+   "url": "https://www.niagararegion.ca/government/departments/public-works.aspx"
+  },
+  {
+   "t": "2026-10-15T19:10:54.541Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/road-safety-action-plan/",
+   "status": 200,
+   "bytes": 77163,
+   "ms": 202,
+   "waited_ms": 1702,
+   "why": "menu link \"Road Safety Action Plan\" on Roads and Sidewalks | Township of West Lincoln",
+   "page": "7/15"
+  },
+  {
+   "t": "2026-10-15T19:10:56.537Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/departments/",
+   "status": 200,
+   "bytes": 68940,
+   "ms": 202,
+   "waited_ms": 1702,
+   "why": "menu link \"Departments\" on Home | Township of West Lincoln",
+   "page": "8/15"
+  },
+  {
+   "t": "2026-10-15T19:10:58.533Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/cultivating-west-lincoln-new-official-plan/",
+   "status": 200,
+   "bytes": 72269,
+   "ms": 187,
+   "waited_ms": 1657,
+   "why": "link \"Cultivating West Lincoln: New Official Plan\" on Home | Township of West Lincoln",
+   "page": "9/15"
+  },
+  {
+   "t": "2026-10-15T19:11:00.546Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/building-reports/",
+   "status": 200,
+   "bytes": 67874,
+   "ms": 202,
+   "waited_ms": 1718,
+   "why": "link \"Building Reports\" on Plans, Studies and Reports | Township of West Lincoln",
+   "page": "10/15"
+  },
+  {
+   "t": "2026-10-15T19:11:02.533Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/community-improvement-plans/",
+   "status": 200,
+   "bytes": 70748,
+   "ms": 187,
+   "waited_ms": 1702,
+   "why": "link \"Community Improvement Plans\" on Plans, Studies and Reports | Township of West Lincoln",
+   "page": "11/15"
+  },
+  {
+   "t": "2026-10-15T19:11:04.578Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/development-charge-study/",
+   "status": 200,
+   "bytes": 88096,
+   "ms": 234,
+   "waited_ms": 1718,
+   "why": "link \"Development Charge Study\" on Plans, Studies and Reports | Township of West Lincoln",
+   "page": "12/15"
+  },
+  {
+   "t": "2026-10-15T19:11:06.522Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/drinking-water-reports/",
+   "status": 200,
+   "bytes": 73474,
+   "ms": 187,
+   "waited_ms": 1609,
+   "why": "link \"Drinking Water Reports\" on Plans, Studies and Reports | Township of West Lincoln",
+   "page": "13/15"
+  },
+  {
+   "t": "2026-10-15T19:11:08.536Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/official-plan/",
+   "status": 200,
+   "bytes": 69898,
+   "ms": 202,
+   "waited_ms": 1718,
+   "why": "link \"Official Plan\" on Plans, Studies and Reports | Township of West Lincoln",
+   "page": "14/15"
+  },
+  {
+   "t": "2026-10-15T19:11:10.512Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/corporate-strategic-plan/",
+   "status": 200,
+   "bytes": 43219,
+   "ms": 172,
+   "waited_ms": 1718,
+   "why": "link \"Strategic Plan\" on Plans, Studies and Reports | Township of West Lincoln",
+   "page": "15/15"
+  },
+  {
+   "t": "2026-10-15T19:11:10.568Z",
+   "step": "skip",
+   "msg": "111 links pointed off the approved list and were not followed"
+  },
+  {
+   "t": "2026-10-15T19:11:10.568Z",
+   "step": "read",
+   "msg": "15 pages read, 15 of 15 requests used"
+  },
+  {
+   "t": "2026-10-15T19:11:10.568Z",
+   "step": "extract",
+   "msg": "sending 15 sources to the model"
+  },
+  {
+   "t": "2026-10-15T19:11:28.336Z",
+   "step": "extract",
+   "msg": "model returned 5 road lines, a roads head, an email, a phone",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "t": "2026-10-15T19:11:28.341Z",
+   "step": "check",
+   "msg": "checks run: 4 value(s) rejected",
+   "rejected": 4
+  },
+  {
+   "t": "2026-10-15T19:11:28.341Z",
+   "step": "reject",
+   "msg": "road_length_km: 612,230 Square Meters (an area, not a length)",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf"
+  },
+  {
+   "t": "2026-10-15T19:11:28.342Z",
+   "step": "reject",
+   "msg": "road_length_km: 0.45 km/km2 (a ratio of lane-km (km/km2), not a length)",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf"
+  },
+  {
+   "t": "2026-10-15T19:11:28.342Z",
+   "step": "reject",
+   "msg": "road_length_km: 0.29 km/km2 (a ratio of lane-km (km/km2), not a length)",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf"
+  },
+  {
+   "t": "2026-10-15T19:11:28.342Z",
+   "step": "reject",
+   "msg": "road_length_km: 0.25 km/km2 (a ratio of lane-km (km/km2), not a length)",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf"
+  },
+  {
+   "t": "2026-10-15T19:11:28.342Z",
+   "step": "dedupe",
+   "msg": "no matching Contact; a new Contact is proposed"
+  },
+  {
+   "t": "2026-10-15T19:11:44.930Z",
+   "step": "brief",
+   "msg": "4 sentence(s) kept",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "t": "2026-10-15T19:11:44.931Z",
+   "step": "writeback",
+   "msg": "2 request(s) built, none sent"
+  },
+  {
+   "t": "2026-10-15T19:11:44.931Z",
+   "step": "status",
+   "msg": "Done"
+  }
+ ],
+ "sources": [
+  {
+   "id": "S1",
+   "url": "https://www.westlincoln.ca/",
+   "kind": "html",
+   "title": "Home | Township of West Lincoln",
+   "found_via": "the Account's website",
+   "anchor": null,
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 80710,
+   "sha256": "a27154c92f8e0c43deb2d0162b5094ddedcc7ca239ebf40f1dcfbc22641228b5",
+   "fetched_at": "2026-10-15T19:10:29.548Z",
+   "elapsed_ms": 187,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S2",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/",
+   "kind": "html",
+   "title": "Plans, Studies and Reports | Township of West Lincoln",
+   "found_via": "menu link \"Plans, Studies and Reports\" on Home | Township of West Lincoln",
+   "anchor": "Plans, Studies and Reports",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 66259,
+   "sha256": "38eeb1d60374c1e9fe212a9bd00d013b4434d6279310e93645d6c0f181ffb559",
+   "fetched_at": "2026-10-15T19:10:31.612Z",
+   "elapsed_ms": 265,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S3",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/asset-management-plans/",
+   "kind": "html",
+   "title": "Asset Management Plans | Township of West Lincoln",
+   "found_via": "link \"Asset Management Plans\" on Plans, Studies and Reports | Township of West Lincoln",
+   "anchor": "Asset Management Plans",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 66247,
+   "sha256": "981c54161a9bdc60731f2c3b5b0d7899398fbffc4db6f0448b9d0a459fc13f50",
+   "fetched_at": "2026-10-15T19:10:33.585Z",
+   "elapsed_ms": 250,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S4",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "kind": "pdf",
+   "title": "2025 Asset Management Plan",
+   "found_via": "link \"2025 Asset Management Plan\" on Asset Management Plans | Township of West Lincoln",
+   "anchor": "2025 Asset Management Plan",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "application/pdf",
+   "bytes": 9717111,
+   "sha256": "442a45a06f36609c567886928692bb4eb1f44a2df92a6ac49a5a1ec462ff2f97",
+   "fetched_at": "2026-10-15T19:10:41.210Z",
+   "elapsed_ms": 5547,
+   "pdf_pages_read": [
+    46,
+    67
+   ],
+   "pdf_page_count": 158,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S5",
+   "url": "https://www.westlincoln.ca/contacts-directory/",
+   "kind": "html",
+   "title": "Contacts Directory | Township of West Lincoln",
+   "found_via": "menu link \"Contacts Directory\" on Home | Township of West Lincoln",
+   "anchor": "Contacts Directory",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 206390,
+   "sha256": "2359d9e2749789b97b97b30a2fb6520158295bc4dca9c5d28fb5cb8309c315c7",
+   "fetched_at": "2026-10-15T19:10:50.597Z",
+   "elapsed_ms": 265,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S6",
+   "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+   "kind": "html",
+   "title": "Roads and Sidewalks | Township of West Lincoln",
+   "found_via": "menu link \"Roads and Sidewalks\" on Home | Township of West Lincoln",
+   "anchor": "Roads and Sidewalks",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 75115,
+   "sha256": "355e946863f5c5ce05cb08158b9fdabe395424fa4e4b4821eaf89315680bfa79",
+   "fetched_at": "2026-10-15T19:10:52.544Z",
+   "elapsed_ms": 202,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S7",
+   "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/road-safety-action-plan/",
+   "kind": "html",
+   "title": "Road Safety Action Plan | Township of West Lincoln",
+   "found_via": "menu link \"Road Safety Action Plan\" on Roads and Sidewalks | Township of West Lincoln",
+   "anchor": "Road Safety Action Plan",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 77163,
+   "sha256": "8cbaba78a0369a68a4e80fe505bd12845eff8de5e648df9a67f6d6eaff5f6004",
+   "fetched_at": "2026-10-15T19:10:54.539Z",
+   "elapsed_ms": 202,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S8",
+   "url": "https://www.westlincoln.ca/township-office/departments/",
+   "kind": "html",
+   "title": "Departments | Township of West Lincoln",
+   "found_via": "menu link \"Departments\" on Home | Township of West Lincoln",
+   "anchor": "Departments",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 68940,
+   "sha256": "96cb4b16af0793e03c43ca7b3db09b22430e8e0c7c6a1420fe96c2546094e3d2",
+   "fetched_at": "2026-10-15T19:10:56.535Z",
+   "elapsed_ms": 202,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S9",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/cultivating-west-lincoln-new-official-plan/",
+   "kind": "html",
+   "title": "Cultivating West Lincoln: New Official Plan | Township of West Lincoln",
+   "found_via": "link \"Cultivating West Lincoln: New Official Plan\" on Home | Township of West Lincoln",
+   "anchor": "Cultivating West Lincoln: New Official Plan",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 72269,
+   "sha256": "5f54e5d79822090e3603941653f4295654b40a236d7f40c3b587650a071cca0a",
+   "fetched_at": "2026-10-15T19:10:58.531Z",
+   "elapsed_ms": 187,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S10",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/building-reports/",
+   "kind": "html",
+   "title": "Building Reports | Township of West Lincoln",
+   "found_via": "link \"Building Reports\" on Plans, Studies and Reports | Township of West Lincoln",
+   "anchor": "Building Reports",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 67874,
+   "sha256": "2bb7c4b65c0200b0fdc1bf7c0e401e03db58083c7a11a59f6586afa155698271",
+   "fetched_at": "2026-10-15T19:11:00.545Z",
+   "elapsed_ms": 202,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S11",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/community-improvement-plans/",
+   "kind": "html",
+   "title": "Community Improvement Plans | Township of West Lincoln",
+   "found_via": "link \"Community Improvement Plans\" on Plans, Studies and Reports | Township of West Lincoln",
+   "anchor": "Community Improvement Plans",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 70748,
+   "sha256": "5b435ec45bcfb727dfa011fb5888f41652ad25d0403889f31e04b7d4e892555e",
+   "fetched_at": "2026-10-15T19:11:02.527Z",
+   "elapsed_ms": 187,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S12",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/development-charge-study/",
+   "kind": "html",
+   "title": "Development Charge Study | Township of West Lincoln",
+   "found_via": "link \"Development Charge Study\" on Plans, Studies and Reports | Township of West Lincoln",
+   "anchor": "Development Charge Study",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 88096,
+   "sha256": "1d0351da9d0b63d7be02d551c5f4a72c00637390d2a2ed4c6a9e0227da55a76e",
+   "fetched_at": "2026-10-15T19:11:04.576Z",
+   "elapsed_ms": 234,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S13",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/drinking-water-reports/",
+   "kind": "html",
+   "title": "Drinking Water Reports | Township of West Lincoln",
+   "found_via": "link \"Drinking Water Reports\" on Plans, Studies and Reports | Township of West Lincoln",
+   "anchor": "Drinking Water Reports",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 73474,
+   "sha256": "0b0815100e14997a89208b2a6516bcce27b8b0924b788b4eafbea2212c27725f",
+   "fetched_at": "2026-10-15T19:11:06.518Z",
+   "elapsed_ms": 187,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S14",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/official-plan/",
+   "kind": "html",
+   "title": "Official Plan | Township of West Lincoln",
+   "found_via": "link \"Official Plan\" on Plans, Studies and Reports | Township of West Lincoln",
+   "anchor": "Official Plan",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 69898,
+   "sha256": "775da668a723a30790b2c1f2a5bba6b9d6cf86e12b5737bb3e2c4ee793c01220",
+   "fetched_at": "2026-10-15T19:11:08.535Z",
+   "elapsed_ms": 202,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S15",
+   "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/corporate-strategic-plan/",
+   "kind": "html",
+   "title": "Corporate Strategic Plan | Township of West Lincoln",
+   "found_via": "link \"Strategic Plan\" on Plans, Studies and Reports | Township of West Lincoln",
+   "anchor": "Strategic Plan",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 43219,
+   "sha256": "f1b978f510179cafefedc890b99e936c75534773e731759def041b505cac6a1f",
+   "fetched_at": "2026-10-15T19:11:10.510Z",
+   "elapsed_ms": 172,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  }
+ ],
+ "fetch_errors": [],
+ "extracted": {
+  "road_lines": [
+   {
+    "value": "354,749",
+    "unit": "Meters",
+    "measures": "length",
+    "road_type": "paved roads",
+    "quote": "Paved Roads 354,749 Meters $124,346,663 CPI",
+    "source": "S4",
+    "pdf_page": 67
+   },
+   {
+    "value": "612,230",
+    "unit": "Square Meters",
+    "measures": "area",
+    "road_type": "unpaved roads",
+    "quote": "Unpaved Roads 612,230 Square Meters $15,851,105 CPI",
+    "source": "S4",
+    "pdf_page": 67
+   },
+   {
+    "value": "0.45",
+    "unit": "km/km2",
+    "measures": "ratio",
+    "road_type": "arterial roads lane-km per land area",
+    "quote": "Lane-km of arterial roads (MMS classes 1 and 2) per land area in the municipality (km/km2) 0.45 km/km2",
+    "source": "S4",
+    "pdf_page": 46
+   },
+   {
+    "value": "0.29",
+    "unit": "km/km2",
+    "measures": "ratio",
+    "road_type": "collector roads lane-km per land area",
+    "quote": "Lane-km of collector roads (MMS classes 3 and 4) per land area in the municipality (km/km2) 0.29 km/km2",
+    "source": "S4",
+    "pdf_page": 46
+   },
+   {
+    "value": "0.25",
+    "unit": "km/km2",
+    "measures": "ratio",
+    "road_type": "local roads lane-km per land area",
+    "quote": "Lane-km of local roads (MMS classes 5 and 6) per land area in the municipality (km/km2) 0.25 km/km2",
+    "source": "S4",
+    "pdf_page": 46
+   }
+  ],
+  "road_totals": [
+   {
+    "lines": [
+     0
+    ],
+    "covers_whole_network": false,
+    "why": "Only paved roads are given as a length; the Township's unpaved roads are given only as an area (Square Meters)."
+   }
+  ],
+  "roads_head": {
+   "name": "Mike DiPaola",
+   "title": "Director, Infrastructure",
+   "quote": "Director, Infrastructure - Mike DiPaola",
+   "source": "S5"
+  },
+  "department_email": {
+   "value": "infrastructure@westlincoln.ca",
+   "quote": "If you have a concern about Township owned roadways, sidewalks, traffic signs or streetlights, please report it to our Infrastructure Department (infrastructure@westlincoln.ca) or call 905-957-3346 ext. 5139",
+   "source": "S6"
+  },
+  "department_phone": {
+   "value": "905-957-3346 ext. 5139",
+   "quote": "If you have a concern about Township owned roadways, sidewalks, traffic signs or streetlights, please report it to our Infrastructure Department (infrastructure@westlincoln.ca) or call 905-957-3346 ext. 5139",
+   "source": "S6"
+  },
+  "sign_work": [
+   {
+    "quote": "the maintenance, repair and replacement of traffic signs",
+    "source": "S6"
+   },
+   {
+    "quote": "The Township also owns and manages other supporting infrastructure and capital assets, including sidewalks, streetlights, signs, roadside barriers, and gravel roads.",
+    "source": "S4"
+   }
+  ]
+ },
+ "validated": {
+  "road_length_km": {
+   "options": [],
+   "partial": [
+    {
+     "km": 354.7,
+     "parts": [
+      {
+       "index": 0,
+       "km": 354.749,
+       "value": "354,749",
+       "unit": "Meters",
+       "road_type": "paved roads",
+       "centerline": false,
+       "approximate": false,
+       "cite": {
+        "quote": "Paved Roads 354,749 Meters $124,346,663 CPI",
+        "source": "S4",
+        "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+        "title": "2025 Asset Management Plan",
+        "pdf_page": 67,
+        "fetched_at": "2026-10-15T19:10:41.210Z"
+       }
+      }
+     ],
+     "centerline": false,
+     "approximate": false,
+     "why": "Only paved roads are given as a length; the Township's unpaved roads are given only as an area (Square Meters)."
+    }
+   ],
+   "status": "not_found",
+   "value_km": null
+  },
+  "roads_head": {
+   "cite": {
+    "quote": "Director, Infrastructure - Mike DiPaola",
+    "source": "S5",
+    "url": "https://www.westlincoln.ca/contacts-directory/",
+    "title": "Contacts Directory | Township of West Lincoln",
+    "pdf_page": null,
+    "fetched_at": "2026-10-15T19:10:50.597Z"
+   },
+   "name": "Mike DiPaola",
+   "title": "Director, Infrastructure",
+   "status": "filled"
+  },
+  "email": {
+   "status": "filled",
+   "value": "infrastructure@westlincoln.ca",
+   "cite": {
+    "quote": "If you have a concern about Township owned roadways, sidewalks, traffic signs or streetlights, please report it to our Infrastructure Department (infrastructure@westlincoln.ca) or call 905-957-3346 ext. 5139",
+    "source": "S6",
+    "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+    "title": "Roads and Sidewalks | Township of West Lincoln",
+    "pdf_page": null,
+    "fetched_at": "2026-10-15T19:10:52.544Z"
+   }
+  },
+  "phone": {
+   "status": "filled",
+   "value": "905-957-3346 ext. 5139",
+   "cite": {
+    "quote": "If you have a concern about Township owned roadways, sidewalks, traffic signs or streetlights, please report it to our Infrastructure Department (infrastructure@westlincoln.ca) or call 905-957-3346 ext. 5139",
+    "source": "S6",
+    "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+    "title": "Roads and Sidewalks | Township of West Lincoln",
+    "pdf_page": null,
+    "fetched_at": "2026-10-15T19:10:52.544Z"
+   }
+  },
+  "key_documents": [
+   {
+    "title": "2025 Asset Management Plan",
+    "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+    "source": "S4",
+    "kind": "pdf",
+    "fetched_at": "2026-10-15T19:10:41.210Z"
+   },
+   {
+    "title": "Contacts Directory",
+    "url": "https://www.westlincoln.ca/contacts-directory/",
+    "source": "S5",
+    "kind": "html",
+    "fetched_at": "2026-10-15T19:10:50.597Z"
+   },
+   {
+    "title": "Roads and Sidewalks",
+    "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+    "source": "S6",
+    "kind": "html",
+    "fetched_at": "2026-10-15T19:10:52.544Z"
+   }
+  ]
+ },
+ "sign_work": [
+  {
+   "quote": "the maintenance, repair and replacement of traffic signs",
+   "source": "S6",
+   "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+   "title": "Roads and Sidewalks | Township of West Lincoln",
+   "pdf_page": null,
+   "fetched_at": "2026-10-15T19:10:52.544Z"
+  },
+  {
+   "quote": "The Township also owns and manages other supporting infrastructure and capital assets, including sidewalks, streetlights, signs, roadside barriers, and gravel roads.",
+   "source": "S4",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "title": "2025 Asset Management Plan",
+   "pdf_page": 67,
+   "fetched_at": "2026-10-15T19:10:41.210Z"
+  }
+ ],
+ "rejected": [
+  {
+   "field": "road_length_km",
+   "value": "612,230 Square Meters",
+   "reason": "an area, not a length",
+   "quote": "Unpaved Roads 612,230 Square Meters $15,851,105 CPI",
+   "source": "S4",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "title": "2025 Asset Management Plan",
+   "pdf_page": 67,
+   "fetched_at": "2026-10-15T19:10:41.210Z",
+   "model_said": "area",
+   "road_type": "unpaved roads"
+  },
+  {
+   "field": "road_length_km",
+   "value": "0.45 km/km2",
+   "reason": "a ratio of lane-km (km/km2), not a length",
+   "quote": "Lane-km of arterial roads (MMS classes 1 and 2) per land area in the municipality (km/km2) 0.45 km/km2",
+   "source": "S4",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "title": "2025 Asset Management Plan",
+   "pdf_page": 46,
+   "fetched_at": "2026-10-15T19:10:41.210Z",
+   "model_said": "ratio",
+   "road_type": "arterial roads lane-km per land area"
+  },
+  {
+   "field": "road_length_km",
+   "value": "0.29 km/km2",
+   "reason": "a ratio of lane-km (km/km2), not a length",
+   "quote": "Lane-km of collector roads (MMS classes 3 and 4) per land area in the municipality (km/km2) 0.29 km/km2",
+   "source": "S4",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "title": "2025 Asset Management Plan",
+   "pdf_page": 46,
+   "fetched_at": "2026-10-15T19:10:41.210Z",
+   "model_said": "ratio",
+   "road_type": "collector roads lane-km per land area"
+  },
+  {
+   "field": "road_length_km",
+   "value": "0.25 km/km2",
+   "reason": "a ratio of lane-km (km/km2), not a length",
+   "quote": "Lane-km of local roads (MMS classes 5 and 6) per land area in the municipality (km/km2) 0.25 km/km2",
+   "source": "S4",
+   "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+   "title": "2025 Asset Management Plan",
+   "pdf_page": 46,
+   "fetched_at": "2026-10-15T19:10:41.210Z",
+   "model_said": "ratio",
+   "road_type": "local roads lane-km per land area"
+  }
+ ],
+ "proposed": [
+  {
+   "field": "road_length_km",
+   "label": "Road network (centerline km)",
+   "current": null,
+   "status": "not_found",
+   "sources": [],
+   "proposed": null,
+   "detail": "No total road length in the sources read.",
+   "partial": [
+    {
+     "km": 354.7,
+     "why": "Only paved roads are given as a length; the Township's unpaved roads are given only as an area (Square Meters).",
+     "sources": [
+      {
+       "quote": "Paved Roads 354,749 Meters $124,346,663 CPI",
+       "source": "S4",
+       "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+       "title": "2025 Asset Management Plan",
+       "pdf_page": 67,
+       "fetched_at": "2026-10-15T19:10:41.210Z"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "field": "email",
+   "label": "Public Works email",
+   "current": null,
+   "status": "filled",
+   "proposed": "infrastructure@westlincoln.ca",
+   "sources": [
+    {
+     "quote": "If you have a concern about Township owned roadways, sidewalks, traffic signs or streetlights, please report it to our Infrastructure Department (infrastructure@westlincoln.ca) or call 905-957-3346 ext. 5139",
+     "source": "S6",
+     "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+     "title": "Roads and Sidewalks | Township of West Lincoln",
+     "pdf_page": null,
+     "fetched_at": "2026-10-15T19:10:52.544Z"
+    }
+   ]
+  },
+  {
+   "field": "phone",
+   "label": "Public Works phone",
+   "current": null,
+   "status": "filled",
+   "proposed": "905-957-3346 ext. 5139",
+   "sources": [
+    {
+     "quote": "If you have a concern about Township owned roadways, sidewalks, traffic signs or streetlights, please report it to our Infrastructure Department (infrastructure@westlincoln.ca) or call 905-957-3346 ext. 5139",
+     "source": "S6",
+     "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+     "title": "Roads and Sidewalks | Township of West Lincoln",
+     "pdf_page": null,
+     "fetched_at": "2026-10-15T19:10:52.544Z"
+    }
+   ]
+  },
+  {
+   "field": "roads_head",
+   "label": "Roads head",
+   "current": null,
+   "sources": [
+    {
+     "quote": "Director, Infrastructure - Mike DiPaola",
+     "source": "S5",
+     "url": "https://www.westlincoln.ca/contacts-directory/",
+     "title": "Contacts Directory | Township of West Lincoln",
+     "pdf_page": null,
+     "fetched_at": "2026-10-15T19:10:50.597Z"
+    }
+   ],
+   "proposed": "Mike DiPaola, Director, Infrastructure",
+   "status": "filled"
+  },
+  {
+   "field": "key_documents",
+   "label": "Key documents",
+   "current": null,
+   "status": "filled",
+   "proposed": [
+    "2025 Asset Management Plan",
+    "Contacts Directory",
+    "Roads and Sidewalks"
+   ],
+   "sources": [
+    {
+     "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+     "title": "2025 Asset Management Plan",
+     "fetched_at": "2026-10-15T19:10:41.210Z"
+    },
+    {
+     "url": "https://www.westlincoln.ca/contacts-directory/",
+     "title": "Contacts Directory",
+     "fetched_at": "2026-10-15T19:10:50.597Z"
+    },
+    {
+     "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+     "title": "Roads and Sidewalks",
+     "fetched_at": "2026-10-15T19:10:52.544Z"
+    }
+   ]
+  },
+  {
+   "field": "brief",
+   "label": "Account brief",
+   "current": null,
+   "status": "filled",
+   "proposed": "The 2025 Asset Management Plan lists 354.7 km of paved roads but doesn't say this is centerline, so the Township's centerline kilometers still need confirming. The Township's Roads and Sidewalks page covers \"the maintenance, repair and replacement of traffic signs,\" and its Asset Management Plan lists signs among the supporting assets it owns and manages. In this Ontario jurisdiction, O. Reg. 239/02, s. 12(1) requires regulatory and warning signs to be checked against Ontario Traffic Manual retroreflectivity requirements once per calendar year, no more than 16 months apart. Next step: confirm centerline kilometers with Mike DiPaola, Director, Infrastructure, by contacting Public Works at infrastructure@westlincoln.ca or 905-957-3346 ext. 5139.",
+   "sources": []
+  }
+ ],
+ "questions": [],
+ "merge": null,
+ "brief": {
+  "sentences": [
+   {
+    "text": "The 2025 Asset Management Plan lists 354.7 km of paved roads but doesn't say this is centerline, so the Township's centerline kilometers still need confirming.",
+    "cites": [
+     "S4"
+    ]
+   },
+   {
+    "text": "The Township's Roads and Sidewalks page covers \"the maintenance, repair and replacement of traffic signs,\" and its Asset Management Plan lists signs among the supporting assets it owns and manages.",
+    "cites": [
+     "S6",
+     "S4"
+    ]
+   },
+   {
+    "text": "In this Ontario jurisdiction, O. Reg. 239/02, s. 12(1) requires regulatory and warning signs to be checked against Ontario Traffic Manual retroreflectivity requirements once per calendar year, no more than 16 months apart.",
+    "cites": [
+     "RON"
+    ]
+   },
+   {
+    "text": "Next step: confirm centerline kilometers with Mike DiPaola, Director, Infrastructure, by contacting Public Works at infrastructure@westlincoln.ca or 905-957-3346 ext. 5139.",
+    "cites": [
+     "S5",
+     "S6",
+     "S4"
+    ]
+   }
+  ],
+  "model": "claude-opus-5-5",
+  "url_of_context": {
+   "RON": "https://www.ontario.ca/laws/docs/020239_e.doc"
+  }
+ },
+ "writeback": {
+  "sent": false,
+  "note": "Preview only: nothing is sent. Draft, never run in a Zoho org; field names are guesses.",
+  "requests": [
+   {
+    "method": "POST",
+    "url": "https://www.zohoapis.com/crm/v8/Accounts/upsert",
+    "body": {
+     "data": [
+      {
+       "Account_Name": "Township of West Lincoln",
+       "Enrichment_Status": "Done",
+       "Last_Enriched": "2026-10-15T19:11:44.930Z",
+       "Public_Works_Email": "infrastructure@westlincoln.ca",
+       "Phone": "905-957-3346 ext. 5139",
+       "Key_Documents": "2025 Asset Management Plan: https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf\nContacts Directory: https://www.westlincoln.ca/contacts-directory/\nRoads and Sidewalks: https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+       "Account_Brief": "The 2025 Asset Management Plan lists 354.7 km of paved roads but doesn't say this is centerline, so the Township's centerline kilometers still need confirming. The Township's Roads and Sidewalks page covers \"the maintenance, repair and replacement of traffic signs,\" and its Asset Management Plan lists signs among the supporting assets it owns and manages. In this Ontario jurisdiction, O. Reg. 239/02, s. 12(1) requires regulatory and warning signs to be checked against Ontario Traffic Manual retroreflectivity requirements once per calendar year, no more than 16 months apart. Next step: confirm centerline kilometers with Mike DiPaola, Director, Infrastructure, by contacting Public Works at infrastructure@westlincoln.ca or 905-957-3346 ext. 5139."
+      }
+     ],
+     "duplicate_check_fields": [
+      "Account_Name"
+     ],
+     "trigger": []
+    }
+   },
+   {
+    "method": "POST",
+    "url": "https://www.zohoapis.com/crm/v8/Contacts",
+    "body": {
+     "data": [
+      {
+       "First_Name": "Mike",
+       "Last_Name": "DiPaola",
+       "Title": "Director, Infrastructure",
+       "Enrichment_Source": "https://www.westlincoln.ca/contacts-directory/ (fetched 2026-10-15)",
+       "Account_Name": {
+        "id": "sample-acct-003"
+       }
+      }
+     ],
+     "trigger": []
+    }
+   }
+  ]
+ }
+}

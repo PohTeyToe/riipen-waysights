@@ -1,0 +1,1180 @@
+{
+ "account": {
+  "slug": "lincoln",
+  "crm_id": "sample-acct-001",
+  "name": "Town of Lincoln",
+  "website": "https://www.lincoln.ca/",
+  "jurisdiction": "ON",
+  "region": "Ontario",
+  "ny_county": null,
+  "example_public_account": true
+ },
+ "run": {
+  "started_at": "2026-10-15T19:10:27.341Z",
+  "finished_at": "2026-10-15T19:11:27.425Z",
+  "model": "claude-opus-5-5",
+  "pages_read": 14,
+  "requests_used": 15,
+  "page_budget": 15,
+  "prompt_chars": 41589
+ },
+ "status": "needs_review",
+ "steps": [
+  {
+   "t": "2026-10-15T19:10:27.341Z",
+   "step": "status",
+   "msg": "Queued"
+  },
+  {
+   "t": "2026-10-15T19:10:27.341Z",
+   "step": "status",
+   "msg": "Running",
+   "rate_rule": "One run per Account per day. Last run: never."
+  },
+  {
+   "t": "2026-10-15T19:10:27.341Z",
+   "step": "allowlist",
+   "msg": "www.lincoln.ca is on the approved list",
+   "approved": [
+    "lincoln.ca"
+   ]
+  },
+  {
+   "t": "2026-10-15T19:10:27.520Z",
+   "step": "robots",
+   "msg": "robots.txt read for www.lincoln.ca",
+   "url": "https://www.lincoln.ca/robots.txt",
+   "status": 200,
+   "delay_s": 2.0
+  },
+  {
+   "t": "2026-10-15T19:10:29.550Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/",
+   "status": 200,
+   "bytes": 106790,
+   "ms": 202,
+   "waited_ms": 1812,
+   "why": "the Account's website",
+   "page": "1/15"
+  },
+  {
+   "t": "2026-10-15T19:10:31.510Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/council-administration/community-plans/asset-management-plan",
+   "status": 200,
+   "bytes": 186458,
+   "ms": 172,
+   "waited_ms": 1547,
+   "why": "menu link \"Asset Management Plan\" on Town of Lincoln",
+   "page": "2/15"
+  },
+  {
+   "t": "2026-10-15T19:10:33.659Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+   "status": 200,
+   "bytes": 6137495,
+   "ms": 312,
+   "waited_ms": 1640,
+   "why": "link \"Town of Lincoln Corporate and Service Area Asset Management Plans (2025)\" on Asset Management Plan | Town of Lincoln",
+   "page": "3/15"
+  },
+  {
+   "t": "2026-10-15T19:10:37.520Z",
+   "step": "pdf",
+   "msg": "PDF read: 134 pages",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+   "pages": 134
+  },
+  {
+   "t": "2026-10-15T19:10:37.520Z",
+   "step": "pdf",
+   "msg": "PDF page 49 read (road-length lines: 11)",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+   "pdf_page": 49
+  },
+  {
+   "t": "2026-10-15T19:10:37.780Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/services/roads-transportation",
+   "status": 200,
+   "bytes": 182456,
+   "ms": 187,
+   "waited_ms": 0,
+   "why": "menu link \"Roads & Transportation\" on Town of Lincoln",
+   "page": "4/15"
+  },
+  {
+   "t": "2026-10-15T19:10:39.869Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/services/roads-transportation/24-hour-emergency-service-roads",
+   "status": 200,
+   "bytes": 182267,
+   "ms": 250,
+   "waited_ms": 1469,
+   "why": "menu link \"24 Hour Emergency Service for Roads\" on Town of Lincoln",
+   "page": "5/15"
+  },
+  {
+   "t": "2026-10-15T19:10:42.057Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/services/roads-transportation/active-transportation",
+   "status": 200,
+   "bytes": 191161,
+   "ms": 297,
+   "waited_ms": 1327,
+   "why": "menu link \"Active Transportation\" on Town of Lincoln",
+   "page": "6/15"
+  },
+  {
+   "t": "2026-10-15T19:10:42.435Z",
+   "step": "skip",
+   "msg": "off-list link skipped: \"Share the Road Cycling Coalition\"",
+   "url": "https://www.sharetheroad.ca/"
+  },
+  {
+   "t": "2026-10-15T19:10:44.072Z",
+   "step": "fetch",
+   "msg": "HTTP 403",
+   "url": "https://www.lincoln.ca/build-invest/capital-investments/road-rehabilitation-program-archived",
+   "status": 403,
+   "bytes": 179952,
+   "ms": 343,
+   "waited_ms": 1094,
+   "why": "link \"Road Rehabilitation Program\" on Active Transportation Network | Town of Lincoln",
+   "page": "7/15"
+  },
+  {
+   "t": "2026-10-15T19:10:45.793Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/RoadRehabilitationProgram",
+   "status": 200,
+   "bytes": 187784,
+   "ms": 203,
+   "waited_ms": 1452,
+   "why": "menu link \"Road Rehabilitation Program\" on Town of Lincoln",
+   "page": "8/15"
+  },
+  {
+   "t": "2026-10-15T19:10:47.853Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/Contact",
+   "status": 200,
+   "bytes": 207641,
+   "ms": 265,
+   "waited_ms": 1344,
+   "why": "menu link \"Contact Us\" on Town of Lincoln",
+   "page": "9/15"
+  },
+  {
+   "t": "2026-10-15T19:10:48.247Z",
+   "step": "skip",
+   "msg": "off-list link skipped: \"4800 South Service Road Beamsville, ON L3J 1L3\"",
+   "url": "https://www.google.com/maps/search/4800%20South%20Service%20Road%20Beamsville,%20ON%20L3J%201L3"
+  },
+  {
+   "t": "2026-10-15T19:10:49.773Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/council-administration/community-plans/transportation-master-plan",
+   "status": 200,
+   "bytes": 184868,
+   "ms": 187,
+   "waited_ms": 1265,
+   "why": "menu link \"Transportation Master Plan\" on Town of Lincoln",
+   "page": "10/15"
+  },
+  {
+   "t": "2026-10-15T19:10:51.629Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/services/fire-emergency-services/fire-department/non-emergency-contact-information",
+   "status": 200,
+   "bytes": 182093,
+   "ms": 109,
+   "waited_ms": 1359,
+   "why": "menu link \"Non-Emergency Contact Information\" on Asset Management Plan | Town of Lincoln",
+   "page": "11/15"
+  },
+  {
+   "t": "2026-10-15T19:10:53.663Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/investinginfrastructure",
+   "status": 200,
+   "bytes": 199414,
+   "ms": 140,
+   "waited_ms": 1672,
+   "why": "menu link \"Investing in Infrastructure\" on Town of Lincoln",
+   "page": "12/15"
+  },
+  {
+   "t": "2026-10-15T19:10:55.636Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/services/roads-transportation/report-potholes-sod-damage-streetlights-damaged-signs",
+   "status": 200,
+   "bytes": 191746,
+   "ms": 109,
+   "waited_ms": 1609,
+   "why": "menu link \"Report Potholes, Sod Damage, Streetlights & Damaged Signs\" on Town of Lincoln",
+   "page": "13/15"
+  },
+  {
+   "t": "2026-10-15T19:10:57.633Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/services/roads-transportation/snow-ice-removal",
+   "status": 200,
+   "bytes": 184049,
+   "ms": 109,
+   "waited_ms": 1655,
+   "why": "menu link \"Snow & Ice Removal\" on Town of Lincoln",
+   "page": "14/15"
+  },
+  {
+   "t": "2026-10-15T19:10:59.647Z",
+   "step": "fetch",
+   "msg": "HTTP 200",
+   "url": "https://www.lincoln.ca/services/roads-transportation/transit",
+   "status": 200,
+   "bytes": 187305,
+   "ms": 125,
+   "waited_ms": 1672,
+   "why": "menu link \"Transit\" on Town of Lincoln",
+   "page": "15/15"
+  },
+  {
+   "t": "2026-10-15T19:10:59.876Z",
+   "step": "skip",
+   "msg": "331 links pointed off the approved list and were not followed"
+  },
+  {
+   "t": "2026-10-15T19:10:59.876Z",
+   "step": "read",
+   "msg": "14 pages read, 15 of 15 requests used"
+  },
+  {
+   "t": "2026-10-15T19:10:59.876Z",
+   "step": "extract",
+   "msg": "sending 14 sources to the model"
+  },
+  {
+   "t": "2026-10-15T19:11:15.732Z",
+   "step": "extract",
+   "msg": "model returned 7 road lines, no roads head, an email, a phone",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "t": "2026-10-15T19:11:15.735Z",
+   "step": "check",
+   "msg": "checks run: 3 value(s) rejected",
+   "rejected": 3
+  },
+  {
+   "t": "2026-10-15T19:11:15.735Z",
+   "step": "reject",
+   "msg": "road_length_km: 0 km/km2 (a ratio of lane-km (km/km2), not a length)",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf"
+  },
+  {
+   "t": "2026-10-15T19:11:15.735Z",
+   "step": "reject",
+   "msg": "road_length_km: 0.43 km/km2 (a ratio of lane-km (km/km2), not a length)",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf"
+  },
+  {
+   "t": "2026-10-15T19:11:15.735Z",
+   "step": "reject",
+   "msg": "road_length_km: 0.84 km/km2 (a ratio of lane-km (km/km2), not a length)",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf"
+  },
+  {
+   "t": "2026-10-15T19:11:15.735Z",
+   "step": "question",
+   "msg": "These sources give different road lengths, and none says centerline. Which one is the centerline length?"
+  },
+  {
+   "t": "2026-10-15T19:11:27.424Z",
+   "step": "brief",
+   "msg": "4 sentence(s) kept",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "t": "2026-10-15T19:11:27.425Z",
+   "step": "writeback",
+   "msg": "2 request(s) built, none sent"
+  },
+  {
+   "t": "2026-10-15T19:11:27.425Z",
+   "step": "status",
+   "msg": "Needs review"
+  }
+ ],
+ "sources": [
+  {
+   "id": "S1",
+   "url": "https://www.lincoln.ca/",
+   "kind": "html",
+   "title": "Town of Lincoln",
+   "found_via": "the Account's website",
+   "anchor": null,
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 106790,
+   "sha256": "4a452dc9212f00feb181d9ef9088bd6d046c4dae22f0c21f8ed79c7746ce4d1b",
+   "fetched_at": "2026-10-15T19:10:29.548Z",
+   "elapsed_ms": 202,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S2",
+   "url": "https://www.lincoln.ca/council-administration/community-plans/asset-management-plan",
+   "kind": "html",
+   "title": "Asset Management Plan | Town of Lincoln",
+   "found_via": "menu link \"Asset Management Plan\" on Town of Lincoln",
+   "anchor": "Asset Management Plan",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 186458,
+   "sha256": "7738cb23fe4df414f24f062056d1dd6b2b945b5181a371af25303e4bfde2fbc5",
+   "fetched_at": "2026-10-15T19:10:31.508Z",
+   "elapsed_ms": 172,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S3",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+   "kind": "pdf",
+   "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+   "found_via": "link \"Town of Lincoln Corporate and Service Area Asset Management Plans (2025)\" on Asset Management Plan | Town of Lincoln",
+   "anchor": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "application/pdf",
+   "bytes": 6137495,
+   "sha256": "a6d1dbe1dd3c263fe7910f21585a8a7690c02810250f4c77d4166ff0bdf03ea7",
+   "fetched_at": "2026-10-15T19:10:33.656Z",
+   "elapsed_ms": 312,
+   "pdf_pages_read": [
+    49
+   ],
+   "pdf_page_count": 134,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S4",
+   "url": "https://www.lincoln.ca/services/roads-transportation",
+   "kind": "html",
+   "title": "Roads & Transportation | Town of Lincoln",
+   "found_via": "menu link \"Roads & Transportation\" on Town of Lincoln",
+   "anchor": "Roads & Transportation",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 182456,
+   "sha256": "b445d94b0a59228d9c99a0f586a84edd623f3ca07f986d52f0838d220fb484ad",
+   "fetched_at": "2026-10-15T19:10:37.719Z",
+   "elapsed_ms": 187,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S5",
+   "url": "https://www.lincoln.ca/services/roads-transportation/24-hour-emergency-service-roads",
+   "kind": "html",
+   "title": "24 Hour Emergency Service for Roads | Town of Lincoln",
+   "found_via": "menu link \"24 Hour Emergency Service for Roads\" on Town of Lincoln",
+   "anchor": "24 Hour Emergency Service for Roads",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 182267,
+   "sha256": "2faafbc76f8d84c63dcb996734bf8bac7fffa9f7c4e1eabc08a794053a6fba18",
+   "fetched_at": "2026-10-15T19:10:39.779Z",
+   "elapsed_ms": 250,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S6",
+   "url": "https://www.lincoln.ca/services/roads-transportation/active-transportation",
+   "kind": "html",
+   "title": "Active Transportation Network | Town of Lincoln",
+   "found_via": "menu link \"Active Transportation\" on Town of Lincoln",
+   "anchor": "Active Transportation",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 191161,
+   "sha256": "11250e22144c7e845a1dd96290fdb0d2f0d7fbfb099616cb5bb5118a4c1c08f1",
+   "fetched_at": "2026-10-15T19:10:41.856Z",
+   "elapsed_ms": 297,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S7",
+   "url": "https://www.lincoln.ca/RoadRehabilitationProgram",
+   "kind": "html",
+   "title": "Road Rehabilitation and Resurfacing Program | Town of Lincoln",
+   "found_via": "menu link \"Road Rehabilitation Program\" on Town of Lincoln",
+   "anchor": "Road Rehabilitation Program",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 187784,
+   "sha256": "01aa714837429f8302f06fb4ec4bd469908d9b9db1cf10a453ea69edd59c409d",
+   "fetched_at": "2026-10-15T19:10:45.761Z",
+   "elapsed_ms": 203,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S8",
+   "url": "https://www.lincoln.ca/Contact",
+   "kind": "html",
+   "title": "Contact Us | Town of Lincoln",
+   "found_via": "menu link \"Contact Us\" on Town of Lincoln",
+   "anchor": "Contact Us",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 207641,
+   "sha256": "6abce75a2eee02c3e88782cb6a124c42c98bb73b419b7048be94d613f0c5d54a",
+   "fetched_at": "2026-10-15T19:10:47.805Z",
+   "elapsed_ms": 265,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S9",
+   "url": "https://www.lincoln.ca/council-administration/community-plans/transportation-master-plan",
+   "kind": "html",
+   "title": "Transportation Master Plan | Town of Lincoln",
+   "found_via": "menu link \"Transportation Master Plan\" on Town of Lincoln",
+   "anchor": "Transportation Master Plan",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 184868,
+   "sha256": "aa89a085cecbeecdf964507bdd78a760957e8a0f187ff08d4b3f7334741174d0",
+   "fetched_at": "2026-10-15T19:10:49.736Z",
+   "elapsed_ms": 187,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S10",
+   "url": "https://www.lincoln.ca/services/fire-emergency-services/fire-department/non-emergency-contact-information",
+   "kind": "html",
+   "title": "Non-Emergency Contact Information | Town of Lincoln",
+   "found_via": "menu link \"Non-Emergency Contact Information\" on Asset Management Plan | Town of Lincoln",
+   "anchor": "Non-Emergency Contact Information",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 182093,
+   "sha256": "2b53d7fcdb5a2163b6d8838da2366134dce0f037e85f31f0e88e1d4c0ec295c0",
+   "fetched_at": "2026-10-15T19:10:51.627Z",
+   "elapsed_ms": 109,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S11",
+   "url": "https://www.lincoln.ca/investinginfrastructure",
+   "kind": "html",
+   "title": "Investing in Infrastructure | Town of Lincoln",
+   "found_via": "menu link \"Investing in Infrastructure\" on Town of Lincoln",
+   "anchor": "Investing in Infrastructure",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 199414,
+   "sha256": "2b5441def3c952f96417c48d57d3b7ce8eb506d626a1533e92a43d1b54b14552",
+   "fetched_at": "2026-10-15T19:10:53.662Z",
+   "elapsed_ms": 140,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S12",
+   "url": "https://www.lincoln.ca/services/roads-transportation/report-potholes-sod-damage-streetlights-damaged-signs",
+   "kind": "html",
+   "title": "Report Potholes, Sod Damage, Streetlights & Damaged Signs | Town of Lincoln",
+   "found_via": "menu link \"Report Potholes, Sod Damage, Streetlights & Damaged Signs\" on Town of Lincoln",
+   "anchor": "Report Potholes, Sod Damage, Streetlights & Damaged Signs",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 191746,
+   "sha256": "1c83b5bb820d2b9dc0236bf1c59680d69896d6b31280e85bd0624968c9ee5de8",
+   "fetched_at": "2026-10-15T19:10:55.634Z",
+   "elapsed_ms": 109,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S13",
+   "url": "https://www.lincoln.ca/services/roads-transportation/snow-ice-removal",
+   "kind": "html",
+   "title": "Snow & Ice Removal | Town of Lincoln",
+   "found_via": "menu link \"Snow & Ice Removal\" on Town of Lincoln",
+   "anchor": "Snow & Ice Removal",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 184049,
+   "sha256": "87e6905b27fa35b30fc70c70beae09f616f181cf6612a46b8f22880f2e9b78b2",
+   "fetched_at": "2026-10-15T19:10:57.632Z",
+   "elapsed_ms": 109,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  },
+  {
+   "id": "S14",
+   "url": "https://www.lincoln.ca/services/roads-transportation/transit",
+   "kind": "html",
+   "title": "Transit | Town of Lincoln",
+   "found_via": "menu link \"Transit\" on Town of Lincoln",
+   "anchor": "Transit",
+   "requested_url": null,
+   "status": 200,
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 187305,
+   "sha256": "566915e35f60ef1b26170ba33b6877f4f60f488c14a9c291834eae0ff1c0e861",
+   "fetched_at": "2026-10-15T19:10:59.645Z",
+   "elapsed_ms": 125,
+   "pdf_pages_read": null,
+   "pdf_page_count": null,
+   "hidden_emails": null,
+   "dataset": null
+  }
+ ],
+ "fetch_errors": [
+  {
+   "url": "https://www.lincoln.ca/build-invest/capital-investments/road-rehabilitation-program-archived",
+   "reason": "HTTP 403"
+  }
+ ],
+ "extracted": {
+  "road_lines": [
+   {
+    "value": "255",
+    "unit": "kms",
+    "measures": "length",
+    "road_type": "local roads",
+    "quote": "Quantity - kms of local roads 255",
+    "source": "S3",
+    "pdf_page": 49
+   },
+   {
+    "value": "55",
+    "unit": "kms",
+    "measures": "length",
+    "road_type": "collector roads",
+    "quote": "Quantity - kms of collector roads 55",
+    "source": "S3",
+    "pdf_page": 49
+   },
+   {
+    "value": "0",
+    "unit": "km/km2",
+    "measures": "ratio",
+    "road_type": "arterial roads (lane-km per land area)",
+    "quote": "Lane-km of arterial roads (MMS classes 1 and 2) per land area (km/km2) 0",
+    "source": "S3",
+    "pdf_page": 49
+   },
+   {
+    "value": "0.43",
+    "unit": "km/km2",
+    "measures": "ratio",
+    "road_type": "collector roads (lane-km per land area)",
+    "quote": "Lane-km of collector roads (MMS classes 3 and 4) per land area (km/km2) 0.43",
+    "source": "S3",
+    "pdf_page": 49
+   },
+   {
+    "value": "0.84",
+    "unit": "km/km2",
+    "measures": "ratio",
+    "road_type": "local roads (lane-km per land area)",
+    "quote": "Lane-km of local roads (MMS classes 5 and 6) per land area (km/km2) 0.84",
+    "source": "S3",
+    "pdf_page": 49
+   },
+   {
+    "value": "300",
+    "unit": "km",
+    "measures": "length",
+    "road_type": "all roads",
+    "quote": "Currently, Public Works oversees approximately 300km of roadway including 49 bridges and 130 culverts.",
+    "source": "S4",
+    "pdf_page": null
+   },
+   {
+    "value": "300",
+    "unit": "km",
+    "measures": "length",
+    "road_type": "all roads",
+    "quote": "Did you know Public Works oversees approximately 300km of roadway, including 49 bridges and 130 culverts?",
+    "source": "S13",
+    "pdf_page": null
+   }
+  ],
+  "road_totals": [
+   {
+    "lines": [
+     0,
+     1
+    ],
+    "covers_whole_network": true,
+    "why": "Local and collector roads are given in km and arterial roads are given as 0, so these two types make up the whole network."
+   },
+   {
+    "lines": [
+     5
+    ],
+    "covers_whole_network": true,
+    "why": "States the approximate total roadway that Public Works oversees."
+   },
+   {
+    "lines": [
+     6
+    ],
+    "covers_whole_network": true,
+    "why": "States the approximate total roadway that Public Works oversees."
+   }
+  ],
+  "roads_head": null,
+  "department_email": {
+   "value": "publicworks@lincoln.ca",
+   "quote": "Email: publicworks@lincoln.ca",
+   "source": "S8"
+  },
+  "department_phone": {
+   "value": "905-563-2799",
+   "quote": "Phone: 905-563-2799",
+   "source": "S8"
+  },
+  "sign_work": [
+   {
+    "quote": "Road signage inventory, inspections, maintenance and repairs",
+    "source": "S4"
+   }
+  ]
+ },
+ "validated": {
+  "road_length_km": {
+   "options": [
+    {
+     "km": 310.0,
+     "parts": [
+      {
+       "index": 0,
+       "km": 255.0,
+       "value": "255",
+       "unit": "kms",
+       "road_type": "local roads",
+       "centerline": false,
+       "approximate": false,
+       "cite": {
+        "quote": "Quantity - kms of local roads 255",
+        "source": "S3",
+        "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+        "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+        "pdf_page": 49,
+        "fetched_at": "2026-10-15T19:10:33.656Z"
+       }
+      },
+      {
+       "index": 1,
+       "km": 55.0,
+       "value": "55",
+       "unit": "kms",
+       "road_type": "collector roads",
+       "centerline": false,
+       "approximate": false,
+       "cite": {
+        "quote": "Quantity - kms of collector roads 55",
+        "source": "S3",
+        "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+        "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+        "pdf_page": 49,
+        "fetched_at": "2026-10-15T19:10:33.656Z"
+       }
+      }
+     ],
+     "centerline": false,
+     "approximate": false,
+     "why": "Local and collector roads are given in km and arterial roads are given as 0, so these two types make up the whole network."
+    },
+    {
+     "km": 300.0,
+     "parts": [
+      {
+       "index": 5,
+       "km": 300.0,
+       "value": "300",
+       "unit": "km",
+       "road_type": "all roads",
+       "centerline": false,
+       "approximate": true,
+       "cite": {
+        "quote": "Currently, Public Works oversees approximately 300km of roadway including 49 bridges and 130 culverts.",
+        "source": "S4",
+        "url": "https://www.lincoln.ca/services/roads-transportation",
+        "title": "Roads & Transportation | Town of Lincoln",
+        "pdf_page": null,
+        "fetched_at": "2026-10-15T19:10:37.719Z"
+       }
+      },
+      {
+       "index": 6,
+       "km": 300.0,
+       "value": "300",
+       "unit": "km",
+       "road_type": "all roads",
+       "centerline": false,
+       "approximate": true,
+       "cite": {
+        "quote": "Did you know Public Works oversees approximately 300km of roadway, including 49 bridges and 130 culverts?",
+        "source": "S13",
+        "url": "https://www.lincoln.ca/services/roads-transportation/snow-ice-removal",
+        "title": "Snow & Ice Removal | Town of Lincoln",
+        "pdf_page": null,
+        "fetched_at": "2026-10-15T19:10:57.632Z"
+       }
+      }
+     ],
+     "centerline": false,
+     "approximate": true,
+     "why": "States the approximate total roadway that Public Works oversees."
+    }
+   ],
+   "partial": [],
+   "status": "needs_human",
+   "value_km": 310.0,
+   "question": {
+    "field": "road_length_km",
+    "kind": "pick",
+    "text": "These sources give different road lengths, and none says centerline. Which one is the centerline length?",
+    "options": [
+     {
+      "label": "310 km · Town of Lincoln Corporate and Service Area Asset Management Plans (2025), p. 49",
+      "value_km": 310.0,
+      "result": "filled",
+      "centerline": false
+     },
+     {
+      "label": "about 300 km · Roads & Transportation + Snow & Ice Removal",
+      "value_km": 300.0,
+      "result": "filled",
+      "centerline": false
+     },
+     {
+      "label": "Not sure",
+      "value_km": null,
+      "result": "note"
+     }
+    ]
+   }
+  },
+  "roads_head": {
+   "status": "not_found"
+  },
+  "email": {
+   "status": "filled",
+   "value": "publicworks@lincoln.ca",
+   "cite": {
+    "quote": "Email: publicworks@lincoln.ca",
+    "source": "S8",
+    "url": "https://www.lincoln.ca/Contact",
+    "title": "Contact Us | Town of Lincoln",
+    "pdf_page": null,
+    "fetched_at": "2026-10-15T19:10:47.805Z"
+   }
+  },
+  "phone": {
+   "status": "filled",
+   "value": "905-563-2799",
+   "cite": {
+    "quote": "Phone: 905-563-2799",
+    "source": "S8",
+    "url": "https://www.lincoln.ca/Contact",
+    "title": "Contact Us | Town of Lincoln",
+    "pdf_page": null,
+    "fetched_at": "2026-10-15T19:10:47.805Z"
+   }
+  },
+  "key_documents": [
+   {
+    "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+    "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+    "source": "S3",
+    "kind": "pdf",
+    "fetched_at": "2026-10-15T19:10:33.656Z"
+   },
+   {
+    "title": "Roads & Transportation",
+    "url": "https://www.lincoln.ca/services/roads-transportation",
+    "source": "S4",
+    "kind": "html",
+    "fetched_at": "2026-10-15T19:10:37.719Z"
+   },
+   {
+    "title": "Contact Us",
+    "url": "https://www.lincoln.ca/Contact",
+    "source": "S8",
+    "kind": "html",
+    "fetched_at": "2026-10-15T19:10:47.805Z"
+   }
+  ]
+ },
+ "sign_work": [
+  {
+   "quote": "Road signage inventory, inspections, maintenance and repairs",
+   "source": "S4",
+   "url": "https://www.lincoln.ca/services/roads-transportation",
+   "title": "Roads & Transportation | Town of Lincoln",
+   "pdf_page": null,
+   "fetched_at": "2026-10-15T19:10:37.719Z"
+  }
+ ],
+ "rejected": [
+  {
+   "field": "road_length_km",
+   "value": "0 km/km2",
+   "reason": "a ratio of lane-km (km/km2), not a length",
+   "quote": "Lane-km of arterial roads (MMS classes 1 and 2) per land area (km/km2) 0",
+   "source": "S3",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+   "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+   "pdf_page": 49,
+   "fetched_at": "2026-10-15T19:10:33.656Z",
+   "model_said": "ratio",
+   "road_type": "arterial roads (lane-km per land area)"
+  },
+  {
+   "field": "road_length_km",
+   "value": "0.43 km/km2",
+   "reason": "a ratio of lane-km (km/km2), not a length",
+   "quote": "Lane-km of collector roads (MMS classes 3 and 4) per land area (km/km2) 0.43",
+   "source": "S3",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+   "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+   "pdf_page": 49,
+   "fetched_at": "2026-10-15T19:10:33.656Z",
+   "model_said": "ratio",
+   "road_type": "collector roads (lane-km per land area)"
+  },
+  {
+   "field": "road_length_km",
+   "value": "0.84 km/km2",
+   "reason": "a ratio of lane-km (km/km2), not a length",
+   "quote": "Lane-km of local roads (MMS classes 5 and 6) per land area (km/km2) 0.84",
+   "source": "S3",
+   "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+   "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+   "pdf_page": 49,
+   "fetched_at": "2026-10-15T19:10:33.656Z",
+   "model_said": "ratio",
+   "road_type": "local roads (lane-km per land area)"
+  }
+ ],
+ "proposed": [
+  {
+   "field": "road_length_km",
+   "label": "Road network (centerline km)",
+   "current": null,
+   "status": "needs_human",
+   "sources": [
+    {
+     "quote": "Quantity - kms of local roads 255",
+     "source": "S3",
+     "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+     "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+     "pdf_page": 49,
+     "fetched_at": "2026-10-15T19:10:33.656Z"
+    },
+    {
+     "quote": "Quantity - kms of collector roads 55",
+     "source": "S3",
+     "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+     "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+     "pdf_page": 49,
+     "fetched_at": "2026-10-15T19:10:33.656Z"
+    },
+    {
+     "quote": "Currently, Public Works oversees approximately 300km of roadway including 49 bridges and 130 culverts.",
+     "source": "S4",
+     "url": "https://www.lincoln.ca/services/roads-transportation",
+     "title": "Roads & Transportation | Town of Lincoln",
+     "pdf_page": null,
+     "fetched_at": "2026-10-15T19:10:37.719Z"
+    },
+    {
+     "quote": "Did you know Public Works oversees approximately 300km of roadway, including 49 bridges and 130 culverts?",
+     "source": "S13",
+     "url": "https://www.lincoln.ca/services/roads-transportation/snow-ice-removal",
+     "title": "Snow & Ice Removal | Town of Lincoln",
+     "pdf_page": null,
+     "fetched_at": "2026-10-15T19:10:57.632Z"
+    }
+   ],
+   "proposed": "310 km (255 local roads + 55 collector roads)",
+   "question": {
+    "field": "road_length_km",
+    "kind": "pick",
+    "text": "These sources give different road lengths, and none says centerline. Which one is the centerline length?",
+    "options": [
+     {
+      "label": "310 km · Town of Lincoln Corporate and Service Area Asset Management Plans (2025), p. 49",
+      "value_km": 310.0,
+      "result": "filled",
+      "centerline": false
+     },
+     {
+      "label": "about 300 km · Roads & Transportation + Snow & Ice Removal",
+      "value_km": 300.0,
+      "result": "filled",
+      "centerline": false
+     },
+     {
+      "label": "Not sure",
+      "value_km": null,
+      "result": "note"
+     }
+    ]
+   }
+  },
+  {
+   "field": "email",
+   "label": "Public Works email",
+   "current": null,
+   "status": "filled",
+   "proposed": "publicworks@lincoln.ca",
+   "sources": [
+    {
+     "quote": "Email: publicworks@lincoln.ca",
+     "source": "S8",
+     "url": "https://www.lincoln.ca/Contact",
+     "title": "Contact Us | Town of Lincoln",
+     "pdf_page": null,
+     "fetched_at": "2026-10-15T19:10:47.805Z"
+    }
+   ]
+  },
+  {
+   "field": "phone",
+   "label": "Public Works phone",
+   "current": null,
+   "status": "filled",
+   "proposed": "905-563-2799",
+   "sources": [
+    {
+     "quote": "Phone: 905-563-2799",
+     "source": "S8",
+     "url": "https://www.lincoln.ca/Contact",
+     "title": "Contact Us | Town of Lincoln",
+     "pdf_page": null,
+     "fetched_at": "2026-10-15T19:10:47.805Z"
+    }
+   ]
+  },
+  {
+   "field": "roads_head",
+   "label": "Roads head",
+   "current": null,
+   "sources": [],
+   "proposed": null,
+   "status": "not_found",
+   "detail": "Not printed on the 14 pages read."
+  },
+  {
+   "field": "key_documents",
+   "label": "Key documents",
+   "current": null,
+   "status": "filled",
+   "proposed": [
+    "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+    "Roads & Transportation",
+    "Contact Us"
+   ],
+   "sources": [
+    {
+     "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+     "title": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025)",
+     "fetched_at": "2026-10-15T19:10:33.656Z"
+    },
+    {
+     "url": "https://www.lincoln.ca/services/roads-transportation",
+     "title": "Roads & Transportation",
+     "fetched_at": "2026-10-15T19:10:37.719Z"
+    },
+    {
+     "url": "https://www.lincoln.ca/Contact",
+     "title": "Contact Us",
+     "fetched_at": "2026-10-15T19:10:47.805Z"
+    }
+   ]
+  },
+  {
+   "field": "brief",
+   "label": "Account brief",
+   "current": null,
+   "status": "filled",
+   "proposed": "Centerline kilometers need confirming: the 2025 asset management plan lists 255 km of local and 55 km of collector roads (310 km), while Public Works pages say approximately 300 km, none marked centerline. Lincoln's Roads & Transportation page lists \"Road signage inventory, inspections, maintenance and repairs\" among the work Public Works oversees. In this Ontario jurisdiction, O. Reg. 239/02, s. 12(1) requires inspecting regulatory and warning signs for Ontario Traffic Manual retroreflectivity once per calendar year, each within 16 months of the last. Next step: contact Public Works at 905-563-2799 or publicworks@lincoln.ca and confirm which road length is the centerline figure for their sign inventory.",
+   "sources": []
+  }
+ ],
+ "questions": [
+  {
+   "field": "road_length_km",
+   "kind": "pick",
+   "text": "These sources give different road lengths, and none says centerline. Which one is the centerline length?",
+   "options": [
+    {
+     "label": "310 km · Town of Lincoln Corporate and Service Area Asset Management Plans (2025), p. 49",
+     "value_km": 310.0,
+     "result": "filled",
+     "centerline": false
+    },
+    {
+     "label": "about 300 km · Roads & Transportation + Snow & Ice Removal",
+     "value_km": 300.0,
+     "result": "filled",
+     "centerline": false
+    },
+    {
+     "label": "Not sure",
+     "value_km": null,
+     "result": "note"
+    }
+   ]
+  }
+ ],
+ "merge": null,
+ "brief": {
+  "sentences": [
+   {
+    "text": "Centerline kilometers need confirming: the 2025 asset management plan lists 255 km of local and 55 km of collector roads (310 km), while Public Works pages say approximately 300 km, none marked centerline.",
+    "cites": [
+     "S3",
+     "S4",
+     "S13"
+    ]
+   },
+   {
+    "text": "Lincoln's Roads & Transportation page lists \"Road signage inventory, inspections, maintenance and repairs\" among the work Public Works oversees.",
+    "cites": [
+     "S4"
+    ]
+   },
+   {
+    "text": "In this Ontario jurisdiction, O. Reg. 239/02, s. 12(1) requires inspecting regulatory and warning signs for Ontario Traffic Manual retroreflectivity once per calendar year, each within 16 months of the last.",
+    "cites": [
+     "RON"
+    ]
+   },
+   {
+    "text": "Next step: contact Public Works at 905-563-2799 or publicworks@lincoln.ca and confirm which road length is the centerline figure for their sign inventory.",
+    "cites": [
+     "S8",
+     "S3",
+     "S4",
+     "S13"
+    ]
+   }
+  ],
+  "model": "claude-opus-5-5",
+  "url_of_context": {
+   "RON": "https://www.ontario.ca/laws/docs/020239_e.doc"
+  }
+ },
+ "writeback": {
+  "sent": false,
+  "note": "Preview only: nothing is sent. Draft, never run in a Zoho org; field names are guesses.",
+  "requests": [
+   {
+    "method": "POST",
+    "url": "https://www.zohoapis.com/crm/v8/Accounts/upsert",
+    "body": {
+     "data": [
+      {
+       "Account_Name": "Town of Lincoln",
+       "Enrichment_Status": "Needs review",
+       "Last_Enriched": "2026-10-15T19:11:27.425Z",
+       "Public_Works_Email": "publicworks@lincoln.ca",
+       "Phone": "905-563-2799",
+       "Key_Documents": "Town of Lincoln Corporate and Service Area Asset Management Plans (2025): https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf\nRoads & Transportation: https://www.lincoln.ca/services/roads-transportation\nContact Us: https://www.lincoln.ca/Contact",
+       "Account_Brief": "Centerline kilometers need confirming: the 2025 asset management plan lists 255 km of local and 55 km of collector roads (310 km), while Public Works pages say approximately 300 km, none marked centerline. Lincoln's Roads & Transportation page lists \"Road signage inventory, inspections, maintenance and repairs\" among the work Public Works oversees. In this Ontario jurisdiction, O. Reg. 239/02, s. 12(1) requires inspecting regulatory and warning signs for Ontario Traffic Manual retroreflectivity once per calendar year, each within 16 months of the last. Next step: contact Public Works at 905-563-2799 or publicworks@lincoln.ca and confirm which road length is the centerline figure for their sign inventory."
+      }
+     ],
+     "duplicate_check_fields": [
+      "Account_Name"
+     ],
+     "trigger": []
+    }
+   },
+   {
+    "method": "POST",
+    "url": "https://www.zohoapis.com/crm/v8/Notes",
+    "body": {
+     "data": [
+      {
+       "Parent_Id": {
+        "module": {
+         "api_name": "Accounts"
+        },
+        "id": "sample-acct-001"
+       },
+       "Note_Title": "Enrich Account: needs a person",
+       "Note_Content": "These sources give different road lengths, and none says centerline. Which one is the centerline length?\n\n- \"Quantity - kms of local roads 255\" (https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf, p. 49 (fetched 2026-10-15))\n- \"Quantity - kms of collector roads 55\" (https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf, p. 49 (fetched 2026-10-15))\n- \"Currently, Public Works oversees approximately 300km of roadway including 49 bridges and 130 culverts.\" (https://www.lincoln.ca/services/roads-transportation (fetched 2026-10-15))\n- \"Did you know Public Works oversees approximately 300km of roadway, including 49 bridges and 130 culverts?\" (https://www.lincoln.ca/services/roads-transportation/snow-ice-removal (fetched 2026-10-15))\n\nLeft blank by Enrich Account until someone confirms it."
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

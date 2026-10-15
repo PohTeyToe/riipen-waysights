@@ -1,0 +1,414 @@
+{
+ "about": "The run scored against data/answer_key.json, which was written before the first run by reading the sources directly and committed on its own. Rules for each outcome are in the key.",
+ "answer_key_commit": "f7023e6a7759b91039f19af83e90432a0091fed9",
+ "counts": {
+  "right": 24,
+  "wrong": 1,
+  "correctly_blank": 7,
+  "missed": 0,
+  "sent_to_person": 4
+ },
+ "sent_to_person_key_agrees": 4,
+ "total": 36,
+ "misses": [
+  {
+   "outcome": "wrong",
+   "got": "905-892-2607 x332",
+   "account": "pelham",
+   "field": "phone",
+   "expected": [
+    "905-892-2607 ext. 33"
+   ],
+   "key_expect": "filled",
+   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+  }
+ ],
+ "rows": [
+  {
+   "outcome": "sent_to_person",
+   "key_agrees_unclear": true,
+   "options_include_accepted": true,
+   "got": [
+    310.0,
+    300.0
+   ],
+   "account": "lincoln",
+   "field": "road_length_km",
+   "expected": [
+    310.0,
+    300.0
+   ],
+   "key_expect": "needs_human"
+  },
+  {
+   "outcome": "correctly_blank",
+   "got": null,
+   "account": "lincoln",
+   "field": "roads_head_name",
+   "expected": "blank",
+   "key_expect": "blank"
+  },
+  {
+   "outcome": "correctly_blank",
+   "got": null,
+   "account": "lincoln",
+   "field": "roads_head_title",
+   "expected": "blank",
+   "key_expect": "blank"
+  },
+  {
+   "outcome": "right",
+   "got": "publicworks@lincoln.ca",
+   "account": "lincoln",
+   "field": "email",
+   "expected": [
+    "publicworks@lincoln.ca"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "905-563-2799",
+   "account": "lincoln",
+   "field": "phone",
+   "expected": [
+    "905-563-2799"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": [
+    "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf"
+   ],
+   "account": "lincoln",
+   "field": "key_document",
+   "expected": [
+    "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+    "https://www.lincoln.ca/council-administration/community-plans/asset-management-plan"
+   ],
+   "key_expect": null
+  },
+  {
+   "outcome": "sent_to_person",
+   "key_agrees_unclear": true,
+   "options_include_accepted": true,
+   "got": [
+    248.0
+   ],
+   "account": "pelham",
+   "field": "road_length_km",
+   "expected": [
+    248.0
+   ],
+   "key_expect": "needs_human"
+  },
+  {
+   "outcome": "correctly_blank",
+   "got": null,
+   "account": "pelham",
+   "field": "roads_head_name",
+   "expected": "blank",
+   "key_expect": "blank"
+  },
+  {
+   "outcome": "right",
+   "got": "Director of Public Works and Drainage Superintendent",
+   "account": "pelham",
+   "field": "roads_head_title",
+   "expected": [
+    "Director of Public Works and Drainage Superintendent"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "correctly_blank",
+   "got": null,
+   "account": "pelham",
+   "field": "email",
+   "expected": "blank",
+   "key_expect": "blank"
+  },
+  {
+   "outcome": "wrong",
+   "got": "905-892-2607 x332",
+   "account": "pelham",
+   "field": "phone",
+   "expected": [
+    "905-892-2607 ext. 33"
+   ],
+   "key_expect": "filled",
+   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+  },
+  {
+   "outcome": "right",
+   "got": [
+    "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
+    "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/"
+   ],
+   "account": "pelham",
+   "field": "key_document",
+   "expected": [
+    "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf",
+    "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/"
+   ],
+   "key_expect": null
+  },
+  {
+   "outcome": "correctly_blank",
+   "got": null,
+   "account": "west-lincoln",
+   "field": "road_length_km",
+   "expected": "blank",
+   "key_expect": "blank"
+  },
+  {
+   "outcome": "right",
+   "got": "Mike DiPaola",
+   "account": "west-lincoln",
+   "field": "roads_head_name",
+   "expected": [
+    "Mike DiPaola"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "Director, Infrastructure",
+   "account": "west-lincoln",
+   "field": "roads_head_title",
+   "expected": [
+    "Director, Infrastructure"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "infrastructure@westlincoln.ca",
+   "account": "west-lincoln",
+   "field": "email",
+   "expected": [
+    "infrastructure@westlincoln.ca"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "905-957-3346 ext. 5139",
+   "account": "west-lincoln",
+   "field": "phone",
+   "expected": [
+    "905-957-3346 ext. 5139"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": [
+    "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf"
+   ],
+   "account": "west-lincoln",
+   "field": "key_document",
+   "expected": [
+    "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+    "https://www.westlincoln.ca/township-office/plans-studies-and-reports/asset-management-plans/"
+   ],
+   "key_expect": null
+  },
+  {
+   "outcome": "right",
+   "got": 586.1,
+   "account": "saratoga",
+   "field": "road_length_km",
+   "expected": 586.1,
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "Chad M. Cooke",
+   "account": "saratoga",
+   "field": "roads_head_name",
+   "expected": [
+    "Chad M. Cooke"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "Commissioner of Public Works",
+   "account": "saratoga",
+   "field": "roads_head_title",
+   "expected": [
+    "Commissioner of Public Works"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "correctly_blank",
+   "got": null,
+   "account": "saratoga",
+   "field": "email",
+   "expected": "blank",
+   "key_expect": "blank"
+  },
+  {
+   "outcome": "right",
+   "got": "(518) 885-2235",
+   "account": "saratoga",
+   "field": "phone",
+   "expected": [
+    "(518) 885-2235"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": [
+    "https://www.saratogacountyny.gov/departments/public-works/"
+   ],
+   "account": "saratoga",
+   "field": "key_document",
+   "expected": [
+    "https://www.saratogacountyny.gov/departments/public-works/"
+   ],
+   "key_expect": null
+  },
+  {
+   "outcome": "sent_to_person",
+   "key_agrees_unclear": true,
+   "options_include_accepted": true,
+   "got": [
+    393.2,
+    398.1
+   ],
+   "account": "warren",
+   "field": "road_length_km",
+   "expected": [
+    398.1,
+    393.2
+   ],
+   "key_expect": "needs_human"
+  },
+  {
+   "outcome": "right",
+   "got": "Kevin J. Hajos, P.E.",
+   "account": "warren",
+   "field": "roads_head_name",
+   "expected": [
+    "Kevin J. Hajos"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "Superintendent of Public Works",
+   "account": "warren",
+   "field": "roads_head_title",
+   "expected": [
+    "Superintendent of Public Works"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "correctly_blank",
+   "got": null,
+   "account": "warren",
+   "field": "email",
+   "expected": "blank",
+   "key_expect": "blank"
+  },
+  {
+   "outcome": "right",
+   "got": "(518) 761-6556",
+   "account": "warren",
+   "field": "phone",
+   "expected": [
+    "(518) 761-6556"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": [
+    "https://www.warrencountyny.gov/dpw"
+   ],
+   "account": "warren",
+   "field": "key_document",
+   "expected": [
+    "https://warrencountyny.gov/dpw"
+   ],
+   "key_expect": null
+  },
+  {
+   "outcome": "sent_to_person",
+   "key_agrees_unclear": true,
+   "options_include_accepted": true,
+   "got": [
+    483.8,
+    486.0
+   ],
+   "account": "tompkins",
+   "field": "road_length_km",
+   "expected": [
+    486.0,
+    483.8
+   ],
+   "key_expect": "needs_human"
+  },
+  {
+   "outcome": "right",
+   "got": "Nick Ensign",
+   "account": "tompkins",
+   "field": "roads_head_name",
+   "expected": [
+    "Nick Ensign",
+    "Nicholas Ensign",
+    "Nicholas (Nick) Ensign"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "Highway Director",
+   "account": "tompkins",
+   "field": "roads_head_title",
+   "expected": [
+    "Highway Director",
+    "Director of Highway"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "highway@tompkins-co.org",
+   "account": "tompkins",
+   "field": "email",
+   "expected": [
+    "highway@tompkins-co.org"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": "(607) 274-0300",
+   "account": "tompkins",
+   "field": "phone",
+   "expected": [
+    "(607) 274-0300"
+   ],
+   "key_expect": "filled"
+  },
+  {
+   "outcome": "right",
+   "got": [
+    "https://www.tompkinscountyny.gov/All-Departments/Highway-Department"
+   ],
+   "account": "tompkins",
+   "field": "key_document",
+   "expected": [
+    "https://www.tompkinscountyny.gov/All-Departments/Highway-Department"
+   ],
+   "key_expect": null
+  }
+ ]
+}

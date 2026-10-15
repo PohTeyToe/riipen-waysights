@@ -1,0 +1,170 @@
+[
+ {
+  "id": "S1",
+  "url": "https://www.westlincoln.ca/",
+  "kind": "html",
+  "sha256": "a27154c92f8e0c43deb2d0162b5094ddedcc7ca239ebf40f1dcfbc22641228b5",
+  "fetched_at": "2026-10-15T19:10:29.548Z",
+  "used": false,
+  "chars": 3134,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S2",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/",
+  "kind": "html",
+  "sha256": "38eeb1d60374c1e9fe212a9bd00d013b4434d6279310e93645d6c0f181ffb559",
+  "fetched_at": "2026-10-15T19:10:31.612Z",
+  "used": false,
+  "chars": 1410,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S3",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/asset-management-plans/",
+  "kind": "html",
+  "sha256": "981c54161a9bdc60731f2c3b5b0d7899398fbffc4db6f0448b9d0a459fc13f50",
+  "fetched_at": "2026-10-15T19:10:33.585Z",
+  "used": false,
+  "chars": 1616,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S4",
+  "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+  "kind": "pdf",
+  "sha256": "442a45a06f36609c567886928692bb4eb1f44a2df92a6ac49a5a1ec462ff2f97",
+  "fetched_at": "2026-10-15T19:10:41.210Z",
+  "used": true,
+  "chars": 3570,
+  "text": null,
+  "pdf_pages": {
+   "46": "Township of West Lincoln \nAsset Management Plan 2025 \n \n \n44 \n \n4.5.2  Technical Levels of Service \nThe following table outlines the quantitative metrics that determine the current technical level of \nservice provided by the Township’s assets. Proposed LOS are reported based on Scenario 3: Full \nLifecycle Funding \nPlease Note: Some level of variation is expected between actual and below noted projected \nvalues due to potential differences in projected deterioration rates compared to actuals, \nunexpected natural events, and/or other factors (e.g. updated condition assessments). Further, \nthe projections assume that the funding increases are successfully implemented throughout the \nperiod of analysis. If this does not occur, projected values are not expected to be realized. \nTable 14 Technical Levels of Service \nService \nAttribute Technical Metric Current LOS \n(2025) \nProjected LOS \n(2025-2034) \nRoad Network \nScope \nLane-km of arterial roads (MMS classes 1 \nand 2) per land area in the municipality \n(km/km2) \n0.45 km/km2 \nCurrent +/- 5% \nLane-km of collector roads (MMS classes \n3 and 4) per land area in the municipality \n(km/km2) \n0.29 km/km2 \nLane-km of local roads (MMS classes 5 \nand 6) per land area in the municipality \n(km/km2) \n0.25 km/km2 \nQuality \nFor paved roads in the municipality, the \naverage pavement condition index value. Good: 69% \nGood: % (2025) \nto Good: 79% \n(2034) \nFor unpaved roads in the municipality, \nthe average surface condition (e.g. \nexcellent, good, fair or poor). \nGood: 61% \nFair 59% (2025) \nto Good: 36% \n(2034) \n Average condition of sidewalks in the \nTownship  Good: 72%  \nBridges & Culverts \nScope % of bridges in the municipality with \nloading or dimensional restrictions. 0% Current +/- 5% \nQuality \nFor bridges in the municipality, the \naverage bridge condition index value. Good: 70% 69% (2026) to \n55% (2035) \nFor structural culverts in the municipality, \nthe average bridge condition index value. Good: 68% 69% (2026) to \n55% (2035) ",
+   "67": "Township of West Lincoln \nAsset Management Plan 2025 \n \n \n65 \n \n8.  Roads Network \nThe Township’s road network comprises the largest share of its infrastructure portfolio, with a \ncurrent replacement cost of more than $156 million, belonging primarily to paved roads. The \nTownship also owns and manages other supporting infrastructure and capital assets, including \nsidewalks, streetlights, signs, roadside barriers, and gravel roads. \n8.1 Inventory & Valuation \nTable 26 summarizes the quantity and current replacement cost of the Township’s various road \nnetwork assets as managed in its primary asset management register, Citywide.  \n \nSegment Quantity Unit of \nMeasure \nReplacement \nCost \nPrimary RC \nMethod \nPaved Roads 354,749 Meters $124,346,663 CPI \nRoadside Barriers 11,863 Meters $6,093,908 CPI \nSidewalks 32,940 Square Meters $6,167,869 CPI \nSigns & Posts 10 Assets $224,550 CPI \nStreetlights 1,088 Assets $3,529,280 CPI \nUnpaved Roads 612,230 Square Meters $15,851,105 CPI \nTOTAL   $156,213,375  \nTable 26 Detailed Asset Inventory: Roads Network \n \nFigure 20 Portfolio Valuation: Roads Network \n8.2 Asset Condition \nFigure 21 summarizes the replacement cost-weighted condition of the Township’s road network. \nBased on a combination of field inspection data and age, 92% of assets are in fair or better \ncondition; the remaining 8% of assets are in poor to very poor condition. Condition assessments \n$225k\n$3.5m\n$6.1m\n$6.2m\n$15.9m\n$124.3m\n$50m $100m $150m\nSigns & Posts\nStreetlights\nRoadside Barriers\nSidewalks\nUnpaved Roads\nPaved Roads\nReplacement Cost by Segment"
+  }
+ },
+ {
+  "id": "S5",
+  "url": "https://www.westlincoln.ca/contacts-directory/",
+  "kind": "html",
+  "sha256": "2359d9e2749789b97b97b30a2fb6520158295bc4dca9c5d28fb5cb8309c315c7",
+  "fetched_at": "2026-10-15T19:10:50.597Z",
+  "used": true,
+  "chars": 8892,
+  "text": "Dismiss all alerts\nWelcome to our new website!\nWelcome! We hope you find our new website helpful and easier to navigate. It's now as easy to use on your smartphone as your desktop. Take a tour and please tell us what you think.\nSkip to main content\nSkip to footer\nTownship of West Lincoln\nMenu\nExpand Search\nContact Us\nCommunity and Protective Services\nActing Director, Community and Protective Services - DJ Brooks\nT: 905-957-3346 ext. 4684\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to DJ Brooks\nCommunity Services - Manager, Community Services - DJ Brooks\nT: 905-957-3346 ext. 4684\nTownship of West Lincoln, 177 West Street, Smithville, Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Manager, Community Services - DJ Brooks\nCommunity Services - Customer Service and Administrative Associate\nT: 905-957-3346 ext. 4688\nTownship of West Lincoln, 177 West Street, Smithville, Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Customer Service and Administrative Associate\nCommunity Services - Coordinator of Recreation Services\nT: 905-957-3346 ext. 4682\nTownship of West Lincoln, 177 West Street, Smithville, Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Coordinator of Recreation Services\nCommunity Services - Recreation and Wellness Programmer\nT: 905-957-3346 ext. 4682\nTownship of West Lincoln, 177 West Street, Smithville, Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Recreation and Wellness Programmer\nCommunity Services - Supervisor, Arena Parks and Facilities\nT: 905-957-3346 ext. 5132\nTownship of West Lincoln, 177 West Street, Smithville, Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Supervisor, Arena Parks and Facilities\nFire Services - Fire Chief Tim Hofsink\nT: 905-957-3346 ext. 6729\nTownship of West Lincoln 344 Canborough Street, Smithville Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Fire Chief Tim Hofsink\nFire Services - Administrative Assistant\nT: 905-957-3346 ext. 7004\nTownship of West Lincoln, 344 Canborough Street, Smithville, ON Canada L0R 2A0\nPhone: 905-957-3346 ext. 7004\nFax: 905-957-3219\nSend Email to Administrative Assistant\nFire Services - Deputy Fire Chief Zoli Rakonjac\nT: 905-957-3346 ext. 6733\nTownship of West Lincoln 344 Canborough Street, Smithville Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Deputy Fire Chief Zoli Rakonjac\nCorporate Services\nDirector, Corporate Services/Chief Financial Officer - John Henry\nT: 905-957-3346 ext. 6719\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nPhone: 905-957-3346 ext. 6719\nFax: 905-957-3219\nSend Email to John Henry\nFinance - Treasury\nT: 905-957-3346 ext. 6003\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nFax: 905-957-3219\nPhone: 905-957-3346 ext. 6003\nSend Email to Treasury\nFinance - Utilities\nT: 905-957-3346 ext. 6002\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nPhone: 905-957-3346 ext. 6002\nFax: 905-957-3219\nSend Email to Utilities\nFinance - Property Tax and Payroll Coordinator\nT: 905-957-3346 ext. 6718\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nPhone: 905-957-3346 ext. 6718\nFax: 905-957-3219\nSend Email to Property Tax and Payroll Coordinator\nManager, Finance/Deputy Treasurer - Steven Emslie\nT: 905-957-3346 ext. 6721\n318 Canborough Street, Smithville, ON L0R2A0\nFax: 905-957-3219\nToll-Free: 1-800-350-3876\nSend Email to Steven Emslie\nManager, IT and Enterprise Solutions - Roberta Keith\nT: 905-957-3346 ext. 6723\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nFax: 905-957-3219\nSend Email to Roberta Keith\nMyWESTLINCOLN -\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON, Canada L0R 2A0\nSend Email to\nCouncil\nMayor - Cheryl Ganann\nT: 365-855-2638\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Cheryl Ganann\nWard 1 Councillor - Mike Rehner\nT:\nSend Email to Mike Rehner\nWard 1 Councillor - Jason Trombetta\nT: 905-961-0215\nSend Email to Jason Trombetta\nWard 2 Councillor - Shelley Bradaric\nT:\nSend Email to Shelley Bradaric\nWard 2 Councillor - Joann Chechalk\nT: 416-567-7323\nSend Email to Joann Chechalk\nWard 3 Councillor - Greg Maychak\nT: 365-855-3951\nSend Email to Greg Maychak\nWard 3 Councillor - William Reilly\nT: 365-366-3447\nSend Email to William Reilly\nGeneral\nTownship of West Lincoln -\nT: 905-957-3346\n318 Canborough St., Box 400, Smithville, Ontario, L0R 2A0\nFax: 905-957-3219\nToll-Free: 1-800-350-3876\nSend Email to\nGrowth and Sustainability\nBuilding Services - Building Secretary\nT: 905-957-3346 ext. 5130\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Building Secretary\nBuilding Services - Chief Building Official - Ben Agro\nT: 905-957-3346 ext. 5135\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Chief Building Official - Ben Agro\nDirector, Growth and Sustainability - Gerrit Boerema\nT: 905-957-3346 ext. 5131\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Gerrit Boerema\nManager, Civil Land Development - Jennifer Bernard\nT: 905-957-3346 ext. 6732\nTownship of West Lincoln, 318 Canborough St, Smithville, Ontario, Canada, L0R 2A0\nFax: 905-957-3219\nToll-Free: 1-800-350-3876\nSend Email to Jennifer Bernard\nManager, Community Planning and Design - Susan Smyth\nT: 905-957-3346 ext. 5133\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Susan Smyth\nPlanning Services - Planning Secretary\nT: 905-957-3346 ext. 5134\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Planning Secretary\nInfrastructure\nDirector, Infrastructure - Mike DiPaola\nT: 905-957-3346 ext. 5142\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Mike DiPaola\nManager of Operations - Tray Benish\nT: 905-957-3346 ext. 4701\nTownship of West Lincoln, 6218 London Road, Smithville, Ontario, Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Tray Benish\nManager, Capital Design Delivery - Ray Vachon\nT: 905-957-3346 ext. 6730\nFax: 905-957-3219\nToll-Free: 1-800-350-3876\nSend Email to Ray Vachon\nPublic Works - Secretary\nT: 905-957-3346 ext. 5139\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Secretary\nPublic Works After Hours Emergency Line -\nT: 1-877-552-5579\nLegal and Legislative Services\nBy-law Services - Municipal Law Enforcement Officer\nT: 905-957-3346 ext. 6734\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Municipal Law Enforcement Officer\nCommunications - Communications Specialist\nT: 905-957-3346 ext. 6737\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Communications Specialist\nDirector, Legal and Legislative Services - Jessica Dyson\nT: 905-957-3346 ext. 6720\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Jessica Dyson\nLegislative Services - Coordinator of Legislative Services/Deputy Clerk\nT: 905-957-3346 ext. 5136\nSend Email to Coordinator of Legislative Services/Deputy Clerk\nManager, Legislative Services - Justin Paylove\nT: 905-957-3346 ext. 5129\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nFax: 905-957-3219\nPhone: 905-957-3346 ext. 5129\nSend Email to Justin Paylove\nOffice of the CAO\nChief Administrative Officer - Truper McBride\nT: 905-957-3346 ext. 6725\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Truper McBride\nExecutive Assistant - Jacquie Thrower\nT: 905-957-3346 ext. 6726\nTownship of West Lincoln, 318 Canborough Street, Smithville, ON Canada L0R 2A0\nToll-Free: 1-800-350-3876\nFax: 905-957-3219\nSend Email to Jacquie Thrower\nTownship of West Lincoln\n318 Canborough St.\nBox 400\nSmithville, ON L0R 2A0\nPhone: 905-957-3346\nFax: 905-957-3219\nResources\nAlerts\nAccessibility\nConnect with Us\nBack to top\nThis website uses cookies to enhance usability and provide you with a more personal experience. By using this website, you agree to our use of cookies as explained in our Privacy Policy.\nAgree",
+  "pdf_pages": null
+ },
+ {
+  "id": "S6",
+  "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/",
+  "kind": "html",
+  "sha256": "355e946863f5c5ce05cb08158b9fdabe395424fa4e4b4821eaf89315680bfa79",
+  "fetched_at": "2026-10-15T19:10:52.544Z",
+  "used": true,
+  "chars": 6322,
+  "text": "This website uses cookies to enhance usability and provide you with a more personal experience. By using this website, you agree to our use of cookies as explained in our Privacy Policy.\nAgree\nDismiss all alerts\nWelcome to our new website!\nWelcome! We hope you find our new website helpful and easier to navigate. It's now as easy to use on your smartphone as your desktop. Take a tour and please tell us what you think.\nSkip to main content\nSkip to footer\nTownship of West Lincoln\nMenu\nExpand Search\nRoads and Sidewalks\nSection Menu\nOn this page:\nReport a concern\nRoads\nRoad occupancy permits\nOversize/overweight permits\nHeavy truck restrictions and local access exemptions\nWinter maintenance\nDust control\nSports equipment on Township roads\nSidewalks\nParking\nRegional roads\nReport a concern\nIf you have a concern about Township owned roadways, sidewalks, traffic signs or streetlights, please report it to our Infrastructure Department (infrastructure@westlincoln.ca) or call 905-957-3346 ext. 5139 (905-957-3346;5139). You can also fill in our Report a Concern Form online.\nRoads\nThe Township of West Lincoln owns all municipal roadways and sidewalks. The Township's Infrastructure Department is responsible for the maintenance of these roadways throughout the year including:\nthe maintenance, repair and replacement of traffic signs\nthe maintenance of streetlights and poles\nSubscribe to be notified about road closures.\nRoad Occupancy Permits\nA Road Occupancy Permit is required for all residents, businesses, contractors, etc. who wish to occupy all or a portion of a road, sidewalk or boulevard to hold events or to perform work.\nTo obtain a permit, complete the Road Occupancy Permit Application Form and Township staff will be in contact once it is approved. The permit is to be kept on site during the event or work being performed.\nOversize/Overweight Permits\nAn Oversize/Overweight Permit is required for any load, vehicle, object or structure that is oversize and/or overweight as defined by the Highway Traffic Act, as amended.\nTo obtain a permit, complete the Oversize/Overweight Permit Application Form and Township staff will be in contact once it is approved. The permit is to be kept in the vehicle at all times.\nHeavy truck restrictions and local access exemptions\nIn 2026, Council approved amendments to By-law 89-2000, including revisions to the heavy truck restriction chart, to implement heavy truck restrictions prohibiting Class 8 vehicles (15,000+ kg) on the following roads:\nYoung Street – Between Regional Road 14 (Thirty Rd) and Regional Road 12 (Grimsby Rd)\nSouth Grimsby Road 8 – Between Regional Road 20 and Twenty Road\nSouth Chippawa Road – Between Regional Road 63 (Canborough Rd) and Regional Road 2 (Caistorville Rd)\nThe over 15,000 kg Registered Gross Weight (RGW) by-law, along with signage, is intended to deter heavy trucks from using these road corridors. The restriction does not apply to:\nEmergency vehicles\nMunicipal and public-utility vehicles\nSchool buses\nFarm machinery and agricultural service vehicles\nRecreational vehicles\nHeavy vehicles in excess of the limit that require access to any premise, business, or lands located on the restricted sections of roadway\nVehicles making local deliveries or pick-ups\nHeavy vehicles operated by a business located within the Township for the purpose of delivery, pickup, servicing, construction, or other legitimate business activity, provided that such vehicles only use the portion of the Highway necessary to reach their destination and return by the most direct route\nWinter maintenance\nOur Infrastructure Department tackles snow removal for all municipal roads and sidewalks. Visit our Winter Maintenance page to learn how we keep our roads safe during winter.\nDust Control\nEvery June, our Infrastructure Department applies Calcium Chloride for dust control throughout West Lincoln's municipal gravel roads. Visit our Dust Control page to learn about dust control and calcium chloride, how it works and how long it lasts.\nSports equipment on Township roads\nThe Township does not encourage sports or game equipment such as hockey or basketball nets on municipal roads and road allowances. These objects can lead to vehicular or pedestrian incidents. To reduce the chance of an incident, please place any unattended nets or ramps on your private property.\nSidewalks\nIf you find a damaged sidewalk, please report it. Township staff will examine and assess the damage. The Township has a Sidewalk Inspection and Spot Repair Program for the maintenance of municipal sidewalks. If a sidewalk is broken or raised, we will place a temporary patch or grind the sidewalk as soon as possible. If we cannot finish the repair at that time, we will complete it as part of our Annual Sidewalk Repair Program.\nParking\nTo learn more about parking in West Lincoln, please visit our Parking page.\nRegional roads\nThe Regional Public Works Operation is responsible for the maintenance of all Niagara Region roads including the maintenance, repair and replacement of traffic signals. You can report a broken traffic signal to Niagara Region by calling 905-984-3690.\nThe roads owned by the Region are:\nRegional Rd. 2 (Caistorville Rd.), from Indian Line to Regional Rd. 65 (Silver St.)\nRegional Rd. 9 (York Rd.), from Regional Rd. 2 (Caistorville Rd.) to Westbrook Rd.\nRegional Rd. 12 (Grimsby Rd.), from Regional Rd. 20 (Hwy. 20) to Regional Rd. 73 (Mud St.)\nRegional Rd. 14 (Smithville Rd./Townline Rd./Canborough St./Griffin St./Station St./Thirty Rd.), from Caistor Centre Rd. to Regional Rd. 73 (Mud St.)\nRegional Rd. 20 (Hwy. 20/West St./St. Catharines St.), from Westbrook Rd. to Regional Rd. 24 (Victoria Ave.)\nRegional Rd. 24 (Victoria Ave.), from East Chippawa Rd. to Regional Rd. 69 (Twenty Mile Rd.)\nRegional Rd. 63 (Canborough Rd.), from South Chippawa Rd. to Regional Rd. 24 (Victoria Ave.)\nRegional Rd. 65 (Silver St.), from Westbrook Rd. to Regional Rd. 20 (Hwy. 20)\nRegional Rd. 73 (Mud St.), from East Townline Rd. to South Grimsby Rd. 3\nContact Us\nTownship of West Lincoln\n318 Canborough St.\nBox 400\nSmithville, ON L0R 2A0\nPhone: 905-957-3346\nFax: 905-957-3219\nTownship of West Lincoln\n318 Canborough St.\nBox 400\nSmithville, ON L0R 2A0\nPhone: 905-957-3346\nFax: 905-957-3219\nResources\nAlerts\nAccessibility\nConnect with Us\nBack to top",
+  "pdf_pages": null
+ },
+ {
+  "id": "S7",
+  "url": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/road-safety-action-plan/",
+  "kind": "html",
+  "sha256": "8cbaba78a0369a68a4e80fe505bd12845eff8de5e648df9a67f6d6eaff5f6004",
+  "fetched_at": "2026-10-15T19:10:54.539Z",
+  "used": false,
+  "chars": 5501,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S8",
+  "url": "https://www.westlincoln.ca/township-office/departments/",
+  "kind": "html",
+  "sha256": "96cb4b16af0793e03c43ca7b3db09b22430e8e0c7c6a1420fe96c2546094e3d2",
+  "fetched_at": "2026-10-15T19:10:56.535Z",
+  "used": false,
+  "chars": 6122,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S9",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/cultivating-west-lincoln-new-official-plan/",
+  "kind": "html",
+  "sha256": "5f54e5d79822090e3603941653f4295654b40a236d7f40c3b587650a071cca0a",
+  "fetched_at": "2026-10-15T19:10:58.531Z",
+  "used": false,
+  "chars": 4442,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S10",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/building-reports/",
+  "kind": "html",
+  "sha256": "2bb7c4b65c0200b0fdc1bf7c0e401e03db58083c7a11a59f6586afa155698271",
+  "fetched_at": "2026-10-15T19:11:00.545Z",
+  "used": false,
+  "chars": 1523,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S11",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/community-improvement-plans/",
+  "kind": "html",
+  "sha256": "5b435ec45bcfb727dfa011fb5888f41652ad25d0403889f31e04b7d4e892555e",
+  "fetched_at": "2026-10-15T19:11:02.527Z",
+  "used": false,
+  "chars": 3197,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S12",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/development-charge-study/",
+  "kind": "html",
+  "sha256": "1d0351da9d0b63d7be02d551c5f4a72c00637390d2a2ed4c6a9e0227da55a76e",
+  "fetched_at": "2026-10-15T19:11:04.576Z",
+  "used": false,
+  "chars": 5956,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S13",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/drinking-water-reports/",
+  "kind": "html",
+  "sha256": "0b0815100e14997a89208b2a6516bcce27b8b0924b788b4eafbea2212c27725f",
+  "fetched_at": "2026-10-15T19:11:06.518Z",
+  "used": false,
+  "chars": 2108,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S14",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/official-plan/",
+  "kind": "html",
+  "sha256": "775da668a723a30790b2c1f2a5bba6b9d6cf86e12b5737bb3e2c4ee793c01220",
+  "fetched_at": "2026-10-15T19:11:08.535Z",
+  "used": false,
+  "chars": 3106,
+  "text": null,
+  "pdf_pages": null
+ },
+ {
+  "id": "S15",
+  "url": "https://www.westlincoln.ca/township-office/plans-studies-and-reports/corporate-strategic-plan/",
+  "kind": "html",
+  "sha256": "f1b978f510179cafefedc890b99e936c75534773e731759def041b505cac6a1f",
+  "fetched_at": "2026-10-15T19:11:10.510Z",
+  "used": false,
+  "chars": 821,
+  "text": null,
+  "pdf_pages": null
+ }
+]
