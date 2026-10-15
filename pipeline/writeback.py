@@ -55,25 +55,19 @@ def account_upsert(account: dict, fields: dict, brief: dict, status: str, run_at
 
 
 def contact_request(account: dict, proposal: dict | None, head: dict) -> dict | None:
+    """The roads head as a Contact: name, title and where they came from. The phone and email
+    the towns print belong to the department, so they go on the Account, not on a person.
+    Zoho's default Contact key is Email, which department addresses can't serve, so the
+    duplicate check is ours (dedupe.py): a match updates that record by id, no match creates one."""
     if not proposal:
         return None
     first, last = crm_name(head.get("name") or "")
-    source = _source_line(head["cite"])
-    if proposal["action"] == "merge":
-        # Our own match found the record, so update it by id rather than trusting Email as the key.
-        record = {"id": proposal["contact_id"], "First_Name": first or None, "Last_Name": last,
-                  "Title": head.get("title"), F_SOURCE: source}
-        return {"method": "PUT", "url": f"{API}/Contacts", "body": {"data": [record], "trigger": []}}
-    c = proposal["contact"]
     record = {"First_Name": first or None, "Last_Name": last, "Title": head.get("title"),
-              "Account_Name": {"id": account["crm_id"]}, F_SOURCE: source}
-    if c.get("phone"):
-        record["Phone"] = c["phone"]
-    if c.get("email"):
-        record["Email"] = c["email"]
-        return {"method": "POST", "url": f"{API}/Contacts/upsert",
-                "body": {"data": [record], "duplicate_check_fields": ["Email"], "trigger": []}}
-    # No email to deduplicate on, and our match found nobody: create.
+              F_SOURCE: _source_line(head["cite"])}
+    if proposal["action"] == "merge":
+        return {"method": "PUT", "url": f"{API}/Contacts",
+                "body": {"data": [{"id": proposal["contact_id"], **record}], "trigger": []}}
+    record["Account_Name"] = {"id": account["crm_id"]}
     return {"method": "POST", "url": f"{API}/Contacts", "body": {"data": [record], "trigger": []}}
 
 

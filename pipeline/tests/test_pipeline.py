@@ -339,6 +339,18 @@ def test_crm_name_drops_post_nominals():
     assert dedupe.crm_name("Mike DiPaola") == ("Mike", "DiPaola")
 
 
+def test_writeback_updates_the_matched_contact_by_id():
+    from pipeline import writeback
+    head = {"name": "Kevin J. Hajos, P.E.", "title": "Superintendent of Public Works",
+            "cite": {"url": "https://warrencountyny.gov/dpw", "fetched_at": FETCHED, "pdf_page": None}}
+    merge = dedupe.propose({"name": head["name"], "phone": "(518) 761-6556"}, [SEED_CONTACT])
+    req = writeback.contact_request({"crm_id": "sample-acct-005"}, merge, head)
+    assert req["method"] == "PUT" and req["body"]["data"][0]["id"] == "sample-contact-001"
+    assert (req["body"]["data"][0]["First_Name"], req["body"]["data"][0]["Last_Name"]) == ("Kevin J.", "Hajos")
+    new = writeback.contact_request({"crm_id": "sample-acct-005"}, {"action": "create", "contact": {}}, head)
+    assert new["method"] == "POST" and "Phone" not in new["body"]["data"][0] and "Email" not in new["body"]["data"][0]
+
+
 def test_no_merge_on_a_different_surname_or_surname_alone():
     assert dedupe.propose({"name": "Kevin J. Hayes", "phone": "(518) 761-6556"}, [SEED_CONTACT])["action"] == "create"
     assert dedupe.propose({"name": "Martin Hajos", "phone": "(518) 555-0100"}, [SEED_CONTACT])["action"] == "create"
