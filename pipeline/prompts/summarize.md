@@ -6,7 +6,7 @@ Use only the facts below. Each fact has a source id. Every sentence must cite th
 
 Write one or two sentences, in this order:
 1. Only if a sign-work fact is given: what the municipality itself says about its signs, such as an inventory, inspections, records, a sign shop or how many signs it has. If no fact covers sign work, leave this sentence out.
-2. Start with "Next step:". Who to ask for (the roads head's name and title if a fact gives them, otherwise the department) and how to reach them, using a phone or email only if its fact gives one. A phone or email belongs to the department its fact names; don't attach it to a person.
+2. Start with "Next step:" and a lowercase verb. Who to ask for (the roads head's name and title if a fact gives them, otherwise the department) and how to reach them, using a phone or email only if its fact gives one. Call the department by the name its own page uses (Public Works, Highway Department, Infrastructure Department). A phone or email belongs to the department; don't attach it to a person.
 
 Don't mention the road length, any rule or regulation, or anything that still needs confirming: the record shows those.
 

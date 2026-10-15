@@ -74,19 +74,22 @@ def facts_for(fields: dict, sign_work: list[dict]) -> tuple[str, list[str], dict
         back(head["cite"], head.get("name"), head.get("title"))
     else:
         lines.append("- Roads head: not named on the pages read.")
+    # The department's own words come with each value, so the brief names it the way its page does.
     email = fields["email"]
     if email.get("status") == "filled":
-        lines.append(f"- Public Works email: {email['value']} [{email['cite']['source']}]")
+        lines.append(f"- The department's email: {email['value']}, printed as \"{email['cite']['quote']}\" "
+                     f"[{email['cite']['source']}]")
         allowed.append(email["value"])
         back(email["cite"], email["value"])
     phone = fields["phone"]
     if phone.get("status") == "filled":
-        lines.append(f"- Public Works phone: {phone['value']} [{phone['cite']['source']}]")
+        lines.append(f"- The department's phone: {phone['value']}, printed as \"{phone['cite']['quote']}\" "
+                     f"[{phone['cite']['source']}]")
         allowed.append(phone["value"])
         back(phone["cite"], phone["value"])
     elif phone.get("status") == "needs_human":
         printed = "; ".join(f"{v} [{c['source']}]" for v, c in zip(phone["values"], phone["cites"]))
-        lines.append(f"- Public Works phone: not settled. The pages print different numbers ({printed}); "
+        lines.append(f"- The department's phone: not settled. The pages print different numbers ({printed}); "
                      f"give neither.")
     for d in fields["key_documents"]:
         lines.append(f"- Key document: {d['title']} [{d['source']}]")
