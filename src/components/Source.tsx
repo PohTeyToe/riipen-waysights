@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import type { Cite } from '../lib/data'
+import { readableUrl, type Cite } from '../lib/data'
 import { cleanTitle, fmtDate, fmtMi, prettyUrl } from '../lib/format'
 import { datasetRows, findQuote, loadPages, savedText, type DatasetRow, type SavedPage } from '../lib/pages'
 
@@ -20,7 +20,7 @@ export function highlight(text: string, value?: string | null): ReactNode {
 export function SourceLine({ cite, children }: { cite: Pick<Cite, 'url' | 'title' | 'pdf_page' | 'fetched_at'>; children?: ReactNode }) {
   return (
     <p className="src">
-      <a href={cite.url} target="_blank" rel="noreferrer" title={prettyUrl(cite.url)}>
+      <a href={readableUrl(cite.url)} target="_blank" rel="noreferrer" title={prettyUrl(readableUrl(cite.url))}>
         {cleanTitle(cite.title)}
       </a>
       {cite.pdf_page ? <span> · PDF p. {cite.pdf_page}</span> : null}

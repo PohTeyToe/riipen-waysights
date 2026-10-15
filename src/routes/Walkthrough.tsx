@@ -1,38 +1,40 @@
-import { meta, REPO, runBySlug, type Cite, type DocLink } from '../lib/data'
-import { cleanTitle, fmtDate, fmtKm, prettyUrl } from '../lib/format'
+import type { ReactNode } from 'react'
+import { DATASET_PAGE, HERO, meta, REPO, runBySlug, shortName, type Cite } from '../lib/data'
+import { fmtDate, fmtKm, fmtMi, prettyUrl } from '../lib/format'
 import { shownRows } from '../lib/record'
 import { Link } from '../lib/router'
 import { Chip, Dot } from '../components/Status'
 import { Honesty, Owner } from '../components/Honesty'
 
-/** Lincoln as the run left it. The question is answered in the run itself, not here. */
-function LincolnCard() {
-  const run = runBySlug.lincoln
+function Before({ children }: { children: ReactNode }) {
+  return (
+    <p className="ba-diff">
+      <span className="nil">empty</span>
+      <span className="diff-arrow" aria-label="becomes">
+        →
+      </span>
+      {children}
+    </p>
+  )
+}
+
+/** The county the run fills end to end, as the run left it. */
+function HeroCard() {
+  const run = runBySlug[HERO]
   const rows = shownRows(run, {})
-  const road = rows.find((r) => r.field === 'road_length_km')!
-  const email = rows.find((r) => r.field === 'email')!
-  const phone = rows.find((r) => r.field === 'phone')!
-  const docs = rows.find((r) => r.field === 'key_documents')!
-  const head = rows.find((r) => r.field === 'roads_head')!
-  const plan = run.validated.road_length_km.options[0]
-  const planCite = plan.parts[0].cite
-  const rounded = plan.agrees?.[0]?.cite
-  const contactPages = [...new Set([email, phone].flatMap((r) => (r.sources as Cite[]).map((c) => c.url)))]
-  const fetched = (email.sources[0] as Cite).fetched_at
-  // The plan's full title is long, so the card shortens it; the link goes to the PDF itself.
-  const docLinks = (docs.sources as DocLink[]).map((d) => ({
-    url: d.url,
-    label: d.url === planCite.url ? '2025 Asset Management Plan (PDF)' : cleanTitle(d.title),
-  }))
+  const row = (f: string) => rows.find((r) => r.field === f)!
+  const [road, head, email, phone, brief] = ['road_length_km', 'roads_head', 'email', 'phone', 'brief'].map(row)
+  const owned = run.validated.road_length_km.options[0]
+  const data = owned.parts[0].cite
+  const own = owned.agrees?.[0]
+  const page = (head.sources[0] as Cite | undefined) ?? (email.sources[0] as Cite)
+  const pct = own ? (Math.abs(own.km - owned.km) / owned.km) * 100 : 0
 
   return (
     <article className="card" aria-labelledby="card-h">
       <header className="card-head">
-        <h2 id="card-h">Town of Lincoln, before and after</h2>
-        <p>
-          Lincoln goes first. Its roads page lists{' '}
-          <q>Road signage inventory, inspections, maintenance and repairs</q> as a key Public Works activity.
-        </p>
+        <h2 id="card-h">{run.account.name}, before and after</h2>
+        <p>One press of Enrich Account. Every value comes from the county's own Highway Department page or the state's road data, with the line it came from.</p>
       </header>
 
       <dl className="ba">
@@ -41,112 +43,56 @@ function LincolnCard() {
             Road network (centerline km) <Chip kind={road.shown} />
           </dt>
           <dd>
-            <p className="ba-diff">
-              <span className="nil">empty</span>
-              <span className="diff-arrow" aria-label="becomes">
-                →
-              </span>
-              <strong>{fmtKm(plan.km)} km proposed</strong>
-            </p>
+            <Before>
+              <strong>{fmtKm(owned.km)} km</strong>
+            </Before>
             <p className="ba-quote">
-              {plan.parts.map((p, i) => (
-                <span key={i}>
-                  {i > 0 ? ', ' : null}
-                  <q>{p.cite.quote.replace('Quantity - ', '')}</q>
-                </span>
-              ))}
-              <a className="ba-src" href={planCite.url} target="_blank" rel="noreferrer">
-                2025 Asset Management Plan, Table 21, PDF p. {planCite.pdf_page}
+              {fmtMi(data.sum_mi ?? 0)} mi of county-owned centerline roads, summed over the county's {data.rows} rows
+              <a className="ba-src" href={DATASET_PAGE} target="_blank" rel="noreferrer">
+                NYSDOT Highway Mileage, {data.year} (data.ny.gov)
               </a>
             </p>
-            {rounded ? (
+            {own ? (
               <p className="ba-quote">
-                roads page: <q>approximately 300km of roadway</q>, the same figure rounded
-                <a className="ba-src" href={rounded.url} target="_blank" rel="noreferrer">
-                  {prettyUrl(rounded.url)}
+                Its own page: <q>{own.cite.quote}</q> The same roads, {pct.toFixed(1)}% apart, so the run doesn't ask.
+                <a className="ba-src" href={own.cite.url} target="_blank" rel="noreferrer">
+                  {prettyUrl(own.cite.url)}
                 </a>
               </p>
             ) : null}
-            <div className="ba-ask">
-              <p>{road.question?.text}</p>
-              <Link to="/demo?account=lincoln" className="ba-ask-link">
-                Answer it in the Lincoln run
-              </Link>
-            </div>
           </dd>
         </div>
 
         <div className="ba-row">
           <dt>
-            Public Works email and phone <Chip kind="filled" />
+            Account brief <Chip kind={brief.shown} />
           </dt>
           <dd>
-            <p className="ba-diff">
-              <span className="nil">empty</span>
-              <span className="diff-arrow" aria-label="becomes">
-                →
-              </span>
+            <Before>
+              <span>{run.brief.sentences[0]?.text}</span>
+            </Before>
+          </dd>
+        </div>
+
+        <div className="ba-row">
+          <dt>
+            Roads head, email and phone <Chip kind={head.shown} />
+          </dt>
+          <dd>
+            <Before>
               <strong>
-                <span className="nowrap">{String(email.proposed)}</span> <Dot /> <span className="nowrap">{String(phone.proposed)}</span>
+                <span className="nowrap">{String(head.proposed)}</span> <Dot /> <span className="nowrap">{String(email.proposed)}</span>{' '}
+                <Dot /> <span className="nowrap">{String(phone.proposed)}</span>
               </strong>
-            </p>
+            </Before>
             <p className="ba-quote">
               <span className="ba-src">
                 printed on{' '}
-                {contactPages.map((url, i) => (
-                  <span key={url}>
-                    {i > 0 ? ' and ' : null}
-                    <a href={url} target="_blank" rel="noreferrer">
-                      {prettyUrl(url)}
-                    </a>
-                  </span>
-                ))}
-                , fetched {fmtDate(fetched)}
+                <a href={page.url} target="_blank" rel="noreferrer">
+                  {prettyUrl(page.url)}
+                </a>
+                , fetched {fmtDate(page.fetched_at)}
               </span>
-            </p>
-          </dd>
-        </div>
-
-        <div className="ba-row">
-          <dt>
-            Key documents <Chip kind={docs.shown} />
-          </dt>
-          <dd>
-            <p className="ba-diff">
-              <span className="nil">none</span>
-              <span className="diff-arrow" aria-label="becomes">
-                →
-              </span>
-              <span className="ba-docs">
-                {docLinks.map((d, i) => (
-                  <span key={d.url}>
-                    {i > 0 ? (
-                      <>
-                        {' '}
-                        <Dot />{' '}
-                      </>
-                    ) : null}
-                    <a href={d.url} target="_blank" rel="noreferrer">
-                      {d.label}
-                    </a>
-                  </span>
-                ))}
-              </span>
-            </p>
-          </dd>
-        </div>
-
-        <div className="ba-row">
-          <dt>
-            Roads head <Chip kind={head.shown} />
-          </dt>
-          <dd>
-            <p className="ba-diff">
-              <span className="nil">empty</span>
-              <span className="diff-arrow" aria-label="becomes">
-                →
-              </span>
-              <span>{head.detail}</span>
             </p>
           </dd>
         </div>
@@ -155,20 +101,21 @@ function LincolnCard() {
   )
 }
 
-/** The question only Waysights can answer, and the one that changes a price. */
+/** The question only Waysights can answer, framed as a reading of their own FAQ. */
 function AskWaysights() {
-  const s = runBySlug.saratoga.validated.road_length_km
+  const run = runBySlug[HERO]
+  const s = run.validated.road_length_km
   const owned = Math.round(s.value_km ?? 0)
   const within = Math.round(s.within_km ?? 0)
   return (
     <aside className="wt-ask" aria-labelledby="wt-ask-h">
       <h2 id="wt-ask-h">One question only you can answer</h2>
       <p>
-        Do you quote a county on the roads it owns, or every road inside it? Saratoga County: <strong>{fmtKm(owned)} km</strong>{' '}
-        or <strong>{fmtKm(within)} km</strong> (NYSDOT, 2020), about {Math.round(within / owned)} times apart. The run uses
-        owned roads until you say otherwise.
+        Your FAQ prices on <q>the total centerline length of roads within your jurisdiction.</q> For a county I read that as
+        the roads it owns: <strong>{fmtKm(owned)} km</strong> for {run.account.name}, not the <strong>{fmtKm(within)} km</strong>{' '}
+        of every road inside it (NYSDOT, {s.data_year}). Is that right? The run uses owned roads until you say otherwise.
       </p>
-      <Link to="/demo?account=saratoga">See both numbers on Saratoga County</Link>
+      <Link to={`/demo?account=${HERO}`}>See both numbers on {run.account.name}</Link>
     </aside>
   )
 }
@@ -181,21 +128,21 @@ export function Walkthrough() {
           <p className="kicker">Waysights · Enrich Account · Riipen Level UP, October 2026</p>
           <h1>Enrich Account, run on six real municipalities</h1>
           <p>
-            Your pricing form asks a town for one number: the length of its road network, in centerline kilometers. That
-            number is spread across the town's own documents. The asset management plan says one thing, the roads page
-            another, and often neither says centerline. Your Riipen brief asks for a button that reads approved municipal
-            sites and fills the Account. I started with the number your pricing runs on, so a rep can size a town before
-            it fills in your form.
+            Your pricing form asks a town for one number: its road network in centerline kilometers. That number sits in the
+            town's own documents, often split up and rarely labelled centerline. Your Riipen brief asks for a button that
+            reads approved municipal sites and fills the Account, so I started there: a rep can size a town before it fills
+            in your form.
           </p>
           <p>
-            This is roughly where I'd want to be at the end of week two: a small Python service that reads a
-            municipality's own pages, finds the road length and the roads contact, and checks every value against the line
-            it came from before it proposes a change. I ran it on three Niagara towns and three New York counties. When the
-            documents can't settle something, it asks one question instead of guessing.
+            This is roughly the end of week two: a small Python service that reads a municipality's own pages, finds the
+            road length and the roads contact, and checks every value against the line it came from. I ran it on three
+            Niagara towns and three New York counties, the counties because you showed Waysights to their highway
+            superintendents at their summer conference. When the documents can't settle something, it asks one question
+            instead of guessing, as on <Link to="/demo?account=lincoln">Lincoln</Link>, whose plan never says centerline.
           </p>
           <nav className="wt-links" aria-label="Next">
-            <Link to="/demo?account=lincoln" className="btn btn--primary btn--lg">
-              Watch the Lincoln run
+            <Link to={`/demo?account=${HERO}`} className="btn btn--primary btn--lg">
+              Watch the {shortName[HERO]} run
             </Link>
             <a href={REPO} target="_blank" rel="noreferrer" className="wt-link">
               Read the code
@@ -206,7 +153,7 @@ export function Walkthrough() {
           </nav>
           <AskWaysights />
         </section>
-        <LincolnCard />
+        <HeroCard />
       </main>
       <footer className="wt-foot">
         <Honesty date={meta.run_date} />

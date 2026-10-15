@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { isCite, type Cite, type DocLink, type RoadOption, type Run } from '../lib/data'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { isCite, readableUrl, type Cite, type DocLink, type RoadOption, type Run } from '../lib/data'
 import { fmtDate, fmtKm, fmtMi, prettyUrl } from '../lib/format'
 import type { ShownRow } from '../lib/record'
 import { Link } from '../lib/router'
@@ -105,9 +105,14 @@ function OwnedVsWithin({ run, row }: { run: Run; row: ShownRow }) {
   )
 }
 
-function Ask({ row, run, onAnswer }: RowProps) {
+function Ask({ row, run, onAnswer, onChange, focusKey }: RowProps & { onChange: () => void; focusKey: number }) {
   const q = row.question!
   const options = run.validated.road_length_km.options
+  // After Change, the question comes back; keyboard focus goes to it, not to the page body.
+  const group = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (focusKey && !row.answered) group.current?.focus()
+  }, [focusKey, row.answered])
   if (row.answered) {
     const { result } = row.answered
     if (result === 'filled') return null
@@ -119,7 +124,7 @@ function Ask({ row, run, onAnswer }: RowProps) {
       <div className="ask ask--done">
         <p className="ask-said">
           {said}{' '}
-          <button type="button" className="linkish" onClick={() => onAnswer(null)}>
+          <button type="button" className="linkish" onClick={onChange}>
             Change
           </button>
         </p>
@@ -127,7 +132,7 @@ function Ask({ row, run, onAnswer }: RowProps) {
     )
   }
   return (
-    <div className="ask" role="group" aria-label={q.text}>
+    <div className="ask" role="group" aria-label={q.text} ref={group} tabIndex={-1}>
       <p className="ask-q">{q.text}</p>
       {q.kind === 'pick' ? (
         <ol className="ask-options">
@@ -176,6 +181,12 @@ function Ask({ row, run, onAnswer }: RowProps) {
 
 function RoadRow({ run, row, onAnswer }: RowProps) {
   const options = run.validated.road_length_km.options
+  const [changes, setChanges] = useState(0)
+  const change = () => {
+    setChanges((n) => n + 1)
+    onAnswer(null)
+  }
+  const ask = <Ask run={run} row={row} onAnswer={onAnswer} onChange={change} focusKey={changes} />
   let next: ReactNode
   let sub: ReactNode = null
   const chosen = row.answered?.result === 'filled' && row.question?.kind === 'pick' ? options[row.question.options.indexOf(row.answered.option)] : null
@@ -184,7 +195,7 @@ function RoadRow({ run, row, onAnswer }: RowProps) {
     sub = (
       <>
         confirmed by you{' '}
-        <button type="button" className="linkish" onClick={() => onAnswer(null)}>
+        <button type="button" className="linkish" onClick={change}>
           Change
         </button>
       </>
@@ -205,10 +216,10 @@ function RoadRow({ run, row, onAnswer }: RowProps) {
       <RowHead row={row} diff={<Diff current={empty} next={next} sub={sub} />} />
       <div className="field-body">
         {row.question && row.shown === 'needs_human' && !row.answered ? (
-          <Ask run={run} row={row} onAnswer={onAnswer} />
+          ask
         ) : (
           <>
-            {row.question ? <Ask run={run} row={row} onAnswer={onAnswer} /> : null}
+            {row.question ? ask : null}
             {chosen ? (
               <Quotes run={run} cites={chosen.parts.map((p) => p.cite)} value={(c) => chosen.parts.find((p) => p.cite === c)?.value} />
             ) : row.shown !== 'not_found' ? (
@@ -260,7 +271,7 @@ export function FieldRow(props: RowProps) {
             {docs.map((d) => (
               <li key={d.url}>
                 <span className="doc-kind">{docKind(run, d.url)}</span>
-                <a href={d.url} target="_blank" rel="noreferrer">
+                <a href={readableUrl(d.url)} target="_blank" rel="noreferrer">
                   {d.title}
                 </a>
                 <span className="doc-meta">
@@ -318,7 +329,7 @@ export function FieldRow(props: RowProps) {
                 <tr>
                   <th scope="row">Phone</th>
                   <td>{m.existing.phone}</td>
-                  <td className="nil">unchanged, and one of the two things it matched on</td>
+                  <td className="nil">unchanged: the department's phone goes on the Account, not on a person</td>
                 </tr>
               </tbody>
             </table>

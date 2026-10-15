@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { fmtKm } from '../lib/format'
-import { runBySlug } from '../lib/data'
+import { HERO, runBySlug, runs, shortName } from '../lib/data'
 import { Link } from '../lib/router'
 
 // The Riipen brief, item by item (paraphrased from the project page, so no quote marks).
@@ -9,7 +9,7 @@ const ITEMS: { item: string; here: string; when: string; state: 'working' | 'dra
   { item: 'Rate limit and status logic', here: 'Working in the service', when: 'Week 2', state: 'working' },
   { item: 'Crawl approved municipal sites', here: 'Working, on a list I chose', when: 'Week 1 with your list', state: 'working' },
   { item: 'Extract contacts and documents', here: 'Working on 6 Accounts', when: 'Weeks 2-3, wider', state: 'working' },
-  { item: 'Summarize with company context', here: 'Working, from your public pages only', when: 'Week 3', state: 'working' },
+  { item: 'Summarize with company context', here: '', when: 'Week 3', state: 'working' },
   { item: 'Write back to Account and Contact', here: 'Payload built, never sent', when: 'Weeks 3-4', state: 'draft' },
   { item: 'Duplicate handling', here: 'Working on sample rows', when: 'Week 4, your rules', state: 'working' },
   { item: 'Validation', here: 'Working', when: 'Ongoing', state: 'working' },
@@ -32,25 +32,37 @@ const WEEKS: { when: string; what: string; now?: boolean }[] = [
   },
 ]
 
+// A brief only when the pages say something about the town's signs; otherwise it would repeat the fields.
+const briefs = runs.filter((r) => r.brief.sentences.length).length
+const items = ITEMS.map((x) =>
+  x.item.startsWith('Summarize')
+    ? { ...x, here: `Working on ${briefs} of ${runs.length}: what the town says about its signs, and who to ask for` }
+    : x,
+)
+
 export function PlanTab() {
-  const s = runBySlug.saratoga.validated.road_length_km
+  const s = runBySlug[HERO].validated.road_length_km
   const owned = Math.round(s.value_km ?? 0)
   const within = Math.round(s.within_km ?? 0)
-  const plainKm = (slug: string) => fmtKm(runBySlug[slug].validated.road_length_km.options[0]?.km ?? 0)
+  const plan = runBySlug.lincoln.validated.road_length_km.options[0]?.parts ?? []
+  const pelham = runBySlug.pelham.validated.road_length_km.options[0]
 
+  // The page renders after load, so :target never matches; mark the question the link points at.
+  const [target, setTarget] = useState('')
   useEffect(() => {
     const id = window.location.hash.slice(1)
+    setTarget(id)
     if (id) document.getElementById(id)?.scrollIntoView({ block: 'start' })
   }, [])
 
   // Policy questions: one answer each settles every Account like it, instead of one question per Account.
   const questions: { q: string; see?: { slug: string; label: string } }[] = [
     {
-      q: `Do you quote on the roads a county owns, or every road inside it? For Saratoga County that's ${fmtKm(owned)} km or ${fmtKm(within)} km.`,
-      see: { slug: 'saratoga', label: 'See both numbers on Saratoga County' },
+      q: `Your FAQ prices on "the total centerline length of roads within your jurisdiction." For a county I read that as the roads it owns: ${fmtKm(owned)} km for ${runBySlug[HERO].account.name}, not the ${fmtKm(within)} km of every road inside it. Is that right?`,
+      see: { slug: HERO, label: `See both numbers on ${shortName[HERO]}` },
     },
     {
-      q: `Do plain km in an Ontario asset management plan count as centerline for your pricing? Lincoln's plan prints ${plainKm('lincoln')} km and Pelham's ${plainKm('pelham')} km, and neither says centerline or lane.`,
+      q: `Do plain km in an Ontario asset management plan count as centerline for your pricing? Lincoln's plan prints ${plan.map((p) => `${p.value} km of ${p.road_type}`).join(' and ')}, Pelham's prints ${fmtKm(pelham?.km ?? 0)} km, and neither says centerline or lane.`,
       see: { slug: 'lincoln', label: 'See it on Lincoln' },
     },
     { q: 'Which sites count as approved? Are asset management plans, council agendas and budgets in or out?' },
@@ -118,7 +130,7 @@ export function PlanTab() {
               </tr>
             </thead>
             <tbody>
-              {ITEMS.map((x) => (
+              {items.map((x) => (
                 <tr key={x.item}>
                   <th scope="row">{x.item}</th>
                   <td className={`items-here items-here--${x.state}`}>{x.here}</td>
@@ -136,7 +148,7 @@ export function PlanTab() {
         </h2>
         <ol>
           {questions.map((x, i) => (
-            <li key={i} id={`q${i + 1}`}>
+            <li key={i} id={`q${i + 1}`} className={target === `q${i + 1}` ? 'is-target' : undefined}>
               <span>
                 {x.q}
                 {x.see ? (

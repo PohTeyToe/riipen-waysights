@@ -8,13 +8,13 @@ The outputs in `data/` come from one final run on six real municipalities on Oct
 
 | Path | What it is |
 |---|---|
-| `pipeline/` | The Python service: fetcher, discovery, PDF reading, the model step, the five validation rules, duplicate check, Account brief, Zoho write-back builder, FastAPI service, Deluge button draft, and 42 offline tests. See `pipeline/README.md`. |
+| `pipeline/` | The Python service: fetcher, discovery, PDF reading, the model step, the five validation rules, duplicate check, Account brief, Zoho write-back builder, FastAPI service, Deluge button draft, and offline tests. See `pipeline/README.md`. |
 | `data/` | The run's real outputs (`run/`), the answer key written before the first run, the scorecard, the sample CRM state, and `SOURCES.md` (every page with its fetch time, HTTP status and hash, and every change made along the way). |
 | `src/` | The page (Vite, React, TypeScript). It reads `data/` as is and shows the pipeline files as read-only code. It never regenerates anything. |
 
 ## The page
 
-- `/` A short walkthrough: the one question only Waysights can answer (owned roads or every road, on Saratoga County), and Lincoln's before and after with the road length from the town's own asset management plan and the page it came from.
+- `/` A short walkthrough: Tompkins County before and after (its road length, roads head, email, phone and brief, each with the line it came from), and the one question only Waysights can answer: does pricing count the roads a county owns, or every road inside it.
 - `/demo` A CRM-style Account record. Press **Enrich Account** to replay the run log for that Account (about 10 seconds, with a skip), then see each proposed change with its quoted line, source link, PDF page and fetch date. Every quote can be opened in place in the saved page text it was checked against. Answer the question, look at what validation rejected, and preview the exact Zoho requests (nothing is sent).
 - `/demo/zoho` The Zoho side: the button flow and the Deluge, write-back and service code, read straight from `pipeline/`.
 - `/demo/plan` What I'd own, one way to split the rest, the brief item by item, and five questions only Waysights can answer. Two of them are policy questions: one answer settles every Account like it.
@@ -39,8 +39,7 @@ Static site, no backend, no secrets, no environment variables. Vercel builds it 
 ## Data sources
 
 - **The six municipalities' own websites**, fetched on Oct 15, 2026 with an honest user agent, robots.txt obeyed, 2 seconds between requests per host and at most 15 pages per Account (robots.txt and redirects are extra requests; the run log shows every one): Town of Lincoln, Town of Pelham and Township of West Lincoln (Ontario); Saratoga, Warren and Tompkins Counties (New York).
-- **NYSDOT Highway Mileage on data.ny.gov** (dataset `tccz-tc3t`, year 2020) for the New York counties: `county_mileage` summed for roads the county owns, `total_centerline_highway_mileage` shown beside it.
-- **Waysights' public pages** (FAQ, how it works, products, pricing), for vocabulary in the Account briefs only.
+- **NYSDOT Highway Mileage on data.ny.gov** (dataset `tccz-tc3t`, year 2020) for the New York counties, with its own budget of 3 requests: `county_mileage` summed for roads the county owns, `total_centerline_highway_mileage` shown beside it.
 
 Every page, with fetch time, HTTP status and hash, is in `data/SOURCES.md`. Whole third-party PDFs are not committed; `data/run/pages/` keeps the text of the pages a value was taken from or refused from.
 
@@ -57,4 +56,4 @@ Every page, with fetch time, HTTP status and hash, is in `data/SOURCES.md`. Whol
 
 ## How it was checked
 
-The answer key (`data/answer_key.json`) was written by reading the sources directly and committed on its own (`f7023e6`) before the pipeline first ran. The scorecard (`data/scorecard.json`) compares the final run against it: 24 right, 0 wrong, 7 correctly left blank, 0 missed, 5 sent to a person. The key agrees on 4 of the 5. On the fifth, Pelham's phone, the key takes the contacts directory's ext. 33, and the run sends it to a person because another town page prints x332. An earlier final run filled x332 and scored it wrong; `data/SOURCES.md` lists that and every other change made along the way. The pipeline was developed against these same six Accounts, so this is a check, not a benchmark.
+The answer key (`data/answer_key.json`) was written by reading the sources directly and committed on its own (`f7023e6`) before the pipeline first ran, and it hasn't changed since. The scorecard (`data/scorecard.json`) compares the final run against it: 24 right, 2 wrong, 7 correctly left blank, 0 missed, 3 sent to a person. Both wrong rows come from one rule added after review: two road lengths within 2% are the same roads. The key sends Warren's and Tompkins' road length to a person, and the run now fills each with one of the two figures the key lists, which the key's rules count as wrong. The key agrees on 2 of the 3 sent to a person. On the third, Pelham's phone, the key takes the contacts directory's ext. 33, and the run sends it to a person because another town page prints x332. `data/SOURCES.md` lists every change made along the way. The pipeline was developed against these same six Accounts, so this is a check, not a benchmark.

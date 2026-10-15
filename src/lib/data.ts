@@ -66,14 +66,15 @@ export type RoadPart = {
   cite: Cite
 }
 
-/** `agrees`: approximate figures elsewhere that round this one ("about 300 km" for 310 km), so they aren't options. */
+/** `agrees`: figures elsewhere that agree with this one, so they aren't options: rounded ("about 300 km" for 310 km)
+ * or within 2% (the same roads measured twice). */
 export type RoadOption = {
   km: number
   centerline: boolean
   approximate: boolean
   why: string
   parts: RoadPart[]
-  agrees?: RoadPart[]
+  agrees?: (RoadPart & { agrees_by?: 'rounded' | 'near' })[]
 }
 
 export type Step = {
@@ -107,16 +108,18 @@ export type Source = {
   pdf_page_count: number | null
 }
 
+/** A brief sentence that failed carries its `cites` and no source; a sign line that failed has no value. */
 export type Rejection = {
   field: string
-  value: string
+  value: string | null
   reason: string
   quote: string
-  source: string
-  url: string
-  title: string
-  pdf_page: number | null
-  fetched_at: string
+  source?: string
+  url?: string
+  title?: string
+  pdf_page?: number | null
+  fetched_at?: string
+  cites?: string[]
 }
 
 export type ZohoRequest = { method: string; url: string; body: { data: Record<string, unknown>[]; [k: string]: unknown } }
@@ -159,7 +162,7 @@ export type Run = {
   proposed: ProposedRow[]
   questions: Question[]
   merge: Merge | null
-  brief: { sentences: { text: string; cites: string[] }[]; model: string; context: Record<string, { url: string; title: string }> }
+  brief: { sentences: { text: string; cites: string[] }[]; model: string | null; skipped?: string }
   writeback: { sent: boolean; note: string; requests: ZohoRequest[] }
 }
 
@@ -183,6 +186,12 @@ export type ScoreRow = {
   expected: unknown
   why?: string
   key_agrees_unclear?: boolean
+  key_expect?: string | null
+}
+
+/** Filled by the 2% rule where the key, written before it, sends the field to a person: one of the key's own figures. */
+export function filledByRule(r: ScoreRow): boolean {
+  return r.outcome === 'wrong' && r.key_expect === 'needs_human' && Array.isArray(r.expected) && r.expected.includes(r.got)
 }
 export type Scorecard = {
   answer_key_commit: string
@@ -204,6 +213,9 @@ export const seedBySlug: Record<string, SeedAccount> = Object.fromEntries(seed.a
 
 export const REPO = 'https://github.com/PohTeyToe/riipen-waysights'
 
+/** The Account the walkthrough leads with: a New York county the run fills end to end. */
+export const HERO = 'tompkins'
+
 // Short labels for the Account list and the scorecard.
 export const shortName: Record<string, string> = {
   lincoln: 'Lincoln',
@@ -218,7 +230,15 @@ export function isCite(s: Cite | DocLink): s is Cite {
   return 'quote' in s
 }
 
-/** A source the run read for this Account, or one of Waysights' own pages the brief cites. */
-export function sourceById(run: Run, id: string): { url: string; title: string; fetched_at?: string } | undefined {
-  return run.sources.find((x) => x.id === id) ?? run.brief.context[id]
+/** A source the run read for this Account. */
+export function sourceById(run: Run, id: string): Source | undefined {
+  return run.sources.find((x) => x.id === id)
+}
+
+/** The NYSDOT dataset's own page, for people; the run's exact query stays in the log and the saved rows. */
+export const DATASET_PAGE = 'https://data.ny.gov/Transportation/Highway-Mileage-Beginning-2008/tccz-tc3t'
+
+/** Where a link to a source should go: the dataset's readable page instead of its raw API query. */
+export function readableUrl(url: string): string {
+  return url.startsWith('https://data.ny.gov/resource/tccz-tc3t') ? DATASET_PAGE : url
 }

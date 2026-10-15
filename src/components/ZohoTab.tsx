@@ -20,7 +20,7 @@ const FLOW: { title: string; body: string }[] = [
   },
   {
     title: 'The service reads the approved sites',
-    body: 'Honest user agent, robots.txt, 2 s per host, 15 pages per Account. Every value is checked against the line it came from.',
+    body: 'Honest user agent, robots.txt, 2 s per host, 15 pages per Account (a New York county also gets 3 requests to the state data). Every value is checked against the line it came from.',
   },
   {
     title: 'Update the Account and its Contact',

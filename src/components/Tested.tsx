@@ -1,4 +1,4 @@
-import { meta, REPO, runs, scorecard, shortName, type ScoreOutcome, type ScoreRow } from '../lib/data'
+import { filledByRule, meta, REPO, runs, scorecard, shortName, type ScoreOutcome, type ScoreRow } from '../lib/data'
 import { Glyph, type GlyphKind } from './Status'
 
 const OUTCOME: Record<ScoreOutcome, { label: string; glyph: GlyphKind }> = {
@@ -35,6 +35,7 @@ function show(v: unknown): string {
 
 export function Tested() {
   const c = scorecard.counts
+  const byRule = scorecard.misses.filter(filledByRule).length
   const short = meta.answer_key_commit.slice(0, 7)
   const cell = (account: string, field: string): ScoreRow | undefined =>
     scorecard.rows.find((r) => r.account === account && r.field === field)
@@ -60,6 +61,12 @@ export function Tested() {
                 {' '}
                 (the key agrees on {scorecard.sent_to_person_key_agrees === c[k] ? 'all' : `${scorecard.sent_to_person_key_agrees} of`}{' '}
                 {c[k]})
+              </span>
+            ) : k === 'wrong' && byRule ? (
+              <span className="score-aside">
+                {' '}
+                ({byRule === c[k] ? (byRule === 2 ? 'both' : 'all') : `${byRule} of ${c[k]}`} filled by the 2% rule, which came
+                after the key, with a figure the key lists)
               </span>
             ) : null}
           </li>
@@ -90,6 +97,7 @@ export function Tested() {
                     <td key={f.key} className={`score score--${row.outcome}`}>
                       <Glyph kind={OUTCOME[row.outcome].glyph} />
                       {CELL[row.outcome]}
+                      {filledByRule(row) ? ', 2% rule' : null}
                     </td>
                   )
                 })}
@@ -104,8 +112,16 @@ export function Tested() {
         {scorecard.misses.map((m, i) => (
           <li key={i}>
             <p className="miss-head">
-              {shortName[m.account]}, {FIELD_LABEL[m.field] ?? m.field}: expected <code>{show(m.expected)}</code>,{' '}
-              {m.outcome === 'sent_to_person' ? 'sent to a person with ' : 'got '}
+              {shortName[m.account]}, {FIELD_LABEL[m.field] ?? m.field}:{' '}
+              {filledByRule(m) ? (
+                <>
+                  the key sends this to a person (<code>{show(m.expected)}</code>), and the run filled{' '}
+                </>
+              ) : (
+                <>
+                  expected <code>{show(m.expected)}</code>, {m.outcome === 'sent_to_person' ? 'sent to a person with ' : 'got '}
+                </>
+              )}
               {Array.isArray(m.got) && m.outcome === 'sent_to_person' ? (
                 m.got.map((g, j) => (
                   <span key={j}>
@@ -125,9 +141,10 @@ export function Tested() {
       <ul className="tested-notes">
         <li>
           {meta.tests.passed} tests run on saved copies of the pages, with no network. They cover the approved-site list,
-          robots.txt, the 2 s wait per host, the quote check, units printed next to their numbers, lane-km and area
-          refusals, mile to km, owned against total, rounded figures, two phone numbers for one department, the duplicate
-          check, and summary sentences their pages don't back.
+          robots.txt, the 2 s wait per host, which links are worth reading, the quote check, units printed next to their
+          numbers, lane-km and area refusals, mile to km, owned against total, rounded figures and figures within 2%, an
+          email or extension cut short, two phone numbers for one department, the duplicate check, and summary sentences
+          with words their pages don't print.
         </li>
         <li>
           PDF tables are read in reading order, which keeps <q>Quantity - kms of local roads 255</q> on one line. Layout

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { runs, scorecard, seedBySlug, shortName, sourceById, type Run } from '../lib/data'
+import { filledByRule, readableUrl, runs, scorecard, seedBySlug, shortName, sourceById, type Cite, type Run } from '../lib/data'
 import { cleanTitle, fmtDate, fmtDateTime, prettyUrl } from '../lib/format'
-import { fillMarks, openQuestions, revealAt, shownRows, writePlan, FIELD_ORDER } from '../lib/record'
+import { fillMarks, openQuestions, revealAt, shownRows, writePlan, FIELD_ORDER, type ShownRow } from '../lib/record'
 import { Link } from '../lib/router'
 import { useStore, type AccountState } from '../lib/store'
 import { FieldRow, SampleTag } from './Fields'
@@ -80,6 +80,7 @@ function Head({ run, st }: { run: Run; st: AccountState }) {
   const rule = run.steps.find((s) => s.rate_rule)?.rate_rule ?? 'One run per Account per day. Last run: never.'
   const lastRun = fmtDateTime(run.run.finished_at)
   const word = statusWord(run, st)
+  const enrichBtn = useRef<HTMLButtonElement>(null)
   const tone = word === 'Done' ? 'filled' : word === 'Needs review' ? 'needs_human' : null
   return (
     <header className="rec-head">
@@ -118,6 +119,7 @@ function Head({ run, st }: { run: Run; st: AccountState }) {
       <div className="rec-actions">
         <button
           type="button"
+          ref={enrichBtn}
           className="btn btn--enrich"
           onClick={() => store.enrich(slug)}
           disabled={st.phase === 'running'}
@@ -135,7 +137,14 @@ function Head({ run, st }: { run: Run; st: AccountState }) {
         {st.blocked ? (
           <p className="rate-blocked" role="status">
             Already enriched in the last 24 hours.{' '}
-            <button type="button" className="linkish" onClick={() => store.reset(slug)}>
+            <button
+              type="button"
+              className="linkish"
+              onClick={() => {
+                store.reset(slug)
+                enrichBtn.current?.focus() // this link goes away; the next thing to press is Enrich
+              }}
+            >
               Start this Account over
             </button>
           </p>
@@ -166,7 +175,13 @@ function Fields({ run, st }: { run: Run; st: AccountState }) {
   const prev = useRef(st.phase)
   useEffect(() => {
     const lost = !document.activeElement || document.activeElement === document.body
-    if (prev.current === 'running' && st.phase === 'proposed' && lost) head.current?.focus({ preventScroll: true })
+    const el = head.current
+    if (prev.current === 'running' && st.phase === 'proposed' && lost && el) {
+      el.focus({ preventScroll: true })
+      // On a phone the result sits below the run log: bring it into view. On a wide screen it already is.
+      const { top, bottom } = el.getBoundingClientRect()
+      if (top < 0 || bottom > window.innerHeight) el.scrollIntoView({ block: 'start' })
+    }
     prev.current = st.phase
   }, [st.phase])
   const reveal = st.phase === 'proposed' || st.phase === 'written' || (st.phase === 'running' && st.shown >= revealAt(run.steps, 'check'))
@@ -189,7 +204,7 @@ function Fields({ run, st }: { run: Run; st: AccountState }) {
         {rows.map((row) =>
           reveal ? (
             <li key={row.field} className={`field field--${row.shown} field--in`} data-field={row.field}>
-              {row.field === 'brief' ? <BriefRow run={run} /> : <FieldRow run={run} row={row} onAnswer={(o) => store.answer(slug, row.field, o)} />}
+              {row.field === 'brief' ? <BriefRow run={run} row={row} /> : <FieldRow run={run} row={row} onAnswer={(o) => store.answer(slug, row.field, o)} />}
               <KeyNote run={run} field={row.field} />
             </li>
           ) : (
@@ -230,6 +245,16 @@ function KeyNote({ run, field }: { run: Run; field: string }) {
   const miss = scorecard.misses.find((m) => m.account === run.account.slug && (SCORED[field] ?? []).includes(m.field))
   if (!miss) return null
   const expected = Array.isArray(miss.expected) ? miss.expected.join(' or ') : String(miss.expected)
+  if (filledByRule(miss))
+    return (
+      <p className="keynote keynote--asked">
+        <Glyph kind="needs_human" />
+        <span>
+          The answer key, written before the first run, sends this to a person to pick <code>{expected}</code>. The 2% rule
+          came after it, so the key counts this as wrong. <a href="#tested-h">How this was tested</a>
+        </span>
+      </p>
+    )
   const verdict =
     miss.outcome === 'wrong' ? 'scores this wrong' : miss.outcome === 'missed' ? 'scores this as missed' : 'would fill this'
   return (
@@ -242,9 +267,35 @@ function KeyNote({ run, field }: { run: Run; field: string }) {
   )
 }
 
-function BriefRow({ run }: { run: Run }) {
+function BriefRow({ run, row }: { run: Run; row: ShownRow }) {
   const b = run.brief
+  const n = b.sentences.length
   const ids = [...new Set(b.sentences.flatMap((s) => s.cites))]
+  if (!n)
+    return (
+      <>
+        <div className="field-head">
+          <h3 className="field-label">Account brief</h3>
+          <div className="diff">
+            <span className="diff-cur">
+              <span className="nil">empty</span>
+            </span>
+            <span className="diff-arrow" aria-label="becomes">
+              →
+            </span>
+            <span className="diff-new">
+              <span className="nil">stays empty</span>
+            </span>
+          </div>
+          <Chip kind="not_found" />
+        </div>
+        {row.detail ? (
+          <div className="field-body">
+            <p className="detail">{row.detail}</p>
+          </div>
+        ) : null}
+      </>
+    )
   return (
     <>
       <div className="field-head">
@@ -256,7 +307,9 @@ function BriefRow({ run }: { run: Run }) {
           <span className="diff-arrow" aria-label="becomes">
             →
           </span>
-          <span className="diff-new">{b.sentences.length} sentences</span>
+          <span className="diff-new">
+            {n} {n === 1 ? 'sentence' : 'sentences'}
+          </span>
         </div>
         <Chip kind="filled" />
       </div>
@@ -268,7 +321,7 @@ function BriefRow({ run }: { run: Run }) {
               {s.cites.map((id) => {
                 const src = sourceById(run, id)
                 return (
-                  <a key={id} className="cite" href={src?.url} target="_blank" rel="noreferrer" title={src?.title}>
+                  <a key={id} className="cite" href={src && readableUrl(src.url)} target="_blank" rel="noreferrer" title={src?.title}>
                     {id}
                   </a>
                 )
@@ -278,8 +331,8 @@ function BriefRow({ run }: { run: Run }) {
         </p>
         <p className="brief-by">
           Written by <code>{b.model}</code> on {fmtDate(run.run.finished_at)} from the checked fields and quoted lines only.
-          A sentence is dropped if it cites a page the run didn't read, uses a number the checks didn't pass, quotes words
-          its pages don't print, or shares nothing with a page it cites.
+          A sentence is dropped if it cites a page the run didn't read, uses a number the checks didn't pass, shares nothing
+          with a page it cites, or uses a word its pages don't print (apart from small connecting words).
         </p>
         <ul className="brief-key">
           {ids.map((id) => {
@@ -287,7 +340,7 @@ function BriefRow({ run }: { run: Run }) {
             return (
               <li key={id}>
                 <span className="cite cite--key">{id}</span>
-                <a href={src?.url} target="_blank" rel="noreferrer">
+                <a href={src && readableUrl(src.url)} target="_blank" rel="noreferrer">
                   {src ? cleanTitle(src.title) : id}
                 </a>
               </li>
@@ -301,6 +354,8 @@ function BriefRow({ run }: { run: Run }) {
 
 const FIELD_NAME: Record<string, string> = {
   road_length_km: 'road length',
+  brief: 'a brief sentence',
+  sign_work: 'a sign line',
   email: 'the Public Works email',
   phone: 'the Public Works phone',
   roads_head: 'the roads head',
@@ -320,12 +375,15 @@ function Rejected({ run }: { run: Run }) {
           {run.rejected.map((r, i) => (
             <li key={i}>
               <p className="rej-head">
-                <code className="rej-value">{r.value}</code>
+                {r.value ? <code className="rej-value">{r.value}</code> : null}
                 <span>
                   offered as {FIELD_NAME[r.field] ?? r.field}, refused: {r.reason}
+                  {r.cites?.length ? ` (cites ${r.cites.join(', ')})` : null}
                 </span>
               </p>
-              <Quote slug={run.account.slug} cite={r} value={r.value.split(' ')[0]} />
+              {r.source && r.url && r.quote ? (
+                <Quote slug={run.account.slug} cite={r as Cite} value={r.field === 'road_length_km' ? r.value?.split(' ')[0] : r.value} />
+              ) : null}
             </li>
           ))}
         </ul>

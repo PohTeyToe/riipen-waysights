@@ -706,6 +706,7 @@ q {
   margin-bottom: var(--s3);
 }
 .section-head h2 {
+  scroll-margin-top: calc(var(--bar-h) + var(--s4));
   font-size: var(--text-md);
   font-weight: 750;
 }
@@ -887,6 +888,23 @@ q {
 .table-scroll {
   max-width: 100%;
   overflow-x: auto;
+}
+/* Single-column grids that can hold a wide table or code block. An auto column grows to its widest
+   child and pushes the page sideways; this column may shrink, so the table scrolls in its own box. */
+.rec-main,
+.field-body,
+.quotes,
+.ask,
+.ask-options,
+.ask-option,
+.partial,
+.owned,
+.merge,
+.rejected ul,
+.rejected li,
+.tested,
+.misses li {
+  grid-template-columns: minmax(0, 1fr);
 }
 table {
   border-collapse: collapse;
@@ -1708,7 +1726,8 @@ a.cite:hover {
   font-size: var(--text-sm);
   font-weight: 800;
 }
-.questions li:target::before {
+.questions li:target::before,
+.questions li.is-target::before {
   background: var(--yellow);
   color: var(--yellow-ink);
 }

@@ -3,7 +3,7 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { isCite, runBySlug, runs, sourceById } from './data'
+import { isCite, runBySlug, runs, sourceById, type Cite } from './data'
 import { datasetRows, findQuote, savedText, type SavedPage } from './pages'
 import { replayTimes, shownRows, writePlan } from './record'
 
@@ -17,7 +17,8 @@ describe('every value on the page traces to a saved source', () => {
       const cites = [
         ...run.proposed.flatMap((r) => r.sources.filter(isCite)),
         ...run.proposed.flatMap((r) => (r.partial ?? []).flatMap((p) => p.sources)),
-        ...run.rejected,
+        // A rejected brief sentence has no quote of its own; it lists what it cited.
+        ...(run.rejected.filter((r) => r.source && r.quote) as Cite[]),
       ]
       expect(cites.length).toBeGreaterThan(0)
       for (const c of cites) {
@@ -114,10 +115,20 @@ describe('answers change the preview, and only the preview', () => {
   })
 
   it('Warren counts the Contact merge as a change', () => {
-    const warren = runBySlug.warren
-    const plan = writePlan(warren, { road_length_km: 1 })
+    const plan = writePlan(runBySlug.warren, {})
     expect(plan.requests.some((r) => r.method === 'PUT' && r.url.endsWith('/Contacts'))).toBe(true)
-    expect(plan.requests[0].body.data[0].Road_Network_Centerline_km).toBe(398.1)
+  })
+
+  it('figures within 2% are one: Warren and Tompkins fill their road length and finish Done', () => {
+    for (const [slug, km] of [['warren', 398.1], ['tompkins', 483.8]] as const) {
+      const run = runBySlug[slug]
+      const plan = writePlan(run, {})
+      expect(plan.status, slug).toBe('Done')
+      expect(plan.openQuestions, slug).toBe(0)
+      expect(plan.requests[0].body.data[0].Road_Network_Centerline_km, slug).toBe(km)
+      // The other source's figure is shown beside it, not dropped.
+      expect(run.validated.road_length_km.options[0].agrees?.[0]?.agrees_by, slug).toBe('near')
+    }
   })
 })
 
