@@ -529,7 +529,7 @@ q {
   grid-area: tested;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1359px) {
   .record-grid {
     grid-template-columns: 220px minmax(0, 1fr);
     grid-template-areas:
@@ -1389,7 +1389,7 @@ a.cite:hover {
 .log-line--status:last-child .log-msg {
   color: var(--log-tag);
 }
-@media (max-width: 1199px) {
+@media (max-width: 1359px) {
   .log {
     max-height: 420px;
   }
@@ -1882,6 +1882,20 @@ a.cite:hover {
 }
 
 /* ---------- Narrow screens ---------- */
+
+@media (max-width: 1100px) {
+  .rec-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rec-actions {
+    justify-items: start;
+    max-width: none;
+  }
+  .rate,
+  .rate-blocked {
+    text-align: left;
+  }
+}
 
 @media (max-width: 1080px) {
   .wt-main {
