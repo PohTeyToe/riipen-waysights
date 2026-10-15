@@ -257,6 +257,9 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     clock = HostClock()
     started = now_iso()
+    # Recorded before anything runs, so the run is tied to the code that made it.
+    commit = git("rev-parse", "HEAD")
+    dirty = bool(git("status", "--porcelain", "--", "pipeline"))
 
     ctx_log = RunLog("context")
     ctx_fetcher = Fetcher(CONTEXT, ctx_log, clock, budget=10, cache_dir=CACHE, cached=args.cached)
@@ -277,8 +280,8 @@ def main() -> None:
         "run_date": started[:10], "started_at": started, "finished_at": now_iso(),
         "used_fetch_cache": args.cached,
         "model": models[0] if len(models) == 1 else models,
-        "pipeline_commit": git("rev-parse", "HEAD"),
-        "pipeline_dirty": bool(git("status", "--porcelain", "--", "pipeline")),
+        "pipeline_commit": commit,
+        "pipeline_dirty": dirty,
         "answer_key_commit": git("log", "--diff-filter=A", "--format=%H", "--", "data/answer_key.json"),
         "user_agent": USER_AGENT, "page_budget": PAGE_BUDGET, "min_delay_s": MIN_DELAY_S,
         "accounts": [{"slug": r["account"]["slug"], "status": r["status"], "pages_read": r["run"]["pages_read"],

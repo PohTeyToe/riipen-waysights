@@ -102,7 +102,8 @@ class Checker:
         """A usable road-length line, or None (and a rejection)."""
         value, unit, quote, sid = line.get("value", ""), line.get("unit", ""), line.get("quote", ""), line.get("source", "")
         page = line.get("pdf_page")
-        r = lambda reason: self.reject("road_length_km", f"{value} {unit}".strip(), reason, quote, sid, page,
+        shown = value if value.strip().endswith(unit.strip()) else f"{value} {unit}".strip()
+        r = lambda reason: self.reject("road_length_km", shown, reason, quote, sid, page,
                                        model_said=line.get("measures"), road_type=line.get("road_type"))
         problem = self.quote_problem(quote, sid, page)
         if problem:
