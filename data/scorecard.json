@@ -36,7 +36,7 @@
     393.2
    ],
    "key_expect": "needs_human",
-   "why": "The key sends this to a person because its sources print different figures. The run filled 398.1 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
+   "why": "Its sources print different figures, so the key asks a person to pick. Rule 4 now treats figures within 2% of each other as the same roads, and 398.1 km is one the key lists. The rule came after the key, which is unchanged, so the key's own rules count this as wrong (see SOURCES.md)."
   },
   {
    "outcome": "wrong",
@@ -48,7 +48,7 @@
     483.8
    ],
    "key_expect": "needs_human",
-   "why": "The key sends this to a person because its sources print different figures. The run filled 483.8 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
+   "why": "Its sources print different figures, so the key asks a person to pick. Rule 4 now treats figures within 2% of each other as the same roads, and 483.8 km is one the key lists. The rule came after the key, which is unchanged, so the key's own rules count this as wrong (see SOURCES.md)."
   }
  ],
  "rows": [
@@ -314,7 +314,7 @@
     393.2
    ],
    "key_expect": "needs_human",
-   "why": "The key sends this to a person because its sources print different figures. The run filled 398.1 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
+   "why": "Its sources print different figures, so the key asks a person to pick. Rule 4 now treats figures within 2% of each other as the same roads, and 398.1 km is one the key lists. The rule came after the key, which is unchanged, so the key's own rules count this as wrong (see SOURCES.md)."
   },
   {
    "outcome": "right",
@@ -376,7 +376,7 @@
     483.8
    ],
    "key_expect": "needs_human",
-   "why": "The key sends this to a person because its sources print different figures. The run filled 483.8 km, one of the values the key lists, because rule 4 now treats figures within 2% of each other as the same roads. That rule came after the key was written (see SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong."
+   "why": "Its sources print different figures, so the key asks a person to pick. Rule 4 now treats figures within 2% of each other as the same roads, and 483.8 km is one the key lists. The rule came after the key, which is unchanged, so the key's own rules count this as wrong (see SOURCES.md)."
   },
   {
    "outcome": "right",

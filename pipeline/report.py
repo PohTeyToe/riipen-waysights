@@ -76,10 +76,9 @@ def miss_reason(run: dict, field: str, outcome: str, key_field: dict) -> str:
     if outcome == "wrong" and field == "road_length_km" and key_field.get("expect") == "needs_human":
         value = run["validated"]["road_length_km"].get("value_km")
         if value is not None and round(value, 1) in [round(x, 1) for x in key_field.get("accepted_options_km", [])]:
-            return (f"The key sends this to a person because its sources print different figures. The run filled "
-                    f"{value:g} km, one of the values the key lists, because rule 4 now treats figures within "
-                    f"{NEAR:.0%} of each other as the same roads. That rule came after the key was written (see "
-                    f"SOURCES.md), and the key's own rules count filling a field it sends to a person as wrong.")
+            return (f"Its sources print different figures, so the key asks a person to pick. Rule 4 now treats figures "
+                    f"within {NEAR:.0%} of each other as the same roads, and {value:g} km is one the key lists. The rule "
+                    f"came after the key, which is unchanged, so the key's own rules count this as wrong (see SOURCES.md).")
     if outcome != "missed":
         cites = row.get("sources") or []
         took = "; ".join(f"\"{c.get('quote', c.get('title', ''))}\" ({short_title(c['title'])})" for c in cites[:2])

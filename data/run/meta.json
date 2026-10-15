@@ -51,7 +51,7 @@
  "tests": {
   "passed": 51,
   "failed": 0,
-  "summary": "51 passed, 1 warning in 1.24s",
+  "summary": "51 passed, 1 warning in 1.22s",
   "network": "none: fixtures are saved copies of the pages"
  }
 }
