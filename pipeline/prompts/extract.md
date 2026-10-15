@@ -17,9 +17,9 @@ What to find:
 
 4. department_email: the email address printed for the public works, roads, highway or infrastructure department (or its head). Copy it exactly, with the quote. If the address is hidden ("[email hidden from scripts]") or the page only offers a web form, return null. Never build an address from a name.
 
-5. department_phones: every phone number printed for that department, exactly as printed (keep the extension), each with its quote. List a number once even if several pages print it, but list every different number or extension the pages give for the department, so a person can see when they disagree. Not the general town hall number unless the page gives it as the department's number, and no fax numbers.
+5. department_phones: the department's own number: the one a page gives for the department as a whole ("Public Works: 905-...", "contact the Public Works Department at ..."), exactly as printed (keep the extension), with its quote. Never a named person's or a role's line, an after-hours or emergency line, a fax, another program's office, or the general town hall number (unless the page gives it as the department's number). Most sites give the department one number: list it once even if several pages print it. If different pages give the department itself different numbers or extensions, list each one, so a person can see that they disagree.
 
-6. sign_work: up to three lines where the municipality says it inventories, inspects, maintains or replaces road signs, or says how many signs it has. Quote exactly.
+6. sign_work: up to three lines where the municipality says something about its road signs in general: an inventory, inspections, maintenance or replacement, records, a sign shop, or how many signs it has. Not signs for one program or event. Quote exactly.
 
 Rules:
 - Every quote must be copied from the source text with the same words in the same order. Keep it to one sentence, table row or contact block line run; don't join text from different places.

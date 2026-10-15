@@ -9,8 +9,9 @@ leave it out of date.
 The model writes from checked fields and quoted lines only. Then each sentence
 is checked the way validate.py checks a value: it must cite a page this run
 read, every number in it must be a checked value or printed in a checked quote,
-and it must share a checked value or four words in a row with every page it
-cites. Sentences that fail are dropped and listed as rejected.
+anything it puts in quotation marks must be printed on a page it cites, and it
+must share something with every page it cites (a checked value, words it quotes,
+or four words in a row). Sentences that fail are dropped and listed as rejected.
 """
 from __future__ import annotations
 
@@ -99,13 +100,21 @@ def four_word_runs(text: str) -> set[tuple[str, ...]]:
     return {tuple(words[i:i + 4]) for i in range(len(words) - 3)}
 
 
+def quoted(sentence: str) -> list[str]:
+    """The words a sentence puts in quotation marks."""
+    return [q.strip(" ,.;:") for q in re.findall(r'"([^"]+)"', norm(sentence)) if q.strip(" ,.;:")]
+
+
 def backs(sentence: str, sid: str, texts: dict[str, str], values: dict[str, list[str]]) -> bool:
-    """Does the cited page support the sentence: a checked value from that page, or four words in a row?"""
-    s = norm(sentence)
+    """Does the cited page support the sentence: a checked value from that page, words the
+    sentence quotes from it, or four words in a row?"""
+    s, page = norm(sentence), norm(texts.get(sid, ""))
     for v in values.get(sid, []):
         if norm(v) in s or (len(digits(v)) >= 10 and digits(v) in digits(sentence)):
             return True
-    return bool(four_word_runs(sentence) & four_word_runs(texts.get(sid, "")))
+    if any(q in page for q in quoted(sentence)):
+        return True
+    return bool(four_word_runs(sentence) & four_word_runs(page))
 
 
 def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Source], sources: list[Source],
@@ -127,8 +136,10 @@ def brief(account: dict, fields: dict, sign_work: list[dict], context: list[Sour
         unknown = [c for c in cites if c not in texts]
         stray = [n for n in numbers_in(text) if n not in allowed_numbers]
         unbacked = [c for c in cites if c in texts and not backs(text, c, texts, values)]
+        misquoted = [q for q in quoted(text) if not any(q in norm(texts.get(c, "")) for c in cites)]
         reason = ("cites no source this run read" if not cites or unknown else
                   f"has a number that isn't a checked value: {', '.join(f'{n:g}' for n in stray)}" if stray else
+                  f"quotes words its pages don't print: \"{misquoted[0]}\"" if misquoted else
                   f"nothing in it comes from {', '.join(unbacked)}" if unbacked else None)
         if reason:
             rejected.append({"field": "brief", "value": text, "reason": reason, "quote": "", "cites": cites})

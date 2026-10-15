@@ -494,6 +494,8 @@ def test_brief_sentences_must_be_cited_checked_and_backed_by_what_they_cite(monk
     reply = {"sentences": [
         {"text": "The Highway Department says it maintains more than 5,000 signs.", "cites": ["S2"]},
         {"text": "The county bought a sign inventory system last year.", "cites": ["S2"]},
+        {"text": 'The department says it "replaced every sign".', "cites": ["S2"]},
+        {"text": 'It also says it "maintains more than" its share of signs.', "cites": ["S2"]},
         {"text": "Signs matter a great deal.", "cites": []},
         {"text": "Waysights finds signs 4x faster.", "cites": ["W1"]},
         {"text": "Next step: confirm with Public Works.", "cites": ["S7"]},
@@ -506,9 +508,11 @@ def test_brief_sentences_must_be_cited_checked_and_backed_by_what_they_cite(monk
     out = summarize.brief(account, fields, sign, [w1], [page], rejected)
     assert [s["text"] for s in out["sentences"]] == [
         "The Highway Department says it maintains more than 5,000 signs.",
+        'It also says it "maintains more than" its share of signs.',  # backed by the words it quotes
         "Next step: call the Highway Department at (607) 274-0300."]
     reasons = [r["reason"] for r in rejected]
     assert "nothing in it comes from S2" in reasons  # a claim the cited page doesn't make
+    assert 'quotes words its pages don\'t print: "replaced every sign"' in reasons
     assert "cites no source this run read" in reasons
     assert any(r.startswith("has a number that isn't a checked value") for r in reasons)
     assert out["model"] == "test-model"
