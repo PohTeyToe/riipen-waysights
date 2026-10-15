@@ -1,0 +1,14 @@
+# Python
+pipeline/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# Raw downloads the pipeline keeps locally (whole third-party PDFs are not committed)
+pipeline/.cache/
+# Node / build (for the page)
+node_modules/
+dist/
+.vercel/
+.env*
+# Internal planning notes, not for the public repo
+BRIEF.md

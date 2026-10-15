@@ -1,0 +1,2 @@
+# Fixtures are saved copies of real pages: keep their bytes exact.
+pipeline/tests/fixtures/** -text

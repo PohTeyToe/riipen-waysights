@@ -1,0 +1,60 @@
+// Enrich Account: the custom button's function on the Account record.
+// DRAFT, NEVER RUN IN A ZOHO ORG. Field API names are guesses until we see the layout.
+//
+// Syntax checked against Zoho's Deluge docs on 2026-10-15:
+//   getRecordById  https://www.zoho.com/deluge/help/crm/get-record-by-id.html
+//   updateRecord   https://www.zoho.com/deluge/help/crm/update-record.html
+//   invokeUrl      https://www.zoho.com/deluge/help/webhook/invokeurl-api-task.html
+//
+// The shared secret lives in a Connection, not in this code. Assumption to check in
+// week 1: a custom-service Connection with API-key auth can send it as the
+// X-Enrich-Secret header. (zoho.crm.getOrgVariable only works in extensions.)
+//
+// The button maps the Account's record id to accountId.
+
+string button.enrich_account(String accountId)
+{
+	account = zoho.crm.getRecordById("Accounts", accountId.toLong());
+	website = ifnull(account.get("Website"), "");
+	if(website == "")
+	{
+		return "Add the Account's website first.";
+	}
+
+	// One run per Account per day. The service enforces this too.
+	last = account.get("Last_Enriched");
+	if(last != null && last.toDateTime().addHour(24) > zoho.currenttime)
+	{
+		return "Already enriched in the last 24 hours. Last run: " + last;
+	}
+
+	payload = Map();
+	payload.put("account_id", accountId);
+	payload.put("website", website);
+	headers = Map();
+	headers.put("Content-Type", "application/json");
+
+	response = invokeUrl
+	[
+		url: "https://ENRICH-SERVICE-HOST/enrich"
+		type: POST
+		parameters: payload.toString()
+		headers: headers
+		connection: "enrich_service"
+		detailed: true
+	];
+
+	if(response.get("responseCode") == 429)
+	{
+		return "Already enriched in the last 24 hours.";
+	}
+	if(response.get("responseCode") != 202)
+	{
+		return "The enrich service didn't take the request (HTTP " + response.get("responseCode") + "). Nothing changed.";
+	}
+
+	update = Map();
+	update.put("Enrichment_Status", "Queued");
+	zoho.crm.updateRecord("Accounts", accountId.toLong(), update);
+	return "Queued. Fields fill in when the run finishes, and anything unclear becomes a Note.";
+}

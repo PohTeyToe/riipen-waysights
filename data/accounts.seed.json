@@ -1,0 +1,16 @@
+{
+  "mock": true,
+  "label": "Sample CRM data, made up",
+  "about": "The CRM state before the run. The six Account names and websites are real public bodies (example public accounts, not leads or customers). Everything else in this file is made up for the demo: record ids, Account type, blank fields, enrichment status and the one earlier Contact.",
+  "accounts": [
+    {"mock": true, "crm_id": "sample-acct-001", "slug": "lincoln", "Account_Name": "Town of Lincoln", "Account_Type": "Municipality", "Website": "https://www.lincoln.ca/", "Billing_State": "ON", "Billing_Country": "Canada", "Road_Network_Centerline_km": null, "Public_Works_Email": null, "Phone": null, "Key_Documents": null, "Account_Brief": null, "Enrichment_Status": "Never run", "Last_Enriched": null},
+    {"mock": true, "crm_id": "sample-acct-002", "slug": "pelham", "Account_Name": "Town of Pelham", "Account_Type": "Municipality", "Website": "https://www.pelham.ca/", "Billing_State": "ON", "Billing_Country": "Canada", "Road_Network_Centerline_km": null, "Public_Works_Email": null, "Phone": null, "Key_Documents": null, "Account_Brief": null, "Enrichment_Status": "Never run", "Last_Enriched": null},
+    {"mock": true, "crm_id": "sample-acct-003", "slug": "west-lincoln", "Account_Name": "Township of West Lincoln", "Account_Type": "Municipality", "Website": "https://www.westlincoln.ca/", "Billing_State": "ON", "Billing_Country": "Canada", "Road_Network_Centerline_km": null, "Public_Works_Email": null, "Phone": null, "Key_Documents": null, "Account_Brief": null, "Enrichment_Status": "Never run", "Last_Enriched": null},
+    {"mock": true, "crm_id": "sample-acct-004", "slug": "saratoga", "Account_Name": "Saratoga County", "Account_Type": "Municipality", "Website": "https://www.saratogacountyny.gov/", "Billing_State": "NY", "Billing_Country": "United States", "Road_Network_Centerline_km": null, "Public_Works_Email": null, "Phone": null, "Key_Documents": null, "Account_Brief": null, "Enrichment_Status": "Never run", "Last_Enriched": null},
+    {"mock": true, "crm_id": "sample-acct-005", "slug": "warren", "Account_Name": "Warren County", "Account_Type": "Municipality", "Website": "https://warrencountyny.gov/", "Billing_State": "NY", "Billing_Country": "United States", "Road_Network_Centerline_km": null, "Public_Works_Email": null, "Phone": null, "Key_Documents": null, "Account_Brief": null, "Enrichment_Status": "Never run", "Last_Enriched": null},
+    {"mock": true, "crm_id": "sample-acct-006", "slug": "tompkins", "Account_Name": "Tompkins County", "Account_Type": "Municipality", "Website": "https://www.tompkinscountyny.gov/", "Billing_State": "NY", "Billing_Country": "United States", "Road_Network_Centerline_km": null, "Public_Works_Email": null, "Phone": null, "Key_Documents": null, "Account_Brief": null, "Enrichment_Status": "Never run", "Last_Enriched": null}
+  ],
+  "contacts": [
+    {"mock": true, "id": "sample-contact-001", "account": "warren", "name": "K. Hajos", "title": "Highway Superintendent", "phone": "(518) 761-6556", "email": null, "note": "Made up: an older Contact with a shortened name and an outdated title, to show the duplicate check. The phone is the one the county's page prints."}
+  ]
+}

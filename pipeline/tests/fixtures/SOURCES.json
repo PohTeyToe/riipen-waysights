@@ -1,0 +1,27 @@
+{
+ "lincoln-amp-2025-p49.pdf": {
+  "from": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf",
+  "pdf_page": 49,
+  "full_file_sha256": "a6d1dbe1dd3c263fe7910f21585a8a7690c02810250f4c77d4166ff0bdf03ea7"
+ },
+ "west-lincoln-amp-2025-p67.txt": {
+  "from": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf",
+  "pdf_page": 67,
+  "full_file_sha256": "442a45a06f36609c567886928692bb4eb1f44a2df92a6ac49a5a1ec462ff2f97"
+ },
+ "pelham-road-rehabilitation.txt": {
+  "from": "https://www.pelham.ca/business-building-development/construction-projects/road-rehabilitation/"
+ },
+ "lincoln-roads-transportation.html": {
+  "from": "https://www.lincoln.ca/services/roads-transportation",
+  "sha256": "b445d94b0a59228d9c99a0f586a84edd623f3ca07f986d52f0838d220fb484ad"
+ },
+ "warren-dpw.html": {
+  "from": "https://www.warrencountyny.gov/dpw",
+  "sha256": "5365dd36401db2c8251a1d0bcfbe35023b4bece1b11e57fb4ab8639b2f109272"
+ },
+ "saratoga-public-works.html": {
+  "from": "https://www.saratogacountyny.gov/departments/public-works/",
+  "sha256": "d0629a22b8217b407747c3b44c276ce6568d9eb39aac9d3257e817bd5c043607"
+ }
+}
