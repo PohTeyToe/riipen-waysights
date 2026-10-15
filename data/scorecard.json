@@ -15,8 +15,8 @@
    "outcome": "sent_to_person",
    "key_agrees_unclear": false,
    "got": [
-    "905-892-2607 x332",
-    "905-892-2607 ext. 33"
+    "905-892-2607 ext. 33",
+    "905-892-2607 x332"
    ],
    "account": "pelham",
    "field": "phone",
@@ -24,7 +24,7 @@
     "905-892-2607 ext. 33"
    ],
    "key_expect": "filled",
-   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/); \"Phone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+   "why": "The run took \"Public Works\nPhone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/); \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
   }
  ],
  "rows": [
@@ -82,6 +82,7 @@
   {
    "outcome": "right",
    "got": [
+    "https://www.lincoln.ca/council-administration/community-plans/asset-management-plan",
     "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf"
    ],
    "account": "lincoln",
@@ -136,8 +137,8 @@
    "outcome": "sent_to_person",
    "key_agrees_unclear": false,
    "got": [
-    "905-892-2607 x332",
-    "905-892-2607 ext. 33"
+    "905-892-2607 ext. 33",
+    "905-892-2607 x332"
    ],
    "account": "pelham",
    "field": "phone",
@@ -145,7 +146,7 @@
     "905-892-2607 ext. 33"
    ],
    "key_expect": "filled",
-   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/); \"Phone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+   "why": "The run took \"Public Works\nPhone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/); \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
   },
   {
    "outcome": "right",
