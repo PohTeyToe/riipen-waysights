@@ -1,2 +1,6 @@
+# Source files are LF everywhere, so builds and ?raw imports never pick up CRs.
+* text=auto eol=lf
 # Fixtures are saved copies of real pages: keep their bytes exact.
 pipeline/tests/fixtures/** -text
+*.pdf binary
+*.png binary
