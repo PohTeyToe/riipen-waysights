@@ -257,6 +257,12 @@ DEV_NOTES = [
     "- Duplicate check: two different full first names never match.",
     "- Fetching: a redirected robots.txt is read where it lands, `..` in a path is refused, a broken PDF is skipped, "
     "and a run that reads nothing is marked Failed instead of Done.",
+    "",
+    "The first repeat asked the extractor for every number printed for the department, and it listed staff "
+    "extensions, after-hours lines and another program's office, so four Accounts got a phone conflict that wasn't "
+    "real. The extractor now returns only the number a page gives for the department itself, and sign lines must be "
+    "about signs in general. A second repeat had the brief call Tompkins County's Highway Department \"Public "
+    "Works\"; the brief now names the department the way its page does. The outputs here are from the third repeat.",
 ]
 
 
