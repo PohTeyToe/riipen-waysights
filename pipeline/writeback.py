@@ -17,7 +17,10 @@ Auth header for all of them: "Authorization: Zoho-oauthtoken <token>".
 """
 from __future__ import annotations
 
+from .dedupe import crm_name
+
 API = "https://www.zohoapis.com/crm/v8"
+STATUS_LABEL = {"done": "Done", "needs_review": "Needs review"}
 
 # Guessed custom fields (standard fields: Account_Name, Phone, Website, Last_Name, First_Name, Title, Email).
 F_ROAD_KM = "Road_Network_Centerline_km"
@@ -35,7 +38,7 @@ def _source_line(cite: dict) -> str:
 
 
 def account_upsert(account: dict, fields: dict, brief: dict, status: str, run_at: str) -> dict:
-    record = {"Account_Name": account["name"], F_STATUS: status, F_LAST: run_at}
+    record = {"Account_Name": account["name"], F_STATUS: STATUS_LABEL[status], F_LAST: run_at}
     road = fields["road_length_km"]
     if road["status"] == "filled":
         record[F_ROAD_KM] = road["value_km"]
@@ -54,7 +57,7 @@ def account_upsert(account: dict, fields: dict, brief: dict, status: str, run_at
 def contact_request(account: dict, proposal: dict | None, head: dict) -> dict | None:
     if not proposal:
         return None
-    first, _, last = (head.get("name") or "").rpartition(" ")
+    first, last = crm_name(head.get("name") or "")
     source = _source_line(head["cite"])
     if proposal["action"] == "merge":
         # Our own match found the record, so update it by id rather than trusting Email as the key.

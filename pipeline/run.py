@@ -230,13 +230,30 @@ def enrich(row: dict, seed: dict, clock: HostClock, context: list[Source], cache
         "brief": brief,
         "writeback": wb,
     }
+    # The text of every page the run took something from (or refused something from) is kept,
+    # so each quote can be checked. Pages it read but took nothing from keep only their hash:
+    # some print private people's contact details that this repo has no reason to copy.
+    used = used_sources(result)
     pages = [{"id": s.id, "url": s.url, "kind": s.kind, "sha256": s.record["sha256"], "fetched_at": s.record["fetched_at"],
-              "text": s.text if s.kind != "pdf" else None,
-              "pdf_pages": {str(k): v for k, v in s.pdf_pages.items()} or None} for s in sources]
+              "used": s.id in used, "chars": len(s.text) + sum(len(t) for t in s.pdf_pages.values()),
+              "text": s.text if s.id in used and s.kind != "pdf" else None,
+              "pdf_pages": ({str(k): v for k, v in s.pdf_pages.items()} or None) if s.id in used else None}
+             for s in sources]
     (OUT / "pages").mkdir(parents=True, exist_ok=True)
     (OUT / f"{slug}.json").write_text(json.dumps(result, indent=1, ensure_ascii=False), encoding="utf-8")
     (OUT / "pages" / f"{slug}.json").write_text(json.dumps(pages, indent=1, ensure_ascii=False), encoding="utf-8")
     return result
+
+
+def used_sources(result: dict) -> set[str]:
+    """Source ids behind any proposed value, rejection, sign line, key document or brief sentence."""
+    ids = {c["source"] for row in result["proposed"] for c in row.get("sources", []) if c.get("source")}
+    ids |= {c["source"] for row in result["proposed"] for p in row.get("partial", []) for c in p["sources"]}
+    ids |= {r["source"] for r in result["rejected"] if r.get("source")}
+    ids |= {s["source"] for s in result["sign_work"]}
+    ids |= {d["source"] for d in result["validated"]["key_documents"]}
+    ids |= {c for s in result["brief"].get("sentences", []) for c in s["cites"]}
+    return ids
 
 
 def git(*args: str) -> str:

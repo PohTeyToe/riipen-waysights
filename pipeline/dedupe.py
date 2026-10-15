@@ -12,11 +12,22 @@ import re
 POST_NOMINALS = {"pe", "p.e", "p.eng", "peng", "jr", "sr", "ii", "iii", "phd", "mba", "cpa"}
 
 
+def name_parts(full: str) -> list[str]:
+    """'Kevin J. Hajos, P.E.' -> ['Kevin', 'J.', 'Hajos']. Drops post-nominals and nicknames in brackets."""
+    nominals = {p.replace(".", "") for p in POST_NOMINALS}
+    words = [w.strip(",") for w in re.split(r"[\s,]+", full or "") if w.strip(",.")]
+    return [w for w in words if w.lower().replace(".", "") not in nominals and not re.fullmatch(r"\(.*\)", w)]
+
+
+def crm_name(full: str) -> tuple[str, str]:
+    """First and last name for the CRM: ('Kevin J.', 'Hajos')."""
+    words = name_parts(full)
+    return " ".join(words[:-1]), (words[-1] if words else "")
+
+
 def split_name(full: str) -> tuple[str, str]:
-    """('Kevin J. Hajos, P.E.') -> ('kevin', 'hajos'). ('K. Hajos') -> ('k', 'hajos')."""
-    words = [w.strip(".,").lower() for w in re.split(r"[\s,]+", full or "") if w.strip(".,")]
-    words = [w for w in words if w.replace(".", "") not in {p.replace(".", "") for p in POST_NOMINALS}]
-    words = [w for w in words if not re.fullmatch(r"\(.*\)", w)]
+    """For matching: ('Kevin J. Hajos, P.E.') -> ('kevin', 'hajos'). ('K. Hajos') -> ('k', 'hajos')."""
+    words = [w.strip(".").lower() for w in name_parts(full)]
     if not words:
         return "", ""
     return (words[0] if len(words) > 1 else ""), words[-1]

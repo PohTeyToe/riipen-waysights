@@ -333,6 +333,12 @@ def test_merge_fires_on_k_hajos():
     assert p["changes"]["title"] == {"from": "Highway Superintendent", "to": "Superintendent of Public Works"}
 
 
+def test_crm_name_drops_post_nominals():
+    assert dedupe.crm_name("Kevin J. Hajos, P.E.") == ("Kevin J.", "Hajos")
+    assert dedupe.crm_name("Nicholas (Nick) Ensign") == ("Nicholas", "Ensign")
+    assert dedupe.crm_name("Mike DiPaola") == ("Mike", "DiPaola")
+
+
 def test_no_merge_on_a_different_surname_or_surname_alone():
     assert dedupe.propose({"name": "Kevin J. Hayes", "phone": "(518) 761-6556"}, [SEED_CONTACT])["action"] == "create"
     assert dedupe.propose({"name": "Martin Hajos", "phone": "(518) 555-0100"}, [SEED_CONTACT])["action"] == "create"
