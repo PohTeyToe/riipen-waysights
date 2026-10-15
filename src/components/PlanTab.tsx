@@ -36,18 +36,26 @@ export function PlanTab() {
   const s = runBySlug.saratoga.validated.road_length_km
   const owned = Math.round(s.value_km ?? 0)
   const within = Math.round(s.within_km ?? 0)
+  const plainKm = (slug: string) => fmtKm(runBySlug[slug].validated.road_length_km.options[0]?.km ?? 0)
 
   useEffect(() => {
     const id = window.location.hash.slice(1)
     if (id) document.getElementById(id)?.scrollIntoView({ block: 'start' })
   }, [])
 
-  const questions = [
-    `Do you quote on the roads a county owns, or every road inside it? For Saratoga County that's ${fmtKm(owned)} km or ${fmtKm(within)} km.`,
-    'Which sites count as approved? Are asset management plans, council agendas and budgets in or out?',
-    'Which Account and Contact fields matter, and how do you spot a duplicate today?',
-    'Which Zoho CRM edition do you run, and where should the outside service live?',
-    'Have you started any of this in-house?',
+  // Policy questions: one answer each settles every Account like it, instead of one question per Account.
+  const questions: { q: string; see?: { slug: string; label: string } }[] = [
+    {
+      q: `Do you quote on the roads a county owns, or every road inside it? For Saratoga County that's ${fmtKm(owned)} km or ${fmtKm(within)} km.`,
+      see: { slug: 'saratoga', label: 'See both numbers on Saratoga County' },
+    },
+    {
+      q: `Do plain km in an Ontario asset management plan count as centerline for your pricing? Lincoln's plan prints ${plainKm('lincoln')} km and Pelham's ${plainKm('pelham')} km, and neither says centerline or lane.`,
+      see: { slug: 'lincoln', label: 'See it on Lincoln' },
+    },
+    { q: 'Which sites count as approved? Are asset management plans, council agendas and budgets in or out?' },
+    { q: 'Which Account and Contact fields matter, and how do you spot a duplicate today?' },
+    { q: 'Which Zoho CRM edition do you run, and where should the outside service live?' },
   ]
 
   return (
@@ -127,13 +135,13 @@ export function PlanTab() {
           Five questions for you
         </h2>
         <ol>
-          {questions.map((q, i) => (
+          {questions.map((x, i) => (
             <li key={i} id={`q${i + 1}`}>
               <span>
-                {q}
-                {i === 0 ? (
-                  <Link to="/demo?account=saratoga" className="q-see">
-                    See both numbers on Saratoga County
+                {x.q}
+                {x.see ? (
+                  <Link to={`/demo?account=${x.see.slug}`} className="q-see">
+                    {x.see.label}
                   </Link>
                 ) : null}
               </span>

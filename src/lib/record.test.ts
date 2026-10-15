@@ -69,11 +69,21 @@ describe('answers change the preview, and only the preview', () => {
     expect(plan.requests).toEqual(lincoln.writeback.requests)
   })
 
-  it('picking 310 km fills the field, drops the Note and finishes the run', () => {
+  it('the Account is updated by its record id, and the department phone has its own field', () => {
+    const update = lincoln.writeback.requests[0]
+    expect([update.method, update.url.endsWith('/Accounts')]).toEqual(['PUT', true])
+    const record = update.body.data[0]
+    expect(record.id).toBe('sample-acct-001')
+    expect(record.Account_Name).toBeUndefined()
+    expect(record.Phone).toBeUndefined()
+    expect(record.Public_Works_Phone).toBe('905-563-2799')
+  })
+
+  it('"Centerline" fills 310 km, drops the Note and finishes the run', () => {
     const plan = writePlan(lincoln, { road_length_km: 0 })
-    const upsert = plan.requests[0].body.data[0]
-    expect(upsert.Road_Network_Centerline_km).toBe(310)
-    expect(upsert.Enrichment_Status).toBe('Done')
+    const account = plan.requests[0].body.data[0]
+    expect(account.Road_Network_Centerline_km).toBe(310)
+    expect(account.Enrichment_Status).toBe('Done')
     expect(plan.notes).toBe(0)
     expect(plan.changes).toBe(5)
     expect(shownRows(lincoln, { road_length_km: 0 })[0].shown).toBe('filled')
@@ -93,6 +103,14 @@ describe('answers change the preview, and only the preview', () => {
     const pelham = runBySlug.pelham
     expect(shownRows(pelham, { road_length_km: 1 })[0].shown).toBe('blank')
     expect(writePlan(pelham, { road_length_km: 1 }).requests[0].body.data[0].Road_Network_Centerline_km).toBeUndefined()
+  })
+
+  it('Pelham still needs review after the road answer: its two phone numbers are a Note for a person', () => {
+    const plan = writePlan(runBySlug.pelham, { road_length_km: 0 })
+    expect(plan.status).toBe('Needs review')
+    expect(plan.notes).toBe(1)
+    expect(plan.openQuestions).toBe(0)
+    expect(plan.requests[0].body.data[0].Public_Works_Phone).toBeUndefined()
   })
 
   it('Warren counts the Contact merge as a change', () => {

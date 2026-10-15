@@ -39,12 +39,19 @@ export type WritePlan = {
   requests: ZohoRequest[]
   changes: number
   notes: number
+  /** Notes that are open questions; the rest need a person for another reason (two phone numbers, say). */
+  openQuestions: number
   status: 'Done' | 'Needs review'
   changedByAnswer: boolean
 }
 
-const BOOKKEEPING = new Set(['Account_Name', 'Enrichment_Status', 'Last_Enriched'])
+const BOOKKEEPING = new Set(['id', 'Enrichment_Status', 'Last_Enriched'])
 const F_ROAD_KM = 'Road_Network_Centerline_km'
+
+/** The Account update: the button sends the record id, so the Account is updated by it (writeback.account_update). */
+const isAccount = (r: ZohoRequest) => r.method === 'PUT' && r.url.endsWith('/Accounts')
+const isNotes = (r: ZohoRequest) => r.url.endsWith('/Notes')
+const firstLine = (n: Record<string, unknown>) => String(n.Note_Content).split('\n')[0]
 
 export function writePlan(run: Run, answers: Answers): WritePlan {
   const requests: ZohoRequest[] = structuredClone(run.writeback.requests)
@@ -59,8 +66,8 @@ export function writePlan(run: Run, answers: Answers): WritePlan {
     const option = q.options[pick]
     changedByAnswer = true
     if (option.result === 'filled' && option.value_km !== null) {
-      const upsert = requests.find((r) => r.url.endsWith('/Accounts/upsert'))
-      if (upsert && q.field === 'road_length_km') upsert.body.data[0][F_ROAD_KM] = option.value_km
+      const account = requests.find(isAccount)
+      if (account && q.field === 'road_length_km') account.body.data[0][F_ROAD_KM] = option.value_km
       settled.add(q.text)
     } else {
       answerLine.set(q.text, `Answered on the page: ${option.label}.`)
@@ -70,29 +77,37 @@ export function writePlan(run: Run, answers: Answers): WritePlan {
   // Notes: drop the ones the answer settled, record the answer on the rest.
   const out: ZohoRequest[] = []
   for (const r of requests) {
-    if (!r.url.endsWith('/Notes')) {
+    if (!isNotes(r)) {
       out.push(r)
       continue
     }
     const data = r.body.data
-      .filter((n) => !settled.has(String(n.Note_Content).split('\n')[0]))
+      .filter((n) => !settled.has(firstLine(n)))
       .map((n) => {
-        const line = answerLine.get(String(n.Note_Content).split('\n')[0])
+        const line = answerLine.get(firstLine(n))
         return line ? { ...n, Note_Content: `${n.Note_Content}\n${line}` } : n
       })
     if (data.length) out.push({ ...r, body: { ...r.body, data } })
   }
 
-  const notes = out.filter((r) => r.url.endsWith('/Notes')).reduce((n, r) => n + r.body.data.length, 0)
-  const status = notes > 0 ? 'Needs review' : 'Done'
-  const upsert = out.find((r) => r.url.endsWith('/Accounts/upsert'))
-  if (upsert) {
-    if (upsert.body.data[0].Enrichment_Status !== status) changedByAnswer = true
-    upsert.body.data[0].Enrichment_Status = status
+  const noteList = out.filter(isNotes).flatMap((r) => r.body.data)
+  const asked = new Set(run.questions.filter((q) => answers[q.field] === undefined).map((q) => q.text))
+  const status = noteList.length > 0 ? 'Needs review' : 'Done'
+  const account = out.find(isAccount)
+  if (account) {
+    if (account.body.data[0].Enrichment_Status !== status) changedByAnswer = true
+    account.body.data[0].Enrichment_Status = status
   }
-  const accountFields = upsert ? Object.keys(upsert.body.data[0]).filter((k) => !BOOKKEEPING.has(k)).length : 0
-  const contacts = out.filter((r) => r.url.includes('/Contacts')).length
-  return { requests: out, changes: accountFields + contacts, notes, status, changedByAnswer }
+  const accountFields = account ? Object.keys(account.body.data[0]).filter((k) => !BOOKKEEPING.has(k)).length : 0
+  const contacts = out.filter((r) => r.url.endsWith('/Contacts')).length
+  return {
+    requests: out,
+    changes: accountFields + contacts,
+    notes: noteList.length,
+    openQuestions: noteList.filter((n) => asked.has(firstLine(n))).length,
+    status,
+    changedByAnswer,
+  }
 }
 
 /**

@@ -8,16 +8,16 @@ The outputs in `data/` come from one final run on six real municipalities on Oct
 
 | Path | What it is |
 |---|---|
-| `pipeline/` | The Python service: fetcher, discovery, PDF reading, the model step, the five validation rules, duplicate check, Account brief, Zoho write-back builder, FastAPI service, Deluge button draft, and 32 offline tests. See `pipeline/README.md`. |
-| `data/` | The run's real outputs (`run/`), the answer key written before the first run, the scorecard, the sample CRM state, and `SOURCES.md` (every URL with fetch time, HTTP status and sha256). |
+| `pipeline/` | The Python service: fetcher, discovery, PDF reading, the model step, the five validation rules, duplicate check, Account brief, Zoho write-back builder, FastAPI service, Deluge button draft, and 42 offline tests. See `pipeline/README.md`. |
+| `data/` | The run's real outputs (`run/`), the answer key written before the first run, the scorecard, the sample CRM state, and `SOURCES.md` (every page with its fetch time, HTTP status and hash, and every change made along the way). |
 | `src/` | The page (Vite, React, TypeScript). It reads `data/` as is and shows the pipeline files as read-only code. It never regenerates anything. |
 
 ## The page
 
-- `/` A short walkthrough with Lincoln's before and after: the road length from the town's own asset management plan, the page it came from, and the one question.
+- `/` A short walkthrough: the one question only Waysights can answer (owned roads or every road, on Saratoga County), and Lincoln's before and after with the road length from the town's own asset management plan and the page it came from.
 - `/demo` A CRM-style Account record. Press **Enrich Account** to replay the run log for that Account (about 10 seconds, with a skip), then see each proposed change with its quoted line, source link, PDF page and fetch date. Every quote can be opened in place in the saved page text it was checked against. Answer the question, look at what validation rejected, and preview the exact Zoho requests (nothing is sent).
-- `/demo/zoho` The Zoho side: the button flow and the Deluge, upsert and service code, read straight from `pipeline/`.
-- `/demo/plan` What I'd own, one way to split the rest, the brief item by item, and five questions only Waysights can answer.
+- `/demo/zoho` The Zoho side: the button flow and the Deluge, write-back and service code, read straight from `pipeline/`.
+- `/demo/plan` What I'd own, one way to split the rest, the brief item by item, and five questions only Waysights can answer. Two of them are policy questions: one answer settles every Account like it.
 
 ## Run it
 
@@ -38,12 +38,11 @@ Static site, no backend, no secrets, no environment variables. Vercel builds it 
 
 ## Data sources
 
-- **The six municipalities' own websites**, fetched on Oct 15, 2026 with an honest user agent, robots.txt obeyed, 2 seconds between requests per host and at most 15 requests per Account: Town of Lincoln, Town of Pelham and Township of West Lincoln (Ontario); Saratoga, Warren and Tompkins Counties (New York).
+- **The six municipalities' own websites**, fetched on Oct 15, 2026 with an honest user agent, robots.txt obeyed, 2 seconds between requests per host and at most 15 pages per Account (robots.txt and redirects are extra requests; the run log shows every one): Town of Lincoln, Town of Pelham and Township of West Lincoln (Ontario); Saratoga, Warren and Tompkins Counties (New York).
 - **NYSDOT Highway Mileage on data.ny.gov** (dataset `tccz-tc3t`, year 2020) for the New York counties: `county_mileage` summed for roads the county owns, `total_centerline_highway_mileage` shown beside it.
 - **Waysights' public pages** (FAQ, how it works, products, pricing), for vocabulary in the Account briefs only.
-- **O. Reg. 239/02** (Ontario) and the **federal MUTCD, 11th Edition, Section 2A.22**, quoted in the Account briefs only after the run found the quoted sentence in the fetched file.
 
-Every URL, with fetch time, HTTP status and sha256, is in `data/SOURCES.md`. Whole third-party PDFs are not committed; `data/run/pages/` keeps the text of the pages a value was taken from or refused from.
+Every page, with fetch time, HTTP status and hash, is in `data/SOURCES.md`. Whole third-party PDFs are not committed; `data/run/pages/` keeps the text of the pages a value was taken from or refused from.
 
 ## Real or mock
 
@@ -53,9 +52,9 @@ Every URL, with fetch time, HTTP status and sha256, is in `data/SOURCES.md`. Who
 | Run log, extractions, rejections, questions, merge proposal, Account briefs, Zoho payloads | Real outputs of the offline run, replayed. The briefs carry the model id (`claude-opus-5-5`). |
 | The six Account names and websites | Real public bodies, shown as example public accounts. Not leads or customers. |
 | CRM state before the run: record ids, Account type, blank fields, status, and one earlier Contact on Warren County ("K. Hajos, Highway Superintendent") | Made up (`data/accounts.seed.json`, `mock: true`). Tagged "sample" on the page. |
-| Zoho field API names, the Deluge function and the upsert code | Draft. Never run in a Zoho org; the field names are guesses. |
+| Zoho field API names, the Deluge function and the write-back code | Draft. Never run in a Zoho org; the field names are guesses. |
 | Answers given on the page | Local page state only. They change the preview, never the run's data. |
 
 ## How it was checked
 
-The answer key (`data/answer_key.json`) was written by reading the sources directly and committed on its own (`f7023e6`) before the pipeline first ran. The scorecard (`data/scorecard.json`) compares the final run against it: 24 right, 1 wrong, 7 correctly left blank, 0 missed, 4 sent to a person (the key agrees on all 4). The pipeline was developed against these same six Accounts, so this is a check, not a benchmark. `data/SOURCES.md` lists every change made along the way.
+The answer key (`data/answer_key.json`) was written by reading the sources directly and committed on its own (`f7023e6`) before the pipeline first ran. The scorecard (`data/scorecard.json`) compares the final run against it: 24 right, 0 wrong, 7 correctly left blank, 0 missed, 5 sent to a person. The key agrees on 4 of the 5. On the fifth, Pelham's phone, the key takes the contacts directory's ext. 33, and the run sends it to a person because another town page prints x332. An earlier final run filled x332 and scored it wrong; `data/SOURCES.md` lists that and every other change made along the way. The pipeline was developed against these same six Accounts, so this is a check, not a benchmark.

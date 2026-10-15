@@ -50,6 +50,13 @@ function optionMath(o: RoadOption): string {
   return `${p[0].value} ${p[0].unit} as printed`
 }
 
+/** The printed number to mark in a road-length quote: the value of the line it came from. */
+function partValue(run: Run, c: Cite): string | undefined {
+  for (const o of run.validated.road_length_km.options)
+    for (const p of [...o.parts, ...(o.agrees ?? [])]) if (p.cite.source === c.source && p.cite.quote === c.quote) return p.value
+  return undefined
+}
+
 function Quotes({ run, cites, value }: { run: Run; cites: Cite[]; value?: (c: Cite) => string | undefined }) {
   return (
     <div className="quotes">
@@ -142,8 +149,9 @@ function Ask({ row, run, onAnswer }: RowProps) {
           })}
         </ol>
       ) : (
-        <Quotes run={run} cites={row.sources.filter(isCite)} value={() => String(row.proposed ?? '').split(' ')[0]} />
+        <Quotes run={run} cites={row.sources.filter(isCite)} value={(c) => partValue(run, c)} />
       )}
+      {row.detail ? <p className="detail">{row.detail}</p> : null}
       <div className="ask-actions">
         {q.options.map((opt, i) =>
           q.kind === 'pick' && opt.result === 'filled' ? null : (
@@ -156,6 +164,12 @@ function Ask({ row, run, onAnswer }: RowProps) {
           <span className="ask-hint">Not sure leaves the field blank and adds a Note to the Account.</span>
         ) : null}
       </div>
+      {q.kind === 'centerline' && run.account.jurisdiction === 'ON' ? (
+        <p className="ask-policy">
+          Ontario asset management plans often print plain km. If you count those as centerline, that's one answer for
+          every plan, not one per Account: <Link to={`/demo/plan?account=${run.account.slug}#q2`}>question 2 for you</Link>.
+        </p>
+      ) : null}
     </div>
   )
 }
@@ -198,11 +212,11 @@ function RoadRow({ run, row, onAnswer }: RowProps) {
             {chosen ? (
               <Quotes run={run} cites={chosen.parts.map((p) => p.cite)} value={(c) => chosen.parts.find((p) => p.cite === c)?.value} />
             ) : row.shown !== 'not_found' ? (
-              <Quotes run={run} cites={row.sources.filter(isCite)} value={(c) => (c.column ? undefined : String(row.proposed ?? '').split(' ')[0])} />
+              <Quotes run={run} cites={row.sources.filter(isCite)} value={(c) => (c.column ? undefined : partValue(run, c))} />
             ) : null}
+            {row.detail ? <p className="detail">{row.detail}</p> : null}
           </>
         )}
-        {row.detail ? <p className="detail">{row.detail}</p> : null}
         {row.partial?.map((p, i) => (
           <div key={i} className="partial">
             <p className="partial-head">
@@ -282,7 +296,8 @@ export function FieldRow(props: RowProps) {
             <p>
               Matches the existing Contact <code>{m.contact_id}</code> (matched on {m.matched_on}). The merge keeps that record
               and its id, updates {Object.keys(m.changes).length === 2 ? 'two fields' : `${Object.keys(m.changes).length} fields`}{' '}
-              and stores where the new values came from. It never merges on a name alone.
+              and stores where the new values came from. It never merges on a surname alone, and nothing merges until a person
+              writes it.
             </p>
             <table className="merge-table">
               <thead>
@@ -315,18 +330,28 @@ export function FieldRow(props: RowProps) {
   }
 
   const value = Array.isArray(row.proposed) ? row.proposed.join(', ') : row.proposed
+  const next =
+    row.status === 'not_found' ? (
+      <span className="nil">not found</span>
+    ) : row.status === 'needs_human' ? (
+      <span className="nil">stays empty</span>
+    ) : (
+      value
+    )
+  // Two printed numbers: mark each quote with its own.
+  const printed = row.field === 'phone' ? run.validated.phone.values : undefined
+  const cites = row.sources.filter(isCite)
   return (
     <>
-      <RowHead
-        row={row}
-        diff={<Diff current={row.current ?? empty} next={row.status === 'not_found' ? <span className="nil">not found</span> : value} />}
-      />
+      <RowHead row={row} diff={<Diff current={row.current ?? empty} next={next} />} />
       <div className="field-body">
         {row.detail ? <p className="detail">{row.detail}</p> : null}
         <Quotes
           run={run}
-          cites={row.sources.filter(isCite)}
-          value={() => (row.field === 'email' || row.field === 'phone' ? (value ?? undefined) : undefined)}
+          cites={cites}
+          value={(c) =>
+            printed ? printed[cites.indexOf(c)] : row.field === 'email' || row.field === 'phone' ? (value ?? undefined) : undefined
+          }
         />
       </div>
     </>

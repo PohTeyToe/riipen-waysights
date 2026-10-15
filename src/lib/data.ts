@@ -66,7 +66,15 @@ export type RoadPart = {
   cite: Cite
 }
 
-export type RoadOption = { km: number; centerline: boolean; approximate: boolean; why: string; parts: RoadPart[] }
+/** `agrees`: approximate figures elsewhere that round this one ("about 300 km" for 310 km), so they aren't options. */
+export type RoadOption = {
+  km: number
+  centerline: boolean
+  approximate: boolean
+  why: string
+  parts: RoadPart[]
+  agrees?: RoadPart[]
+}
 
 export type Step = {
   t: string
@@ -123,7 +131,15 @@ export type Run = {
     region: string
     ny_county: string | null
   }
-  run: { started_at: string; finished_at: string; model: string; pages_read: number; requests_used: number; page_budget: number }
+  run: {
+    started_at: string
+    finished_at: string
+    model: string
+    pages_read: number
+    page_fetches: number
+    page_budget: number
+    http_requests: number
+  }
   status: 'done' | 'needs_review'
   steps: Step[]
   sources: Source[]
@@ -136,12 +152,14 @@ export type Run = {
       within_km?: number
       data_year?: string
     }
+    /** `values`: every number the pages print for the department, when they disagree. */
+    phone: { status: string; value?: string; values?: string[] }
   }
   rejected: Rejection[]
   proposed: ProposedRow[]
   questions: Question[]
   merge: Merge | null
-  brief: { sentences: { text: string; cites: string[] }[]; model: string; url_of_context: Record<string, string> }
+  brief: { sentences: { text: string; cites: string[] }[]; model: string; context: Record<string, { url: string; title: string }> }
   writeback: { sent: boolean; note: string; requests: ZohoRequest[] }
 }
 
@@ -200,9 +218,7 @@ export function isCite(s: Cite | DocLink): s is Cite {
   return 'quote' in s
 }
 
+/** A source the run read for this Account, or one of Waysights' own pages the brief cites. */
 export function sourceById(run: Run, id: string): { url: string; title: string; fetched_at?: string } | undefined {
-  const s = run.sources.find((x) => x.id === id)
-  if (s) return s
-  const ctx = run.brief.url_of_context[id]
-  return ctx ? { url: ctx, title: id === 'RON' ? 'O. Reg. 239/02 (Ontario)' : 'Federal MUTCD, 11th Edition, Chapter 2A' } : undefined
+  return run.sources.find((x) => x.id === id) ?? run.brief.context[id]
 }

@@ -998,6 +998,9 @@ thead th {
   color: var(--ink);
   font-size: var(--text-sm);
 }
+.keynote--asked {
+  background: var(--yellow-tint);
+}
 .keynote .glyph {
   flex: none;
   transform: translateY(1px);
@@ -1491,6 +1494,7 @@ a.cite:hover {
 
 .doc-page {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s7);
   max-width: 900px;
   margin: var(--s4) auto var(--s7);
@@ -1721,6 +1725,10 @@ a.cite:hover {
   padding: var(--s5) var(--s5) var(--s6);
   border-top: 1px solid var(--line);
 }
+.wt-foot {
+  max-width: 1320px;
+  padding-inline: var(--s6);
+}
 .honesty {
   max-width: 88ch;
   color: var(--ink-2);
@@ -1880,14 +1888,37 @@ a.ba-src,
   font-weight: 700;
   line-height: 1.4;
 }
-.ba-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s2);
-}
-.ba-said {
+.ba-ask-link {
+  justify-self: start;
   font-weight: 600;
-  animation: rise var(--dur-2) var(--ease) both;
+}
+.wt-ask {
+  display: grid;
+  gap: var(--s2);
+  margin-top: var(--s2);
+  padding: var(--s4) var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+.wt-ask h2 {
+  font-size: var(--text-base);
+  font-weight: 750;
+}
+.wt-ask p {
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.wt-ask strong {
+  color: var(--ink);
+}
+.wt-ask a {
+  justify-self: start;
+  font-weight: 600;
+}
+.ask-policy {
+  color: var(--ink-2);
+  font-size: var(--text-sm);
 }
 
 /* ---------- Narrow screens ---------- */
@@ -1907,33 +1938,14 @@ a.ba-src,
 }
 
 @media (max-width: 1080px) {
-  /* Stacked: Lincoln's before and after comes straight after the heading, so it is on the first screen. */
+  /* Stacked in reading order: what this is and the one question first, then Lincoln's before and after. */
   .wt-main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s4);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s6);
     padding: var(--s7) var(--s5) var(--s6);
   }
-  .wt-intro {
-    display: contents;
-  }
-  .kicker {
-    order: 1;
-  }
-  .wt-intro h1 {
-    order: 2;
-    margin-bottom: var(--s1);
-  }
-  .card {
-    order: 3;
-    margin-bottom: var(--s4);
-  }
-  .wt-intro > p:not(.kicker) {
-    order: 4;
-    max-width: 62ch;
-  }
-  .wt-links {
-    order: 5;
+  .wt-foot {
+    padding-inline: var(--s5);
   }
 }
 
@@ -1983,6 +1995,7 @@ a.ba-src,
     display: flex;
     gap: var(--s2);
     padding: 2px var(--s4) var(--s2);
+    scroll-padding-inline: var(--s4);
     overflow-x: auto;
     scroll-snap-type: x proximity;
     scrollbar-width: thin;
@@ -2038,8 +2051,7 @@ a.ba-src,
     grid-template-columns: minmax(0, 1fr);
     gap: 2px;
   }
-  .foot,
-  .wt-foot {
+  .foot {
     padding: var(--s5) var(--s4) var(--s6);
   }
 }
@@ -2077,7 +2089,11 @@ a.ba-src,
   .wt-main {
     padding: var(--s6) var(--s4) var(--s5);
   }
-  .card {
+  .wt-foot {
+    padding-inline: var(--s4);
+  }
+  .card,
+  .wt-ask {
     padding: var(--s4);
   }
   .questions li {

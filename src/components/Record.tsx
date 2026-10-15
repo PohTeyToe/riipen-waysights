@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { runs, scorecard, seedBySlug, shortName, sourceById, type Run } from '../lib/data'
 import { cleanTitle, fmtDate, fmtDateTime, prettyUrl } from '../lib/format'
 import { fillMarks, openQuestions, revealAt, shownRows, writePlan, FIELD_ORDER } from '../lib/record'
@@ -53,7 +53,7 @@ function AccountList({ current }: { current: string }) {
                 <span className="account-region">{r.account.jurisdiction === 'ON' ? 'Ontario' : 'New York'}</span>
                 <span className="account-state">
                   <Marks marks={marks} label={label} />
-                  <span>
+                  <span aria-hidden="true">
                     {state}
                     {open ? (
                       <>
@@ -134,7 +134,7 @@ function Head({ run, st }: { run: Run; st: AccountState }) {
         </p>
         {st.blocked ? (
           <p className="rate-blocked" role="status">
-            Already enriched in the last 24 hours. Last run: {lastRun}.{' '}
+            Already enriched in the last 24 hours.{' '}
             <button type="button" className="linkish" onClick={() => store.reset(slug)}>
               Start this Account over
             </button>
@@ -161,12 +161,22 @@ function Head({ run, st }: { run: Run; st: AccountState }) {
 function Fields({ run, st }: { run: Run; st: AccountState }) {
   const store = useStore()
   const slug = run.account.slug
+  // When the replay ends, the Skip button goes away; keep keyboard focus on the result, not the page body.
+  const head = useRef<HTMLHeadingElement>(null)
+  const prev = useRef(st.phase)
+  useEffect(() => {
+    const lost = !document.activeElement || document.activeElement === document.body
+    if (prev.current === 'running' && st.phase === 'proposed' && lost) head.current?.focus({ preventScroll: true })
+    prev.current = st.phase
+  }, [st.phase])
   const reveal = st.phase === 'proposed' || st.phase === 'written' || (st.phase === 'running' && st.shown >= revealAt(run.steps, 'check'))
   const rows = shownRows(run, st.answers)
   return (
     <section className="fields" aria-labelledby="fields-h">
       <header className="section-head">
-        <h2 id="fields-h">{st.phase === 'written' ? 'Changes' : reveal ? 'Proposed changes' : 'Fields'}</h2>
+        <h2 id="fields-h" ref={head} tabIndex={-1}>
+          {st.phase === 'written' ? 'Changes' : reveal ? 'Proposed changes' : 'Fields'}
+        </h2>
         <p className="section-note">
           {st.phase === 'written'
             ? 'Each value shows the line it came from. The write below is a preview; nothing was sent.'
@@ -220,12 +230,13 @@ function KeyNote({ run, field }: { run: Run; field: string }) {
   const miss = scorecard.misses.find((m) => m.account === run.account.slug && (SCORED[field] ?? []).includes(m.field))
   if (!miss) return null
   const expected = Array.isArray(miss.expected) ? miss.expected.join(' or ') : String(miss.expected)
+  const verdict =
+    miss.outcome === 'wrong' ? 'scores this wrong' : miss.outcome === 'missed' ? 'scores this as missed' : 'would fill this'
   return (
-    <p className="keynote">
-      <Glyph kind="rejected" />
+    <p className={`keynote${miss.outcome === 'sent_to_person' ? ' keynote--asked' : ''}`}>
+      <Glyph kind={miss.outcome === 'sent_to_person' ? 'needs_human' : 'rejected'} />
       <span>
-        The answer key scores this {miss.outcome === 'wrong' ? 'wrong' : 'as missed'}: it expects <code>{expected}</code>.{' '}
-        <a href="#tested-h">How this was tested</a>
+        The answer key {verdict}: it expects <code>{expected}</code>. <a href="#tested-h">How this was tested</a>
       </span>
     </p>
   )
@@ -267,10 +278,8 @@ function BriefRow({ run }: { run: Run }) {
         </p>
         <p className="brief-by">
           Written by <code>{b.model}</code> on {fmtDate(run.run.finished_at)} from the checked fields and quoted lines only.
-          Sentences that cited nothing, or used a number the checks hadn't passed, would have been dropped.
-          {run.account.jurisdiction === 'NY'
-            ? ' The rule sentence quotes the federal MUTCD; whether New York has adopted the 11th Edition is not settled here.'
-            : ''}
+          A sentence is dropped if it cites a page the run didn't read, uses a number the checks didn't pass, quotes words
+          its pages don't print, or shares nothing with a page it cites.
         </p>
         <ul className="brief-key">
           {ids.map((id) => {
@@ -335,9 +344,9 @@ function Write({ run, st }: { run: Run; st: AccountState }) {
   const written = st.phase === 'written'
   const [picked, setShown] = useState(0)
   const shown = Math.min(picked, plan.requests.length - 1)
-  const label = `Write ${plan.changes} ${plan.changes === 1 ? 'change' : 'changes'}${plan.notes ? ` and ${plan.notes} Note` : ''}`
-  const why = plan.notes ? ', because a question is still open' : ''
-  const count = plan.requests.length === 1 ? 'the request' : `the ${plan.requests.length} requests`
+  const label = `Write ${plan.changes} ${plan.changes === 1 ? 'change' : 'changes'}${plan.notes ? ` and ${plan.notes} ${plan.notes === 1 ? 'Note' : 'Notes'}` : ''}`
+  const why = plan.openQuestions ? ', because a question is still open' : plan.notes ? `, because ${plan.notes === 1 ? 'a Note needs' : 'Notes need'} a person` : ''
+  const below = plan.requests.length === 1 ? 'Below is the request' : `Below are the ${plan.requests.length} requests`
   return (
     <section className="write" aria-labelledby="write-h">
       <header className="section-head">
@@ -347,7 +356,7 @@ function Write({ run, st }: { run: Run; st: AccountState }) {
       <div className="write-row">
         {written ? (
           <p className="write-hint">
-            Preview only: nothing was sent. Below is {count} the service would make. Status: <strong>{plan.status}</strong>
+            Preview only: nothing was sent. {below} the service would make. Status: <strong>{plan.status}</strong>
             {why}.
           </p>
         ) : (

@@ -8,7 +8,7 @@ import { Tabs } from './Tabs'
 
 const FILES = [
   { path: 'pipeline/zoho/enrich_account.deluge', what: 'The button’s function on the Account', code: deluge, comment: '//' },
-  { path: 'pipeline/writeback.py', what: 'The upsert, the Contact update and the Notes', code: writeback, comment: '#' },
+  { path: 'pipeline/writeback.py', what: 'The Account update, the Contact and the Notes', code: writeback, comment: '#' },
   { path: 'pipeline/service.py', what: 'The FastAPI service the button calls', code: service, comment: '#' },
 ]
 
@@ -20,11 +20,11 @@ const FLOW: { title: string; body: string }[] = [
   },
   {
     title: 'The service reads the approved sites',
-    body: 'Honest user agent, robots.txt, 2 s per host, 15 requests per Account. Every value is checked against the line it came from.',
+    body: 'Honest user agent, robots.txt, 2 s per host, 15 pages per Account. Every value is checked against the line it came from.',
   },
   {
-    title: 'Upsert to Account and Contact',
-    body: 'Duplicate check first. A matched Contact is updated by its id, and a new one is made only when nothing matches.',
+    title: 'Update the Account and its Contact',
+    body: 'The Account is updated by the record id the button sent, never matched by name. A Contact that matches is updated by its id, and a new one is made only when nothing matches.',
   },
   { title: 'Anything unsettled becomes a Note', body: 'The question and every quote, each with its URL and fetch date.' },
   { title: 'Status is Done or Needs review', body: 'Plus Last Enriched, which the next button press checks.' },

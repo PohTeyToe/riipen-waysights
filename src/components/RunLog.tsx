@@ -87,6 +87,7 @@ function Line({ s, home }: { s: Step; home: string }) {
 
 export function RunLog({ run, st, onSkip, onEnrich }: { run: Run; st: AccountState; onSkip: () => void; onEnrich: () => void }) {
   const box = useRef<HTMLOListElement>(null)
+  const skip = useRef<HTMLButtonElement>(null)
   const steps = run.steps
   const shown = st.phase === 'idle' ? 0 : st.phase === 'running' ? st.shown : steps.length
   const speed = Math.round(realSpanMs(steps) / replayTimes(steps).at(-1)!)
@@ -95,6 +96,11 @@ export function RunLog({ run, st, onSkip, onEnrich }: { run: Run; st: AccountSta
     const el = box.current
     if (el && st.phase !== 'idle') el.scrollTop = el.scrollHeight
   }, [shown, st.phase])
+
+  // Pressing Enrich Account disables it, so keyboard focus moves to the one control the replay has.
+  useEffect(() => {
+    if (st.phase === 'running') skip.current?.focus({ preventScroll: true })
+  }, [st.phase])
 
   const pages = run.run.pages_read
   const skipped = steps.find((s) => s.step === 'skip' && /links pointed off/.test(s.msg))
@@ -112,7 +118,7 @@ export function RunLog({ run, st, onSkip, onEnrich }: { run: Run; st: AccountSta
           </p>
         </div>
         {st.phase === 'running' ? (
-          <button type="button" className="btn btn--quiet" onClick={onSkip}>
+          <button type="button" className="btn btn--quiet" onClick={onSkip} ref={skip}>
             Skip to result
           </button>
         ) : null}
@@ -129,8 +135,10 @@ export function RunLog({ run, st, onSkip, onEnrich }: { run: Run; st: AccountSta
         <>
           {st.phase !== 'running' ? (
             <p className="log-summary">
-              {pages} pages read · {run.run.requests_used} of {run.run.page_budget} requests · {offList} off-list links not
-              followed · {run.rejected.length} {run.rejected.length === 1 ? 'value' : 'values'} rejected
+              {pages} pages read · {run.run.page_fetches} of {run.run.page_budget} page fetches ·{' '}
+              <span title="Every HTTP request, counting robots.txt and redirects">{run.run.http_requests} requests in all</span> ·{' '}
+              {offList} off-list links not followed · {run.rejected.length} {run.rejected.length === 1 ? 'value' : 'values'}{' '}
+              rejected
             </p>
           ) : null}
           <ol className="log-lines" ref={box} aria-live={st.phase === 'running' ? 'off' : undefined} tabIndex={0} aria-label="Run log lines">

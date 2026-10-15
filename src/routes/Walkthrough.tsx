@@ -2,36 +2,28 @@ import { meta, REPO, runBySlug, type Cite, type DocLink } from '../lib/data'
 import { cleanTitle, fmtDate, fmtKm, prettyUrl } from '../lib/format'
 import { shownRows } from '../lib/record'
 import { Link } from '../lib/router'
-import { useStore } from '../lib/store'
 import { Chip, Dot } from '../components/Status'
 import { Honesty, Owner } from '../components/Honesty'
 
+/** Lincoln as the run left it. The question is answered in the run itself, not here. */
 function LincolnCard() {
-  const store = useStore()
   const run = runBySlug.lincoln
-  const st = store.get('lincoln')
-  const rows = shownRows(run, st.answers)
+  const rows = shownRows(run, {})
   const road = rows.find((r) => r.field === 'road_length_km')!
   const email = rows.find((r) => r.field === 'email')!
   const phone = rows.find((r) => r.field === 'phone')!
   const docs = rows.find((r) => r.field === 'key_documents')!
   const head = rows.find((r) => r.field === 'roads_head')!
-  const [plan, roadsPage] = run.validated.road_length_km.options
-  const q = road.question!
-  const contact = email.sources[0] as Cite
+  const plan = run.validated.road_length_km.options[0]
+  const planCite = plan.parts[0].cite
+  const rounded = plan.agrees?.[0]?.cite
+  const contactPages = [...new Set([email, phone].flatMap((r) => (r.sources as Cite[]).map((c) => c.url)))]
+  const fetched = (email.sources[0] as Cite).fetched_at
   // The plan's full title is long, so the card shortens it; the link goes to the PDF itself.
   const docLinks = (docs.sources as DocLink[]).map((d) => ({
     url: d.url,
-    label: d.url === plan.parts[0].cite.url ? '2025 Asset Management Plan' : cleanTitle(d.title),
+    label: d.url === planCite.url ? '2025 Asset Management Plan (PDF)' : cleanTitle(d.title),
   }))
-  const planCite = plan.parts[0].cite
-  const pageCite = roadsPage.parts[0].cite
-  const picked = road.answered ? run.validated.road_length_km.options[q.options.indexOf(road.answered.option)] : undefined
-  const roadValue = picked
-    ? `${picked.approximate ? 'about ' : ''}${fmtKm(picked.km)} km`
-    : road.answered
-      ? null
-      : `${fmtKm(plan.km)} km proposed`
 
   return (
     <article className="card" aria-labelledby="card-h">
@@ -54,43 +46,33 @@ function LincolnCard() {
               <span className="diff-arrow" aria-label="becomes">
                 →
               </span>
-              {roadValue ? <strong>{roadValue}</strong> : <span className="nil">stays empty</span>}
+              <strong>{fmtKm(plan.km)} km proposed</strong>
             </p>
             <p className="ba-quote">
-              <q>{plan.parts[0].cite.quote.replace('Quantity - ', '')}</q>, <q>{plan.parts[1].cite.quote.replace('Quantity - ', '')}</q>
+              {plan.parts.map((p, i) => (
+                <span key={i}>
+                  {i > 0 ? ', ' : null}
+                  <q>{p.cite.quote.replace('Quantity - ', '')}</q>
+                </span>
+              ))}
               <a className="ba-src" href={planCite.url} target="_blank" rel="noreferrer">
                 2025 Asset Management Plan, Table 21, PDF p. {planCite.pdf_page}
               </a>
             </p>
-            <p className="ba-quote">
-              roads page: <q>approximately 300km of roadway</q>
-              <a className="ba-src" href={pageCite.url} target="_blank" rel="noreferrer">
-                {prettyUrl(pageCite.url)}
-              </a>
-            </p>
-            {road.answered ? (
-              <p className="ba-said">
-                {picked ? 'Confirmed by you.' : 'Left blank. It becomes a Note on the Account for a person to check.'}{' '}
-                <button type="button" className="linkish" onClick={() => store.answer('lincoln', 'road_length_km', null)}>
-                  Change
-                </button>
+            {rounded ? (
+              <p className="ba-quote">
+                roads page: <q>approximately 300km of roadway</q>, the same figure rounded
+                <a className="ba-src" href={rounded.url} target="_blank" rel="noreferrer">
+                  {prettyUrl(rounded.url)}
+                </a>
               </p>
-            ) : (
-              <div className="ba-ask" role="group" aria-label={q.text}>
-                <p>{q.text}</p>
-                <div className="ba-buttons">
-                  <button type="button" className="btn btn--answer" onClick={() => store.answer('lincoln', 'road_length_km', 0)}>
-                    {fmtKm(plan.km)} km, the plan
-                  </button>
-                  <button type="button" className="btn btn--answer" onClick={() => store.answer('lincoln', 'road_length_km', 1)}>
-                    about {fmtKm(roadsPage.km)} km, the roads page
-                  </button>
-                  <button type="button" className="btn btn--answer" onClick={() => store.answer('lincoln', 'road_length_km', 2)}>
-                    Not sure
-                  </button>
-                </div>
-              </div>
-            )}
+            ) : null}
+            <div className="ba-ask">
+              <p>{road.question?.text}</p>
+              <Link to="/demo?account=lincoln" className="ba-ask-link">
+                Answer it in the Lincoln run
+              </Link>
+            </div>
           </dd>
         </div>
 
@@ -111,10 +93,15 @@ function LincolnCard() {
             <p className="ba-quote">
               <span className="ba-src">
                 printed on{' '}
-                <a href={contact.url} target="_blank" rel="noreferrer">
-                  {prettyUrl(contact.url)}
-                </a>
-                , fetched {fmtDate(contact.fetched_at)}
+                {contactPages.map((url, i) => (
+                  <span key={url}>
+                    {i > 0 ? ' and ' : null}
+                    <a href={url} target="_blank" rel="noreferrer">
+                      {prettyUrl(url)}
+                    </a>
+                  </span>
+                ))}
+                , fetched {fmtDate(fetched)}
               </span>
             </p>
           </dd>
@@ -168,6 +155,24 @@ function LincolnCard() {
   )
 }
 
+/** The question only Waysights can answer, and the one that changes a price. */
+function AskWaysights() {
+  const s = runBySlug.saratoga.validated.road_length_km
+  const owned = Math.round(s.value_km ?? 0)
+  const within = Math.round(s.within_km ?? 0)
+  return (
+    <aside className="wt-ask" aria-labelledby="wt-ask-h">
+      <h2 id="wt-ask-h">One question only you can answer</h2>
+      <p>
+        Do you quote a county on the roads it owns, or every road inside it? Saratoga County: <strong>{fmtKm(owned)} km</strong>{' '}
+        or <strong>{fmtKm(within)} km</strong> (NYSDOT, 2020), about {Math.round(within / owned)} times apart. The run uses
+        owned roads until you say otherwise.
+      </p>
+      <Link to="/demo?account=saratoga">See both numbers on Saratoga County</Link>
+    </aside>
+  )
+}
+
 export function Walkthrough() {
   return (
     <div className="wt">
@@ -176,17 +181,16 @@ export function Walkthrough() {
           <p className="kicker">Waysights · Enrich Account · Riipen Level UP, October 2026</p>
           <h1>Enrich Account, run on six real municipalities</h1>
           <p>
-            Your pricing form asks a town one thing about its roads: the total length of its network, in centerline
-            kilometers. That number is spread across the town's own documents. An asset management plan says one thing, the
-            roads page says another, and neither always says centerline. The person who runs the roads might be a
-            Superintendent of Public Works in one county and a Commissioner of Public Works in another. Your Riipen brief asks
-            for an Enrich Account button in Zoho that does this digging.
+            Your pricing form asks a town for one number: the length of its road network, in centerline kilometers. That
+            number is spread across the town's own documents. The asset management plan says one thing, the roads page
+            another, and often neither says centerline. Your Riipen brief asks for a button that reads approved municipal
+            sites and fills the Account, so I started with the number your pricing runs on.
           </p>
           <p>
-            So I built roughly where I'd want to be at the end of week two. A small Python service reads a municipality's own
-            public pages, finds the road length and the roads contact, and keeps the exact line each value came from. It checks
-            every value against that line before it proposes a change to the Account. I ran it on three Niagara towns and three
-            New York counties. When the documents can't settle something, it asks you one question instead of guessing.
+            This is roughly where I'd want to be at the end of week two: a small Python service that reads a
+            municipality's own pages, finds the road length and the roads contact, and checks every value against the line
+            it came from before it proposes a change. I ran it on three Niagara towns and three New York counties. When the
+            documents can't settle something, it asks one question instead of guessing.
           </p>
           <nav className="wt-links" aria-label="Next">
             <Link to="/demo?account=lincoln" className="btn btn--primary btn--lg">
@@ -199,6 +203,7 @@ export function Walkthrough() {
               My plan and five questions for you
             </Link>
           </nav>
+          <AskWaysights />
         </section>
         <LincolnCard />
       </main>

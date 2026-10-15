@@ -55,7 +55,13 @@ export function Tested() {
           <li key={k}>
             <Glyph kind={OUTCOME[k].glyph} />
             <span className="score-n">{c[k]}</span> {OUTCOME[k].label}
-            {k === 'sent_to_person' ? <span className="score-aside"> (the key agrees on all {scorecard.sent_to_person_key_agrees})</span> : null}
+            {k === 'sent_to_person' ? (
+              <span className="score-aside">
+                {' '}
+                (the key agrees on {scorecard.sent_to_person_key_agrees === c[k] ? 'all' : `${scorecard.sent_to_person_key_agrees} of`}{' '}
+                {c[k]})
+              </span>
+            ) : null}
           </li>
         ))}
       </ul>
@@ -93,13 +99,23 @@ export function Tested() {
         </table>
       </div>
 
-      <h3 className="tested-sub">Misses ({scorecard.misses.length})</h3>
+      <h3 className="tested-sub">Where the run and the key differ ({scorecard.misses.length})</h3>
       <ul className="misses">
         {scorecard.misses.map((m, i) => (
           <li key={i}>
             <p className="miss-head">
-              {shortName[m.account]}, {FIELD_LABEL[m.field] ?? m.field}: expected <code>{show(m.expected)}</code>, got{' '}
-              <code>{show(m.got)}</code>
+              {shortName[m.account]}, {FIELD_LABEL[m.field] ?? m.field}: expected <code>{show(m.expected)}</code>,{' '}
+              {m.outcome === 'sent_to_person' ? 'sent to a person with ' : 'got '}
+              {Array.isArray(m.got) && m.outcome === 'sent_to_person' ? (
+                m.got.map((g, j) => (
+                  <span key={j}>
+                    {j > 0 ? ' and ' : null}
+                    <code>{String(g)}</code>
+                  </span>
+                ))
+              ) : (
+                <code>{show(m.got)}</code>
+              )}
             </p>
             <p className="miss-why">{m.why}</p>
           </li>
@@ -109,8 +125,9 @@ export function Tested() {
       <ul className="tested-notes">
         <li>
           {meta.tests.passed} tests run on saved copies of the pages, with no network. They cover the approved-site list,
-          robots.txt, the 2 s wait per host, the quote check, lane-km and area refusals, mile to km, owned against total,
-          the duplicate check and an uncited summary sentence.
+          robots.txt, the 2 s wait per host, the quote check, units printed next to their numbers, lane-km and area
+          refusals, mile to km, owned against total, rounded figures, two phone numbers for one department, the duplicate
+          check, and summary sentences their pages don't back.
         </li>
         <li>
           PDF tables are read in reading order, which keeps <q>Quantity - kms of local roads 255</q> on one line. Layout
