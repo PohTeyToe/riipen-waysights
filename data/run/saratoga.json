@@ -10,29 +10,30 @@
   "example_public_account": true
  },
  "run": {
-  "started_at": "2026-10-15T19:11:16.468Z",
-  "finished_at": "2026-10-15T19:12:03.155Z",
+  "started_at": "2026-10-15T22:30:42.804Z",
+  "finished_at": "2026-10-15T22:31:17.600Z",
   "model": "claude-opus-5-5",
   "pages_read": 8,
-  "requests_used": 8,
+  "page_fetches": 8,
   "page_budget": 15,
-  "prompt_chars": 29943
+  "http_requests": 13,
+  "prompt_chars": 30486
  },
  "status": "done",
  "steps": [
   {
-   "t": "2026-10-15T19:11:16.468Z",
+   "t": "2026-10-15T22:30:42.804Z",
    "step": "status",
    "msg": "Queued"
   },
   {
-   "t": "2026-10-15T19:11:16.468Z",
+   "t": "2026-10-15T22:30:42.804Z",
    "step": "status",
    "msg": "Running",
    "rate_rule": "One run per Account per day. Last run: never."
   },
   {
-   "t": "2026-10-15T19:11:16.468Z",
+   "t": "2026-10-15T22:30:42.804Z",
    "step": "allowlist",
    "msg": "www.saratogacountyny.gov is on the approved list",
    "approved": [
@@ -41,7 +42,7 @@
    ]
   },
   {
-   "t": "2026-10-15T19:11:16.739Z",
+   "t": "2026-10-15T22:30:43.112Z",
    "step": "robots",
    "msg": "robots.txt read for www.saratogacountyny.gov",
    "url": "https://www.saratogacountyny.gov/robots.txt",
@@ -49,119 +50,119 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T19:11:19.783Z",
+   "t": "2026-10-15T22:30:46.163Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/",
    "status": 200,
    "bytes": 192919,
-   "ms": 1312,
-   "waited_ms": 1718,
+   "ms": 1359,
+   "waited_ms": 1686,
    "why": "the Account's website",
    "page": "1/15"
   },
   {
-   "t": "2026-10-15T19:11:21.535Z",
+   "t": "2026-10-15T22:30:47.811Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/public-works/",
    "status": 200,
    "bytes": 181088,
-   "ms": 1077,
-   "waited_ms": 562,
+   "ms": 1000,
+   "waited_ms": 577,
    "why": "menu link \"Public Works\" on County of Saratoga, New York",
    "page": "2/15"
   },
   {
-   "t": "2026-10-15T19:11:23.625Z",
+   "t": "2026-10-15T22:30:49.820Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/dmv/",
    "status": 200,
-   "bytes": 180615,
-   "ms": 1141,
-   "waited_ms": 765,
+   "bytes": 180545,
+   "ms": 1016,
+   "waited_ms": 905,
    "why": "menu link \"Road Test\" on County of Saratoga, New York",
    "page": "3/15"
   },
   {
-   "t": "2026-10-15T19:11:25.470Z",
+   "t": "2026-10-15T22:30:51.674Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/dmv/road-test-information/",
    "status": 200,
    "bytes": 130818,
-   "ms": 906,
-   "waited_ms": 672,
+   "ms": 859,
+   "waited_ms": 905,
    "why": "link \"Road Tests\" on Department of Motor Vehicles – County of Saratoga, New York",
    "page": "4/15"
   },
   {
-   "t": "2026-10-15T19:11:25.547Z",
+   "t": "2026-10-15T22:30:51.743Z",
    "step": "skip",
    "msg": "off-list link skipped: \"https://dmv.ny.gov/schedule-road-test\"",
    "url": "https://dmv.ny.gov/driver-license/schedule-and-take-a-road-test"
   },
   {
-   "t": "2026-10-15T19:11:27.430Z",
+   "t": "2026-10-15T22:30:53.899Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/dmv/contact-us/",
    "status": 200,
    "bytes": 141496,
-   "ms": 967,
-   "waited_ms": 922,
+   "ms": 1094,
+   "waited_ms": 1061,
    "why": "link \"Contact Us\" on Department of Motor Vehicles – County of Saratoga, New York",
    "page": "5/15"
   },
   {
-   "t": "2026-10-15T19:11:29.622Z",
+   "t": "2026-10-15T22:30:55.698Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/",
    "status": 200,
    "bytes": 130275,
-   "ms": 1156,
-   "waited_ms": 952,
+   "ms": 891,
+   "waited_ms": 842,
    "why": "menu link \"Departments\" on County of Saratoga, New York",
    "page": "6/15"
   },
   {
-   "t": "2026-10-15T19:11:31.405Z",
+   "t": "2026-10-15T22:30:57.698Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/public-works/recycle/",
    "status": 200,
    "bytes": 147872,
-   "ms": 937,
-   "waited_ms": 687,
+   "ms": 891,
+   "waited_ms": 1045,
    "why": "menu link \"Recycle\" on County of Saratoga, New York",
    "page": "7/15"
   },
   {
-   "t": "2026-10-15T19:11:33.396Z",
+   "t": "2026-10-15T22:30:59.679Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://www.saratogacountyny.gov/departments/health/medication-disposal/",
    "status": 200,
    "bytes": 134761,
-   "ms": 922,
-   "waited_ms": 968,
+   "ms": 875,
+   "waited_ms": 1030,
    "why": "link \"https://www.saratogacountyny.gov/departments/health/medication-disposal/\" on Recycle – County of Saratoga, New York",
    "page": "8/15"
   },
   {
-   "t": "2026-10-15T19:11:33.476Z",
+   "t": "2026-10-15T22:30:59.751Z",
    "step": "skip",
    "msg": "139 links pointed off the approved list and were not followed"
   },
   {
-   "t": "2026-10-15T19:11:33.477Z",
+   "t": "2026-10-15T22:30:59.751Z",
    "step": "read",
    "msg": "8 pages read, 8 of 15 requests used"
   },
   {
-   "t": "2026-10-15T19:11:38.806Z",
+   "t": "2026-10-15T22:31:00.028Z",
    "step": "robots",
    "msg": "robots.txt read for data.ny.gov",
    "url": "https://data.ny.gov/robots.txt",
@@ -169,43 +170,43 @@
    "delay_s": 2.0
   },
   {
-   "t": "2026-10-15T19:11:38.928Z",
+   "t": "2026-10-15T22:31:01.852Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/api/views/tccz-tc3t.json",
    "status": 200,
    "bytes": 24118,
-   "ms": 125,
-   "waited_ms": 0,
+   "ms": 108,
+   "waited_ms": 1719,
    "why": "dataset column descriptions",
    "page": "1/3"
   },
   {
-   "t": "2026-10-15T19:11:40.926Z",
+   "t": "2026-10-15T22:31:03.893Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24select=max%28year%29+as+year",
    "status": 200,
    "bytes": 18,
-   "ms": 125,
-   "waited_ms": 1875,
+   "ms": 140,
+   "waited_ms": 1891,
    "why": "latest year in the set",
    "page": "2/3"
   },
   {
-   "t": "2026-10-15T19:11:42.970Z",
+   "t": "2026-10-15T22:31:05.843Z",
    "step": "fetch",
    "msg": "HTTP 200",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
    "status": 200,
    "bytes": 8206,
-   "ms": 157,
-   "waited_ms": 1875,
+   "ms": 93,
+   "waited_ms": 1844,
    "why": "Saratoga County rows for 2020",
    "page": "3/3"
   },
   {
-   "t": "2026-10-15T19:11:42.970Z",
+   "t": "2026-10-15T22:31:05.844Z",
    "step": "dataset",
    "msg": "31 rows for Saratoga County, 2020: county_mileage sums to 364.21 mi, total_centerline_highway_mileage to 2250.53 mi",
    "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
@@ -213,40 +214,40 @@
    "year": "2020"
   },
   {
-   "t": "2026-10-15T19:11:42.970Z",
+   "t": "2026-10-15T22:31:05.844Z",
    "step": "extract",
    "msg": "sending 8 sources to the model"
   },
   {
-   "t": "2026-10-15T19:11:50.993Z",
+   "t": "2026-10-15T22:31:12.053Z",
    "step": "extract",
-   "msg": "model returned 0 road lines, a roads head, no email, a phone",
+   "msg": "model returned 0 road lines, a roads head, no email, 1 phone(s)",
    "model": "claude-opus-5-5"
   },
   {
-   "t": "2026-10-15T19:11:50.996Z",
+   "t": "2026-10-15T22:31:12.054Z",
    "step": "check",
    "msg": "checks run: 0 value(s) rejected",
    "rejected": 0
   },
   {
-   "t": "2026-10-15T19:11:50.996Z",
+   "t": "2026-10-15T22:31:12.054Z",
    "step": "dedupe",
    "msg": "no matching Contact; a new Contact is proposed"
   },
   {
-   "t": "2026-10-15T19:12:03.155Z",
+   "t": "2026-10-15T22:31:17.600Z",
    "step": "brief",
-   "msg": "4 sentence(s) kept",
+   "msg": "1 sentence(s) kept",
    "model": "claude-opus-5-5"
   },
   {
-   "t": "2026-10-15T19:12:03.155Z",
+   "t": "2026-10-15T22:31:17.600Z",
    "step": "writeback",
    "msg": "2 request(s) built, none sent"
   },
   {
-   "t": "2026-10-15T19:12:03.155Z",
+   "t": "2026-10-15T22:31:17.600Z",
    "step": "status",
    "msg": "Done"
   }
@@ -263,9 +264,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 192919,
-   "sha256": "1c9dc83d1d54bca119a82b98402195aaa76dcb0f1cad1b6f211963a2fe463422",
-   "fetched_at": "2026-10-15T19:11:19.781Z",
-   "elapsed_ms": 1312,
+   "sha256": "15282a8c5a4f7502e285d74b926082ffb6c894141e2d226d71b484318d87d77a",
+   "fetched_at": "2026-10-15T22:30:46.161Z",
+   "elapsed_ms": 1359,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -282,9 +283,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 181088,
-   "sha256": "6bf4a204044e2482c6b93505587766637549a907ab96b84cf85cf1eb6660e67f",
-   "fetched_at": "2026-10-15T19:11:21.533Z",
-   "elapsed_ms": 1077,
+   "sha256": "fca3ef3f4ef2e7f7b631bb871baf7ad46e8068f3002ecb30e8e0c8baaac7b21c",
+   "fetched_at": "2026-10-15T22:30:47.809Z",
+   "elapsed_ms": 1000,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -300,10 +301,10 @@
    "requested_url": null,
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
-   "bytes": 180615,
-   "sha256": "3ff00376357b5efcc46e1eae39d13e31acfbb9f02578591a88ec3a2172008255",
-   "fetched_at": "2026-10-15T19:11:23.623Z",
-   "elapsed_ms": 1141,
+   "bytes": 180545,
+   "sha256": "7040a289de6e1c569dbe71f76de9771450a199a15d63395a3d8ab201e9a0e533",
+   "fetched_at": "2026-10-15T22:30:49.818Z",
+   "elapsed_ms": 1016,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -320,9 +321,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 130818,
-   "sha256": "31ae26e38d87501323d6ada0cb702daf995d0bed7b18414ef4a489e7d33becd5",
-   "fetched_at": "2026-10-15T19:11:25.364Z",
-   "elapsed_ms": 906,
+   "sha256": "5f9d5aa9616135721841c9d8228bdab359bbfc83a05eaa7fae403dc9a3570a4c",
+   "fetched_at": "2026-10-15T22:30:51.671Z",
+   "elapsed_ms": 859,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -339,9 +340,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 141496,
-   "sha256": "dabce340352274e58e9c4334a989d01751cebcf03c52ceec4bab8f3217b0027e",
-   "fetched_at": "2026-10-15T19:11:27.424Z",
-   "elapsed_ms": 967,
+   "sha256": "dd89646d6f63a5908592b223fb5aa7298276b28d551d7b0f1db4d6c747aa2f7f",
+   "fetched_at": "2026-10-15T22:30:53.897Z",
+   "elapsed_ms": 1094,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -358,9 +359,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 130275,
-   "sha256": "d7d23f166a84584194d564101953630498ff618a5e691898673dfa2b781653ab",
-   "fetched_at": "2026-10-15T19:11:29.620Z",
-   "elapsed_ms": 1156,
+   "sha256": "c3b8cbd37de4472517f6696d3cf8cd77f2912c090a7c748ceace34a2be25883e",
+   "fetched_at": "2026-10-15T22:30:55.695Z",
+   "elapsed_ms": 891,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -377,9 +378,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 147872,
-   "sha256": "ef3646145c287831768ad841636da36536632bd5a1e268ae177db7ddbcb266a8",
-   "fetched_at": "2026-10-15T19:11:31.398Z",
-   "elapsed_ms": 937,
+   "sha256": "b9de28468aae0e9519b65163acfb6e1add5e6a35c5ba04b5a97552743228229b",
+   "fetched_at": "2026-10-15T22:30:57.697Z",
+   "elapsed_ms": 891,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -396,9 +397,9 @@
    "status": 200,
    "content_type": "text/html; charset=UTF-8",
    "bytes": 134761,
-   "sha256": "ba78fc76fdf1eb0e069c48b2ea505680973f0905a3c3d4ea7370c39dbc7aca01",
-   "fetched_at": "2026-10-15T19:11:33.385Z",
-   "elapsed_ms": 922,
+   "sha256": "33a38104ffb87dbd9d94a1fb1b5b81b61778c45ee88addb4d5cf00624761678f",
+   "fetched_at": "2026-10-15T22:30:59.677Z",
+   "elapsed_ms": 875,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -416,8 +417,8 @@
    "content_type": "application/json;charset=utf-8",
    "bytes": 8206,
    "sha256": "b997841263bc87fe6e531b711083cd2a9ee9289912f342dff3551c14cf9b42bf",
-   "fetched_at": "2026-10-15T19:11:42.969Z",
-   "elapsed_ms": 157,
+   "fetched_at": "2026-10-15T22:31:05.842Z",
+   "elapsed_ms": 93,
    "pdf_pages_read": null,
    "pdf_page_count": null,
    "hidden_emails": null,
@@ -436,9 +437,9 @@
      "status": 200,
      "content_type": "application/json; charset=utf-8",
      "bytes": 24118,
-     "sha256": "13d184f9a1e247df7a9c3fd0dca725573bf8344cff21bba0ca1b67684152b0d9",
-     "fetched_at": "2026-10-15T19:11:38.926Z",
-     "elapsed_ms": 125
+     "sha256": "d9bc77c0a138cd69c1438aa31cea3c34cc9bc664dda33f948e730884e1cae432",
+     "fetched_at": "2026-10-15T22:31:01.850Z",
+     "elapsed_ms": 108
     },
     "row_values": [
      "0",
@@ -481,17 +482,19 @@
   "road_lines": [],
   "road_totals": [],
   "roads_head": {
-   "name": "Chad M. Cooke",
+   "name": "Chad M. Cooke, P.E.",
    "title": "Commissioner of Public Works",
    "quote": "Chad M. Cooke, P.E., Commissioner of Public Works",
    "source": "S2"
   },
   "department_email": null,
-  "department_phone": {
-   "value": "(518) 885-2235",
-   "quote": "Phone: (518) 885-2235",
-   "source": "S2"
-  },
+  "department_phones": [
+   {
+    "value": "(518) 885-2235",
+    "quote": "Phone: (518) 885-2235",
+    "source": "S2"
+   }
+  ],
   "sign_work": []
  },
  "validated": {
@@ -516,7 +519,7 @@
         "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
         "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
         "pdf_page": null,
-        "fetched_at": "2026-10-15T19:11:42.969Z",
+        "fetched_at": "2026-10-15T22:31:05.842Z",
         "rows": 31,
         "year": "2020",
         "sum_mi": 364.21,
@@ -541,9 +544,9 @@
     "url": "https://www.saratogacountyny.gov/departments/public-works/",
     "title": "Public Works – County of Saratoga, New York",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T19:11:21.533Z"
+    "fetched_at": "2026-10-15T22:30:47.809Z"
    },
-   "name": "Chad M. Cooke",
+   "name": "Chad M. Cooke, P.E.",
    "title": "Commissioner of Public Works",
    "status": "filled"
   },
@@ -559,7 +562,7 @@
     "url": "https://www.saratogacountyny.gov/departments/public-works/",
     "title": "Public Works – County of Saratoga, New York",
     "pdf_page": null,
-    "fetched_at": "2026-10-15T19:11:21.533Z"
+    "fetched_at": "2026-10-15T22:30:47.809Z"
    }
   },
   "key_documents": [
@@ -568,14 +571,14 @@
     "url": "https://www.saratogacountyny.gov/departments/public-works/",
     "source": "S2",
     "kind": "html",
-    "fetched_at": "2026-10-15T19:11:21.533Z"
+    "fetched_at": "2026-10-15T22:30:47.809Z"
    },
    {
     "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
     "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
     "source": "S9",
     "kind": "dataset",
-    "fetched_at": "2026-10-15T19:11:42.969Z"
+    "fetched_at": "2026-10-15T22:31:05.842Z"
    }
   ]
  },
@@ -594,7 +597,7 @@
      "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
      "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T19:11:42.969Z",
+     "fetched_at": "2026-10-15T22:31:05.842Z",
      "rows": 31,
      "year": "2020",
      "sum_mi": 364.21,
@@ -632,7 +635,7 @@
      "url": "https://www.saratogacountyny.gov/departments/public-works/",
      "title": "Public Works – County of Saratoga, New York",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T19:11:21.533Z"
+     "fetched_at": "2026-10-15T22:30:47.809Z"
     }
    ]
   },
@@ -647,10 +650,10 @@
      "url": "https://www.saratogacountyny.gov/departments/public-works/",
      "title": "Public Works – County of Saratoga, New York",
      "pdf_page": null,
-     "fetched_at": "2026-10-15T19:11:21.533Z"
+     "fetched_at": "2026-10-15T22:30:47.809Z"
     }
    ],
-   "proposed": "Chad M. Cooke, Commissioner of Public Works",
+   "proposed": "Chad M. Cooke, P.E., Commissioner of Public Works",
    "status": "filled"
   },
   {
@@ -666,12 +669,12 @@
     {
      "url": "https://www.saratogacountyny.gov/departments/public-works/",
      "title": "Public Works",
-     "fetched_at": "2026-10-15T19:11:21.533Z"
+     "fetched_at": "2026-10-15T22:30:47.809Z"
     },
     {
      "url": "https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
      "title": "NYSDOT Highway Mileage, 2020 (data.ny.gov)",
-     "fetched_at": "2026-10-15T19:11:42.969Z"
+     "fetched_at": "2026-10-15T22:31:05.842Z"
     }
    ]
   },
@@ -680,7 +683,7 @@
    "label": "Account brief",
    "current": null,
    "status": "filled",
-   "proposed": "Saratoga County owns 586.1 centerline kilometers of county highway, according to NYSDOT Highway Mileage 2020 data. The Public Works and NYSDOT pages read don't mention the county's sign inventory or any sign work. As a public agency having jurisdiction, the county falls under federal MUTCD 11th Edition Section 2A.22, which requires a method to maintain sign retroreflectivity at or above Table 2A-5 minimums. Next step: ask for Chad M. Cooke, Commissioner of Public Works, by calling the Public Works department's line at (518) 885-2235.",
+   "proposed": "Next step: ask for Chad M. Cooke, P.E., Commissioner of Public Works, by calling the Public Works department at (518) 885-2235.",
    "sources": []
   }
  ],
@@ -689,59 +692,34 @@
  "brief": {
   "sentences": [
    {
-    "text": "Saratoga County owns 586.1 centerline kilometers of county highway, according to NYSDOT Highway Mileage 2020 data.",
-    "cites": [
-     "S9"
-    ]
-   },
-   {
-    "text": "The Public Works and NYSDOT pages read don't mention the county's sign inventory or any sign work.",
-    "cites": [
-     "S2",
-     "S9"
-    ]
-   },
-   {
-    "text": "As a public agency having jurisdiction, the county falls under federal MUTCD 11th Edition Section 2A.22, which requires a method to maintain sign retroreflectivity at or above Table 2A-5 minimums.",
-    "cites": [
-     "RNY"
-    ]
-   },
-   {
-    "text": "Next step: ask for Chad M. Cooke, Commissioner of Public Works, by calling the Public Works department's line at (518) 885-2235.",
+    "text": "Next step: ask for Chad M. Cooke, P.E., Commissioner of Public Works, by calling the Public Works department at (518) 885-2235.",
     "cites": [
      "S2"
     ]
    }
   ],
   "model": "claude-opus-5-5",
-  "url_of_context": {
-   "RNY": "https://mutcd.fhwa.dot.gov/pdfs/11th_Edition/Chapter2a.pdf"
-  }
+  "context": {}
  },
  "writeback": {
   "sent": false,
   "note": "Preview only: nothing is sent. Draft, never run in a Zoho org; field names are guesses.",
   "requests": [
    {
-    "method": "POST",
-    "url": "https://www.zohoapis.com/crm/v8/Accounts/upsert",
+    "method": "PUT",
+    "url": "https://www.zohoapis.com/crm/v8/Accounts",
     "body": {
      "data": [
       {
-       "Account_Name": "Saratoga County",
+       "id": "sample-acct-004",
        "Enrichment_Status": "Done",
-       "Last_Enriched": "2026-10-15T19:12:03.155Z",
+       "Last_Enriched": "2026-10-15T22:31:17.600Z",
        "Road_Network_Centerline_km": 586.1,
-       "Phone": "(518) 885-2235",
+       "Public_Works_Phone": "(518) 885-2235",
        "Key_Documents": "Public Works: https://www.saratogacountyny.gov/departments/public-works/\nNYSDOT Highway Mileage, 2020 (data.ny.gov): https://data.ny.gov/resource/tccz-tc3t.json?%24where=year%3D%272020%27+AND+county%3D%27SARATOGA%27&%24order=municipality&%24limit=500",
-       "Account_Brief": "Saratoga County owns 586.1 centerline kilometers of county highway, according to NYSDOT Highway Mileage 2020 data. The Public Works and NYSDOT pages read don't mention the county's sign inventory or any sign work. As a public agency having jurisdiction, the county falls under federal MUTCD 11th Edition Section 2A.22, which requires a method to maintain sign retroreflectivity at or above Table 2A-5 minimums. Next step: ask for Chad M. Cooke, Commissioner of Public Works, by calling the Public Works department's line at (518) 885-2235."
+       "Account_Brief": "Next step: ask for Chad M. Cooke, P.E., Commissioner of Public Works, by calling the Public Works department at (518) 885-2235."
       }
-     ],
-     "duplicate_check_fields": [
-      "Account_Name"
-     ],
-     "trigger": []
+     ]
     }
    },
    {
@@ -758,8 +736,7 @@
         "id": "sample-acct-004"
        }
       }
-     ],
-     "trigger": []
+     ]
     }
    }
   ]

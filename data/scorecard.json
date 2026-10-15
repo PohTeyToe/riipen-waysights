@@ -3,24 +3,28 @@
  "answer_key_commit": "f7023e6a7759b91039f19af83e90432a0091fed9",
  "counts": {
   "right": 24,
-  "wrong": 1,
+  "wrong": 0,
   "correctly_blank": 7,
   "missed": 0,
-  "sent_to_person": 4
+  "sent_to_person": 5
  },
  "sent_to_person_key_agrees": 4,
  "total": 36,
  "misses": [
   {
-   "outcome": "wrong",
-   "got": "905-892-2607 x332",
+   "outcome": "sent_to_person",
+   "key_agrees_unclear": false,
+   "got": [
+    "905-892-2607 x332",
+    "905-892-2607 ext. 33"
+   ],
    "account": "pelham",
    "field": "phone",
    "expected": [
     "905-892-2607 ext. 33"
    ],
    "key_expect": "filled",
-   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/); \"Phone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
   }
  ],
  "rows": [
@@ -29,8 +33,7 @@
    "key_agrees_unclear": true,
    "options_include_accepted": true,
    "got": [
-    310.0,
-    300.0
+    310.0
    ],
    "account": "lincoln",
    "field": "road_length_km",
@@ -130,15 +133,19 @@
    "key_expect": "blank"
   },
   {
-   "outcome": "wrong",
-   "got": "905-892-2607 x332",
+   "outcome": "sent_to_person",
+   "key_agrees_unclear": false,
+   "got": [
+    "905-892-2607 x332",
+    "905-892-2607 ext. 33"
+   ],
    "account": "pelham",
    "field": "phone",
    "expected": [
     "905-892-2607 ext. 33"
    ],
    "key_expect": "filled",
-   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
+   "why": "The run took \"For additional information, please contact the Public Works & Utilities Department at 905-892-2607 x332.\" (https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/); \"Phone: 905-892-2607 ext. 33\" (https://www.pelham.ca/contacts-directory/). Key: The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."
   },
   {
    "outcome": "right",
@@ -225,7 +232,7 @@
   },
   {
    "outcome": "right",
-   "got": "Chad M. Cooke",
+   "got": "Chad M. Cooke, P.E.",
    "account": "saratoga",
    "field": "roads_head_name",
    "expected": [

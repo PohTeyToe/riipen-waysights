@@ -1,10 +1,10 @@
 {
  "run_date": "2026-10-15",
- "started_at": "2026-10-15T19:10:08.249Z",
- "finished_at": "2026-10-15T19:12:54.083Z",
+ "started_at": "2026-10-15T22:29:54.144Z",
+ "finished_at": "2026-10-15T22:32:06.479Z",
  "used_fetch_cache": false,
  "model": "claude-opus-5-5",
- "pipeline_commit": "21ee5dba0299790fd3b76787c02c795c42f99593",
+ "pipeline_commit": "defc69c6c37de9ab45834bc291e4df5f130c67d7",
  "pipeline_dirty": false,
  "answer_key_commit": "f7023e6a7759b91039f19af83e90432a0091fed9",
  "user_agent": "enrich-account-demo/0.1 (+https://github.com/PohTeyToe/riipen-waysights)",
@@ -21,7 +21,7 @@
    "slug": "pelham",
    "status": "needs_review",
    "pages_read": 6,
-   "rejected": 1
+   "rejected": 0
   },
   {
    "slug": "west-lincoln",
@@ -49,9 +49,9 @@
   }
  ],
  "tests": {
-  "passed": 32,
+  "passed": 42,
   "failed": 0,
-  "summary": "32 passed, 1 warning in 4.24s",
+  "summary": "42 passed, 1 warning in 1.76s",
   "network": "none: fixtures are saved copies of the pages"
  }
 }
