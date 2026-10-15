@@ -1,0 +1,131 @@
+{
+  "about": "The right answer for each example public account, written on 2026-10-15 before the pipeline's first run, by reading the source pages directly (curl for pages, pypdf page text for PDFs, a direct data.ny.gov query). The pipeline never reads this file. Scoring rules are fixed here too, so they can't be tuned after the run.",
+  "written": "2026-10-15",
+  "method": "Pages fetched with curl using the same honest user agent the pipeline uses, PDFs read page by page with pypdf extract_text(), data.ny.gov summed with a SoQL query. Nothing here came from the pipeline or from search-engine results.",
+  "scoring": {
+    "fields": ["road_length_km", "roads_head_name", "roads_head_title", "email", "phone", "key_document"],
+    "outcomes": {
+      "right": "The run filled the field with an accepted value. Numbers match after rounding to 0.1 km. Phones match on digits (extension included). Names and titles match ignoring case, punctuation and post-nominals such as P.E.",
+      "wrong": "The run filled the field with a value the key does not accept, or filled a field the key says must go to a person or stay blank.",
+      "correctly_blank": "The key expects blank and the run left it blank.",
+      "missed": "The key has a value and the run left it blank.",
+      "sent_to_person": "The run asked a person instead of filling the field. The scorecard records whether the key agrees the sources were unclear (expect = needs_human) and whether the run's options include an accepted value."
+    },
+    "key_document_rule": "Right if the run's key documents include at least one accepted URL.",
+    "mile_to_km": 1.609344
+  },
+  "accounts": {
+    "lincoln": {
+      "name": "Town of Lincoln",
+      "website": "https://www.lincoln.ca/",
+      "road_length_km": {
+        "expect": "needs_human",
+        "accepted_options_km": [310.0, 300.0],
+        "why": "Two town sources, neither says centerline. The plan gives local and collector kms as separate rows; the roads page gives an approximate total.",
+        "sources": [
+          {"quote": "Quantity - kms of local roads 255", "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf", "pdf_page": 49, "printed_page": 44, "table": "Table 21 Road Network Current Level of Service"},
+          {"quote": "Quantity - kms of collector roads 55", "url": "https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf", "pdf_page": 49, "printed_page": 44, "table": "Table 21 Road Network Current Level of Service"},
+          {"quote": "Currently, Public Works oversees approximately 300km of roadway including 49 bridges and 130 culverts.", "url": "https://www.lincoln.ca/services/roads-transportation"}
+        ]
+      },
+      "roads_head_name": {"expect": "blank", "accepted": [], "why": "No named head of Public Works on the roads page or the Contact page (https://www.lincoln.ca/Contact). Council reports were not checked."},
+      "roads_head_title": {"expect": "blank", "accepted": [], "why": "Same pages; no title for a roads head."},
+      "email": {"expect": "filled", "accepted": ["publicworks@lincoln.ca"], "source": "https://www.lincoln.ca/services/roads-transportation"},
+      "phone": {"expect": "filled", "accepted": ["905-563-2799"], "source": "https://www.lincoln.ca/services/roads-transportation"},
+      "key_document": {"accepted_urls": ["https://www.lincoln.ca/sites/default/files/2025-06/Lincoln-AMP-Final%20to%20Council_AODA%20compliant%20FINAL.pdf", "https://www.lincoln.ca/council-administration/community-plans/asset-management-plan"], "how_reached": "Site menu: Asset Management Plan page, which links the 2025 plan PDF."}
+    },
+    "pelham": {
+      "name": "Town of Pelham",
+      "website": "https://www.pelham.ca/",
+      "road_length_km": {
+        "expect": "needs_human",
+        "accepted_options_km": [248.0],
+        "why": "One printed value, \"km\" with no centerline label.",
+        "sources": [
+          {"quote": "Roadway 248 km $377.6 M", "url": "https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf", "pdf_page": 62, "printed_page": 16, "table": "Table 21: Inventory and Current Replacement Value (Transportation)"}
+        ],
+        "must_reject": "The road rehabilitation page says 7 km a year \"equates to approximately 2.8% of roads\". 7 / 0.028 = 250 km is derived, not printed, and must never be offered as the road length."
+      },
+      "roads_head_name": {"expect": "blank", "accepted": [], "why": "The contacts directory (https://www.pelham.ca/contacts-directory/) lists the role by title and phone only, with no name."},
+      "roads_head_title": {"expect": "filled", "accepted": ["Director of Public Works and Drainage Superintendent"], "source": "https://www.pelham.ca/contacts-directory/"},
+      "email": {"expect": "blank", "accepted": [], "why": "The directory sends email through a form (\"Send Email to ...\"). Addresses sit in a hidden data attribute and are not printed. The roads page's \"Email Us\" goes to a web form."},
+      "phone": {"expect": "filled", "accepted": ["905-892-2607 ext. 33"], "source": "https://www.pelham.ca/contacts-directory/", "why": "The directory's Public Works entry. 905-892-2607 alone is the town's general line and does not count as the Public Works phone."},
+      "key_document": {"accepted_urls": ["https://media-001-ca.cdn.govstack.com/pelham-007-ca/media/mialwaxn/town-of-pelham-asset-management-plan-2025.pdf", "https://www.pelham.ca/pelham-government/municipal-plans-reports-studies/"], "how_reached": "Municipal Plans, Reports & Studies page, Asset Management section. The PDF sits on the town's file host (media-001-ca.cdn.govstack.com/pelham-007-ca/)."}
+    },
+    "west-lincoln": {
+      "name": "Township of West Lincoln",
+      "website": "https://www.westlincoln.ca/",
+      "road_length_km": {
+        "expect": "blank",
+        "accepted_options_km": [],
+        "why": "Not given as a centerline length. Paved roads are a length but unpaved roads are an area, so no total road length can be read. The township's lane-km figures are per km2 of land.",
+        "partial": {"quote": "Paved Roads 354,749 Meters", "value_km": 354.7, "scope": "paved roads only"},
+        "sources": [
+          {"quote": "Paved Roads 354,749 Meters $124,346,663 CPI", "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf", "pdf_page": 67, "printed_page": 65, "table": "Table 26 Detailed Asset Inventory: Roads Network"},
+          {"quote": "Unpaved Roads 612,230 Square Meters $15,851,105 CPI", "url": "https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf", "pdf_page": 67, "printed_page": 65, "table": "Table 26 Detailed Asset Inventory: Roads Network"}
+        ]
+      },
+      "roads_head_name": {"expect": "filled", "accepted": ["Mike DiPaola"], "source": "https://www.westlincoln.ca/contacts-directory/", "why": "Department head of Infrastructure, which the Departments page says covers \"Construction and maintenance of the Township's roads\". The Manager of Operations (Tray Benish) is not the department head."},
+      "roads_head_title": {"expect": "filled", "accepted": ["Director, Infrastructure"], "source": "https://www.westlincoln.ca/township-office/departments/"},
+      "email": {"expect": "filled", "accepted": ["infrastructure@westlincoln.ca"], "source": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/", "why": "A mailto link on the words \"Infrastructure Department\"."},
+      "phone": {"expect": "filled", "accepted": ["905-957-3346 ext. 5139"], "source": "https://www.westlincoln.ca/living-here/roads-and-sidewalks/"},
+      "key_document": {"accepted_urls": ["https://media-003-ca.cdn.govstack.com/westlincoln-002-ca/media/2qsccius/2025-asset-management-plan.pdf", "https://www.westlincoln.ca/township-office/plans-studies-and-reports/asset-management-plans/"], "how_reached": "Plans, Studies and Reports > Asset Management Plans. The PDF sits on the township's file host (media-003-ca.cdn.govstack.com/westlincoln-002-ca/)."}
+    },
+    "saratoga": {
+      "name": "Saratoga County, NY",
+      "website": "https://www.saratogacountyny.gov/",
+      "road_length_km": {
+        "expect": "filled",
+        "value_km": 586.1,
+        "accepted_options_km": [586.1],
+        "why": "Sum of county_mileage over the county's 31 rows for 2020 = 364.21 mi. The column is described by the dataset as \"County-owned highway centerline mileage\". The all-roads total (2,250.53 mi = 3,621.9 km) is shown beside it, never used as the value.",
+        "reference_total_km": 3621.9,
+        "sources": [
+          {"dataset": "https://data.ny.gov/resource/tccz-tc3t.json", "query": "year='2020' AND county='SARATOGA'", "rows": 31, "sum_county_mileage": 364.21, "sum_total_centerline_highway_mileage": 2250.53}
+        ]
+      },
+      "roads_head_name": {"expect": "filled", "accepted": ["Chad M. Cooke"], "source": "https://www.saratogacountyny.gov/departments/public-works/"},
+      "roads_head_title": {"expect": "filled", "accepted": ["Commissioner of Public Works"], "source": "https://www.saratogacountyny.gov/departments/public-works/"},
+      "email": {"expect": "blank", "accepted": [], "why": "The Public Works page prints no email address."},
+      "phone": {"expect": "filled", "accepted": ["(518) 885-2235"], "source": "https://www.saratogacountyny.gov/departments/public-works/"},
+      "key_document": {"accepted_urls": ["https://www.saratogacountyny.gov/departments/public-works/"], "how_reached": "Departments > Public Works."}
+    },
+    "warren": {
+      "name": "Warren County, NY",
+      "website": "https://warrencountyny.gov/",
+      "road_length_km": {
+        "expect": "needs_human",
+        "accepted_options_km": [398.1, 393.2],
+        "why": "The county's own page and the state dataset disagree a little.",
+        "sources": [
+          {"quote": "Repair and upkeep of County Highways and appurtenances on 247.36 miles of highway;", "url": "https://warrencountyny.gov/dpw", "value_km": 398.1},
+          {"dataset": "https://data.ny.gov/resource/tccz-tc3t.json", "query": "year='2020' AND county='WARREN'", "rows": 13, "sum_county_mileage": 244.31, "sum_total_centerline_highway_mileage": 1229.82, "value_km": 393.2}
+        ]
+      },
+      "roads_head_name": {"expect": "filled", "accepted": ["Kevin J. Hajos"], "source": "https://warrencountyny.gov/dpw"},
+      "roads_head_title": {"expect": "filled", "accepted": ["Superintendent of Public Works"], "source": "https://warrencountyny.gov/dpw"},
+      "email": {"expect": "blank", "accepted": [], "why": "The page shows \"Email Kevin: [email protected]\": the address is hidden from scripts by Cloudflare email protection. Decoding it would be working around the site's protection."},
+      "phone": {"expect": "filled", "accepted": ["(518) 761-6556"], "source": "https://warrencountyny.gov/dpw"},
+      "key_document": {"accepted_urls": ["https://warrencountyny.gov/dpw"], "how_reached": "Departments > Public Works."}
+    },
+    "tompkins": {
+      "name": "Tompkins County, NY",
+      "website": "https://www.tompkinscountyny.gov/",
+      "site_note": "The brief recorded HTTP 403 for every scripted request earlier on 2026-10-15. When this key was written the site answered 200, so it is scored as an ordinary Account.",
+      "road_length_km": {
+        "expect": "needs_human",
+        "accepted_options_km": [486.0, 483.8],
+        "why": "The county's page gives an approximate figure that differs a little from the state dataset.",
+        "sources": [
+          {"quote": "The Highway Department maintains close to 302 highway miles and 109 bridges in Tompkins County.", "url": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department", "value_km": 486.0},
+          {"dataset": "https://data.ny.gov/resource/tccz-tc3t.json", "query": "year='2020' AND county='TOMPKINS'", "rows": 16, "sum_county_mileage": 300.62, "sum_total_centerline_highway_mileage": 1227.49, "value_km": 483.8}
+        ]
+      },
+      "roads_head_name": {"expect": "filled", "accepted": ["Nick Ensign", "Nicholas Ensign", "Nicholas (Nick) Ensign"], "source": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department"},
+      "roads_head_title": {"expect": "filled", "accepted": ["Highway Director", "Director of Highway"], "source": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department"},
+      "email": {"expect": "filled", "accepted": ["highway@tompkins-co.org"], "source": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department"},
+      "phone": {"expect": "filled", "accepted": ["(607) 274-0300"], "source": "https://www.tompkinscountyny.gov/All-Departments/Highway-Department"},
+      "key_document": {"accepted_urls": ["https://www.tompkinscountyny.gov/All-Departments/Highway-Department"], "how_reached": "All Departments > Highway Department."}
+    }
+  }
+}
