@@ -225,6 +225,15 @@ def test_lane_km_and_area_are_rejected():
     assert paved and round(paved["km"], 1) == 354.7 and not paved["centerline"]
 
 
+def test_a_unit_with_a_word_in_front_still_counts_but_lane_miles_do_not():
+    c = Checker([src("S1", "The Highway Department maintains close to 302 highway miles and 109 bridges. "
+                           "It also plows 640 lane miles.")])
+    ok = c.road_line(0, line("302", "highway miles", "maintains close to 302 highway miles and 109 bridges"))
+    assert ok and round(ok["km"], 1) == 486.0 and ok["approximate"]
+    assert c.road_line(1, line("640", "lane miles", "It also plows 640 lane miles.")) is None
+    assert c.rejected[-1]["reason"] == "lane length, not road length"
+
+
 def test_part_of_the_network_is_not_a_road_length():
     p67 = (FX / "west-lincoln-amp-2025-p67.txt").read_text(encoding="utf-8")
     c = Checker([src("S1", kind="pdf", pdf={67: p67})])

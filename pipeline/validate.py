@@ -25,7 +25,7 @@ EMAIL = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
 APPROX = re.compile(r"\b(approximately|approx\.?|about|around|close to|nearly|roughly|almost|over|more than)\b|~", re.I)
 CENTERLINE = re.compile(r"\bcent(er|re)[ -]?line\b", re.I)
 RATIO = re.compile(r"%|\bper\b|/\s*km|km\s*/|\bpercent", re.I)
-LANE = re.compile(r"\blane[- ]?(km|kilomet)", re.I)
+LANE = re.compile(r"\blane[- ]?(km|kilomet|mi\b|miles?\b)", re.I)
 AREA = re.compile(r"\bsquare\b|\bsq\.?\b|m2\b|m²|km2\b|km²|\bhectares?\b|\bacres?\b", re.I)
 UNIT_KM = [(re.compile(r"^(km|kms|kilomet(er|re)s?)$", re.I), 1.0),
            (re.compile(r"^(m|meters?|metres?)$", re.I), 0.001),
@@ -115,10 +115,12 @@ class Checker:
         if RATIO.search(unit) or line.get("measures") == "ratio":
             return r(f"a ratio{' of lane-km' if LANE.search(context) else ''} ({unit}), not a length")
         if LANE.search(context) or line.get("measures") == "lane_length":
-            return r("lane-km, not road length")
+            return r("lane length, not road length")
         if AREA.search(unit) or line.get("measures") == "area":
             return r("an area, not a length")
-        factor = next((f for pat, f in UNIT_KM if pat.match(unit.strip().rstrip("."))), None)
+        # The unit as printed can carry a word in front ("highway miles", "centreline km"): read the last word.
+        unit_word = unit.split()[-1].rstrip(".") if unit.split() else ""
+        factor = next((f for pat, f in UNIT_KM if pat.match(unit_word)), None)
         if factor is None:
             return r(f"unit \"{unit}\" is not a length")
         if line.get("measures") != "length":

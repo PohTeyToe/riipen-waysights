@@ -223,6 +223,11 @@ DEV_NOTES = [
     "extraction prompt now says a type given as zero, or roads another government owns, doesn't break coverage.",
     "- The brief writer is now told which numbers it may use, and not to attach a department's phone to a person.",
     "- The New York dataset query got its own small request budget after long crawls used all 15 requests.",
+    "- In one development run the model gave Tompkins County's unit as \"highway miles\", and the unit check refused "
+    "it, so the county's own figure dropped out and the run filled the state number without asking. The answer key "
+    "caught it. The check now reads the last word of a unit, and refuses lane miles the way it refuses lane-km.",
+    "- Contacts now carry only a name and title: the phone and email the sites print belong to the department, so "
+    "they go on the Account.",
     "- Scoring compares URLs ignoring `https://`, `www.` and a trailing slash (decided after a development run "
     "listed www.warrencountyny.gov/dpw for the key's warrencountyny.gov/dpw).",
 ]
