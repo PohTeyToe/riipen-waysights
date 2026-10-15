@@ -10,7 +10,8 @@ node_modules/
 dist/
 .vercel/
 .env*
-# Internal planning notes, not for the public repo
+# Internal planning and review notes, not for the public repo
 BRIEF.md
+REVIEW.md
 # Review screenshots from building the page (local only)
 _review_screenshots/

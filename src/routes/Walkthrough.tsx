@@ -184,7 +184,8 @@ export function Walkthrough() {
             Your pricing form asks a town for one number: the length of its road network, in centerline kilometers. That
             number is spread across the town's own documents. The asset management plan says one thing, the roads page
             another, and often neither says centerline. Your Riipen brief asks for a button that reads approved municipal
-            sites and fills the Account, so I started with the number your pricing runs on.
+            sites and fills the Account. I started with the number your pricing runs on, so a rep can size a town before
+            it fills in your form.
           </p>
           <p>
             This is roughly where I'd want to be at the end of week two: a small Python service that reads a
