@@ -3,7 +3,7 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { isCite, runBySlug, runs, sourceById, type Cite } from './data'
+import { isCite, runBySlug, runs, sourceById, wholeRoadKm, type Cite } from './data'
 import { datasetRows, findQuote, savedText, type SavedPage } from './pages'
 import { replayTimes, shownRows, writePlan } from './record'
 
@@ -153,5 +153,12 @@ describe('copy', () => {
     for (const f of [...walk(join(root, 'src')), join(root, 'index.html')]) {
       expect(readFileSync(f, 'utf8').includes(String.fromCharCode(0x2014)), f).toBe(false)
     }
+  })
+})
+
+describe('road figures in whole km', () => {
+  it('rounds once from the state miles, so 1,227.49 mi is 1,975 km, not 1,976', () => {
+    expect(wholeRoadKm(runBySlug.tompkins)).toEqual({ owned: 484, within: 1975 })
+    expect(wholeRoadKm(runBySlug.saratoga).within).toBe(Math.round(2250.53 * 1.609344))
   })
 })

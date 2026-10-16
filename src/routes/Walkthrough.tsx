@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { DATASET_PAGE, HERO, meta, REPO, runBySlug, shortName, type Cite } from '../lib/data'
+import { DATASET_PAGE, HERO, meta, REPO, runBySlug, shortName, wholeRoadKm, type Cite } from '../lib/data'
 import { fmtDate, fmtKm, fmtMi, prettyUrl } from '../lib/format'
 import { shownRows } from '../lib/record'
 import { Link } from '../lib/router'
@@ -18,7 +18,7 @@ function Before({ children }: { children: ReactNode }) {
   )
 }
 
-/** The county the run fills end to end, as the run left it. */
+/** The hero county, as the run left it. */
 function HeroCard() {
   const run = runBySlug[HERO]
   const rows = shownRows(run, {})
@@ -105,13 +105,12 @@ function HeroCard() {
 function AskWaysights() {
   const run = runBySlug[HERO]
   const s = run.validated.road_length_km
-  const owned = Math.round(s.value_km ?? 0)
-  const within = Math.round(s.within_km ?? 0)
+  const { owned, within } = wholeRoadKm(run)
   return (
     <aside className="wt-ask" aria-labelledby="wt-ask-h">
       <h2 id="wt-ask-h">One question only you can answer</h2>
       <p>
-        Your FAQ prices on <q>the total centerline length of roads within your jurisdiction.</q> For a county I read that as
+        Your FAQ says pricing runs on <q>the total centerline length of roads within your jurisdiction.</q> For a county I read that as
         the roads it owns: <strong>{fmtKm(owned)} km</strong> for {run.account.name}, not the <strong>{fmtKm(within)} km</strong>{' '}
         of every road inside it (NYSDOT, {s.data_year}). Is that right? The run uses owned roads until you say otherwise.
       </p>

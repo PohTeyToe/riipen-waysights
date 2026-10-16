@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fmtKm } from '../lib/format'
-import { HERO, runBySlug, runs, shortName } from '../lib/data'
+import { HERO, runBySlug, runs, shortName, wholeRoadKm } from '../lib/data'
 import { Link } from '../lib/router'
 
 // The Riipen brief, item by item (paraphrased from the project page, so no quote marks).
@@ -41,9 +41,7 @@ const items = ITEMS.map((x) =>
 )
 
 export function PlanTab() {
-  const s = runBySlug[HERO].validated.road_length_km
-  const owned = Math.round(s.value_km ?? 0)
-  const within = Math.round(s.within_km ?? 0)
+  const { owned, within } = wholeRoadKm(runBySlug[HERO])
   const plan = runBySlug.lincoln.validated.road_length_km.options[0]?.parts ?? []
   const pelham = runBySlug.pelham.validated.road_length_km.options[0]
 
@@ -58,7 +56,7 @@ export function PlanTab() {
   // Policy questions: one answer each settles every Account like it, instead of one question per Account.
   const questions: { q: string; see?: { slug: string; label: string } }[] = [
     {
-      q: `Your FAQ prices on "the total centerline length of roads within your jurisdiction." For a county I read that as the roads it owns: ${fmtKm(owned)} km for ${runBySlug[HERO].account.name}, not the ${fmtKm(within)} km of every road inside it. Is that right?`,
+      q: `Your FAQ says pricing runs on "the total centerline length of roads within your jurisdiction." For a county I read that as the roads it owns: ${fmtKm(owned)} km for ${runBySlug[HERO].account.name}, not the ${fmtKm(within)} km of every road inside it. Is that right?`,
       see: { slug: HERO, label: `See both numbers on ${shortName[HERO]}` },
     },
     {

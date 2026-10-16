@@ -153,6 +153,7 @@ export type Run = {
       status: string
       value_km?: number
       within_km?: number
+      within_mi?: number
       data_year?: string
     }
     /** `values`: every number the pages print for the department, when they disagree. */
@@ -213,8 +214,21 @@ export const seedBySlug: Record<string, SeedAccount> = Object.fromEntries(seed.a
 
 export const REPO = 'https://github.com/PohTeyToe/riipen-waysights'
 
-/** The Account the walkthrough leads with: a New York county the run fills end to end. */
+/** The Account the walkthrough leads with: the New York county with the clearest owned-or-every-road question. */
 export const HERO = 'tompkins'
+
+const MI_KM = 1.609344
+
+/** A county's two road figures in whole km, each rounded once from its source. The stored km are
+ * already rounded to 0.1, so rounding them again can be off by one: 1,975.45 km became 1,976. */
+export function wholeRoadKm(run: Run): { owned: number; within: number } {
+  const s = run.validated.road_length_km
+  const parts = s.options[0]?.parts ?? []
+  return {
+    owned: Math.round(parts.length ? parts.reduce((n, p) => n + p.km, 0) : (s.value_km ?? 0)),
+    within: Math.round(s.within_mi != null ? s.within_mi * MI_KM : (s.within_km ?? 0)),
+  }
+}
 
 // Short labels for the Account list and the scorecard.
 export const shortName: Record<string, string> = {
