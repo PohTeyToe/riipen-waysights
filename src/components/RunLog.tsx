@@ -1,153 +1,149 @@
-import { useEffect, useRef, type ReactNode } from 'react'
-import type { Run, Step } from '../lib/data'
-import { fmtBytes, fmtDate, fmtTime, prettyUrl } from '../lib/format'
-import { realSpanMs, replayTimes } from '../lib/record'
-import type { AccountState } from '../lib/store'
+// One Account's log, as the run wrote it, revealed up to the playhead.
+import { useEffect, useRef } from 'react'
+import { runBySlug, type Step } from '../lib/data'
+import { fmtBytes, prettyUrl } from '../lib/format'
+import { sourceIdFor, type Focus } from '../lib/marks'
+import { laneBySlug } from '../lib/timeline'
 
 const TAG: Record<string, string> = {
   status: 'status',
   allowlist: 'allow',
   robots: 'robots',
   fetch: 'fetch',
+  redirect: 'redirect',
   skip: 'skip',
   pdf: 'pdf',
   read: 'read',
   dataset: 'data',
-  extract: 'model',
+  extract: 'Claude',
   check: 'check',
-  reject: 'reject',
+  reject: 'refuse',
   question: 'ask',
-  merge: 'merge',
-  brief: 'brief',
-  writeback: 'write',
-  note: 'note',
+  note: 'ask',
   dedupe: 'dedupe',
-  redirect: 'redirect',
+  brief: 'Claude',
+  writeback: 'zoho',
+  error: 'error',
 }
 
-/** A URL on the Account's own site shows as its path; anything else keeps its host. */
-function where(url: string, home: string): string {
-  const p = prettyUrl(url)
-  return p.startsWith(`${home}/`) ? p.slice(home.length) : p
+function tone(s: Step): string {
+  if (s.step === 'fetch' && s.status && s.status >= 400) return 'bad'
+  if (s.step === 'extract' || (s.step === 'brief' && s.model)) return 'model'
+  if (s.step === 'reject' || s.step === 'error') return 'bad'
+  if (s.step === 'question' || s.step === 'note') return 'ask'
+  if (s.step === 'dataset' || (s.url ?? '').includes('data.ny.gov')) return 'data'
+  if (s.step === 'skip' || s.step === 'robots' || s.step === 'allowlist' || s.step === 'status') return 'dim'
+  return 'plain'
 }
 
-function Line({ s, home }: { s: Step; home: string }) {
-  const bad = s.step === 'reject' || (s.step === 'fetch' && (s.status ?? 200) >= 400)
-  let head: ReactNode = s.msg
-  let detail = ''
-  let clip = false
-  if (s.step === 'fetch' && s.url) {
-    clip = true
-    head = (
+function Line({ s }: { s: Step }) {
+  if ((s.step === 'fetch' || s.step === 'redirect') && s.url) {
+    const u = prettyUrl(s.url)
+    const path = u.replace(/^[^/]+/, '') || '/'
+    return (
       <>
-        <span className={bad ? 'log-bad' : 'log-ok'}>{s.msg}</span> <span title={s.url}>{where(s.url, home) || '/'}</span>
+        <span className="log-msg">
+          <b>{s.status}</b> <span className="log-path">{decodeURIComponent(path)}</span>
+        </span>
+        <span className="log-sub">
+          {s.step === 'redirect' && s.to ? `to ${prettyUrl(s.to)}` : null}
+          {s.ms != null ? `${s.ms} ms` : null}
+          {s.waited_ms ? ` · paused ${(s.waited_ms / 1000).toFixed(1)} s first` : null}
+          {s.bytes ? ` · ${fmtBytes(s.bytes)}` : null}
+          {s.page ? ` · page ${s.page}` : null}
+        </span>
+        {s.why ? <span className="log-why">{s.why}</span> : null}
       </>
     )
-    detail = [
-      s.bytes ? fmtBytes(s.bytes) : '',
-      `${s.ms} ms`,
-      s.waited_ms ? `waited ${(s.waited_ms / 1000).toFixed(1)} s` : '',
-      s.why ?? '',
-    ]
-      .filter(Boolean)
-      .join(' · ')
-  } else if (s.step === 'robots') {
-    detail = `HTTP ${s.status} · ${s.delay_s} s between requests`
-  } else if (s.step === 'status' && s.rate_rule) {
-    detail = s.rate_rule
-  } else if (s.step === 'redirect' && s.url) {
-    detail = `${where(s.url, home)} to ${s.to ? where(s.to, home) : ''}`
-  } else if ((s.step === 'skip' || s.step === 'note') && s.url) {
-    detail = where(s.url, home)
-  } else if (s.step === 'reject') {
-    head = <span className="log-bad">{s.msg}</span>
-  } else if (s.model) {
-    detail = s.model
   }
-  return (
-    <li className={`log-line log-line--${s.step}`}>
-      <time className="log-t" dateTime={s.t} title={s.t}>
-        {fmtTime(s.t, false)}
-      </time>
-      <span className="log-tag">
-        {TAG[s.step] ?? s.step}
-        {s.page ? <span className="log-page"> {s.page}</span> : null}
-      </span>
-      <span className="log-msg">
-        <span className={clip ? 'log-main log-clip' : 'log-main'}>{head}</span>
-        {detail ? (
-          <span className="log-detail log-clip" title={detail}>
-            {detail}
-          </span>
-        ) : null}
-      </span>
-    </li>
-  )
+  return <span className="log-msg">{s.msg}</span>
 }
 
-export function RunLog({ run, st, onSkip, onEnrich }: { run: Run; st: AccountState; onSkip: () => void; onEnrich: () => void }) {
+export function RunLog({
+  slug,
+  shown,
+  playing,
+  active,
+  onOpen,
+}: {
+  slug: string
+  shown: number
+  playing: boolean
+  active: number | null
+  onOpen: (f: Focus) => void
+}) {
+  const run = runBySlug[slug]
+  const lane = laneBySlug[slug]
   const box = useRef<HTMLOListElement>(null)
-  const skip = useRef<HTMLButtonElement>(null)
-  const steps = run.steps
-  const shown = st.phase === 'idle' ? 0 : st.phase === 'running' ? st.shown : steps.length
-  const speed = Math.round(realSpanMs(steps) / replayTimes(steps).at(-1)!)
+  const follow = useRef(true)
+  const seen = useRef(shown)
 
+  // As new lines arrive, keep the newest in view unless the reader scrolled up. Opening a
+  // finished Account starts at the top.
   useEffect(() => {
     const el = box.current
-    if (el && st.phase !== 'idle') el.scrollTop = el.scrollHeight
-  }, [shown, st.phase])
+    const grew = shown > seen.current
+    seen.current = shown
+    if (!el || active != null || !grew) return
+    if (follow.current) el.scrollTop = el.scrollHeight
+  }, [shown, active])
 
-  // Pressing Enrich Account disables it, so keyboard focus moves to the one control the replay has.
   useEffect(() => {
-    if (st.phase === 'running') skip.current?.focus({ preventScroll: true })
-  }, [st.phase])
+    if (playing) follow.current = true
+  }, [playing])
 
-  const pages = run.run.pages_read
-  const skipped = steps.find((s) => s.step === 'skip' && /links pointed off/.test(s.msg))
-  const offList = skipped ? Number(skipped.msg.match(/\d+/)?.[0] ?? 0) : 0
+  useEffect(() => {
+    if (active == null) return
+    const row = box.current?.querySelector<HTMLElement>(`[data-i="${active}"]`)
+    if (row && box.current) box.current.scrollTop = row.offsetTop - box.current.clientHeight / 3
+  }, [active, slug])
+
+  if (shown === 0)
+    return (
+      <p className="panel-empty">
+        Nothing logged yet. {lane.start > 0 ? `This Account waits ${(lane.start / 1000).toFixed(1)} s for a free worker.` : 'Press Enrich Account or Play.'}
+      </p>
+    )
 
   return (
-    <section className="log" aria-labelledby="log-h">
-      <header className="log-head">
-        <div>
-          <h2 id="log-h">Run log</h2>
-          <p className="log-sub">
-            {st.phase === 'idle'
-              ? `Replays the run from ${fmtDate(run.run.started_at)}, line by line`
-              : `Replayed from a run on ${fmtDate(run.run.started_at)}, about ${speed}x speed`}
-          </p>
-        </div>
-        {st.phase === 'running' ? (
-          <button type="button" className="btn btn--quiet" onClick={onSkip} ref={skip}>
-            Skip to result
-          </button>
-        ) : null}
-      </header>
-      {st.phase === 'idle' ? (
-        <div className="log-empty">
-          <p>
-            Press <button type="button" className="linkish" onClick={onEnrich}>Enrich Account</button> to replay what the
-            pipeline did for {run.account.name}: {steps.length} log lines, about 10 seconds, with a skip.
-          </p>
-          <p className="log-dim">Times are UTC. Every request, wait and refusal is in the log as it happened.</p>
-        </div>
-      ) : (
-        <>
-          {st.phase !== 'running' ? (
-            <p className="log-summary">
-              {pages} pages read · {run.run.page_fetches} of {run.run.page_budget} page fetches ·{' '}
-              <span title="Every HTTP request, counting robots.txt and redirects">{run.run.http_requests} requests in all</span> ·{' '}
-              {offList} off-list links not followed · {run.rejected.length} {run.rejected.length === 1 ? 'value' : 'values'}{' '}
-              rejected
-            </p>
-          ) : null}
-          <ol className="log-lines" ref={box} aria-live={st.phase === 'running' ? 'off' : undefined} tabIndex={0} aria-label="Run log lines">
-            {steps.slice(0, Math.max(shown, 1)).map((s, i) => (
-              <Line key={i} s={s} home={prettyUrl(run.account.website)} />
-            ))}
-          </ol>
-        </>
-      )}
-    </section>
+    <ol
+      className="log"
+      ref={box}
+      onScroll={(e) => {
+        const el = e.currentTarget
+        follow.current = el.scrollHeight - el.scrollTop - el.clientHeight < 40
+      }}
+    >
+      {run.steps.slice(0, shown).map((s, i) => {
+        const block = lane.blocks.find((b) => b.i === i)
+        const src = s.url ? sourceIdFor(run, s.url) : undefined
+        const k = tone(s)
+        const body = (
+          <>
+            <span className="log-t mono">+{((lane.times[i] - lane.start) / 1000).toFixed(1)}</span>
+            <span className={`log-tag log-tag--${k}`}>{TAG[s.step] ?? s.step}</span>
+            <span className="log-body">
+              <Line s={s} />
+              {block ? (
+                <span className="log-sub">
+                  {s.model} · {((block.to - block.from) / 1000).toFixed(1)} s{s.step === 'extract' ? ` · prompt of ${run.run.prompt_chars.toLocaleString('en-US')} characters, no tools, JSON schema` : ''}
+                </span>
+              ) : null}
+            </span>
+          </>
+        )
+        return (
+          <li key={i} data-i={i} className={`log-row log-row--${k}${active === i ? ' is-active' : ''}`}>
+            {src && s.status === 200 ? (
+              <button type="button" className="log-btn" onClick={() => onOpen({ source: src })} aria-label={`Open the saved text of ${prettyUrl(s.url!)}`}>
+                {body}
+              </button>
+            ) : (
+              <div className="log-btn">{body}</div>
+            )}
+          </li>
+        )
+      })}
+    </ol>
   )
 }

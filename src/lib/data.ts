@@ -8,6 +8,7 @@ import tompkins from '../../data/run/tompkins.json'
 import metaJson from '../../data/run/meta.json'
 import scorecardJson from '../../data/scorecard.json'
 import seedJson from '../../data/accounts.seed.json'
+import keyJson from '../../data/answer_key.json'
 
 export type Cite = {
   quote: string
@@ -93,6 +94,8 @@ export type Step = {
   pdf_page?: number
   delay_s?: number
   model?: string
+  /** On the check step: how many values the checks refused. */
+  rejected?: number
 }
 
 export type Source = {
@@ -142,6 +145,8 @@ export type Run = {
     page_fetches: number
     page_budget: number
     http_requests: number
+    /** Characters of page text sent to the model in the extract call. */
+    prompt_chars: number
   }
   status: 'done' | 'needs_review'
   steps: Step[]
@@ -169,6 +174,8 @@ export type Run = {
 
 export type Meta = {
   run_date: string
+  started_at: string
+  finished_at: string
   model: string
   pipeline_commit: string
   answer_key_commit: string
@@ -190,10 +197,6 @@ export type ScoreRow = {
   key_expect?: string | null
 }
 
-/** Filled by the 2% rule where the key, written before it, sends the field to a person: one of the key's own figures. */
-export function filledByRule(r: ScoreRow): boolean {
-  return r.outcome === 'wrong' && r.key_expect === 'needs_human' && Array.isArray(r.expected) && r.expected.includes(r.got)
-}
 export type Scorecard = {
   answer_key_commit: string
   counts: Record<ScoreOutcome, number>
@@ -204,17 +207,23 @@ export type Scorecard = {
 }
 
 export type SeedAccount = { crm_id: string; slug: string; Account_Type: string; Enrichment_Status: string; mock: boolean }
+export type SeedContact = { mock: boolean; id: string; account: string; name: string; title: string; phone: string; email: string | null }
+
+/** The answer key's road row: what it expects and which figures it accepts. */
+export type KeyRoad = { expect: 'filled' | 'needs_human' | 'blank'; accepted_options_km?: number[]; why?: string }
+export type AnswerKey = { accounts: Record<string, { road_length_km: KeyRoad }> }
 
 export const runs: Run[] = [lincoln, pelham, westLincoln, saratoga, warren, tompkins] as unknown as Run[]
 export const runBySlug: Record<string, Run> = Object.fromEntries(runs.map((r) => [r.account.slug, r]))
 export const meta = metaJson as unknown as Meta
 export const scorecard = scorecardJson as unknown as Scorecard
-export const seed = seedJson as unknown as { label: string; accounts: SeedAccount[] }
+export const seed = seedJson as unknown as { label: string; accounts: SeedAccount[]; contacts: SeedContact[] }
+export const answerKey = keyJson as unknown as AnswerKey
 export const seedBySlug: Record<string, SeedAccount> = Object.fromEntries(seed.accounts.map((a) => [a.slug, a]))
 
 export const REPO = 'https://github.com/PohTeyToe/riipen-waysights'
 
-/** The Account the walkthrough leads with: the New York county with the clearest owned-or-every-road question. */
+/** The Account the page opens on: the New York county with the clearest owned-or-every-road question. */
 export const HERO = 'tompkins'
 
 const MI_KM = 1.609344
@@ -229,6 +238,9 @@ export function wholeRoadKm(run: Run): { owned: number; within: number } {
     within: Math.round(s.within_mi != null ? s.within_mi * MI_KM : (s.within_km ?? 0)),
   }
 }
+
+/** The Account list: the lead county first, then New York, then Niagara. */
+export const listOrder: Run[] = ['tompkins', 'warren', 'saratoga', 'lincoln', 'pelham', 'west-lincoln'].map((s) => runBySlug[s])
 
 // Short labels for the Account list and the scorecard.
 export const shortName: Record<string, string> = {

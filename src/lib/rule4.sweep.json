@@ -1,0 +1,2075 @@
+{
+ "recorded_near": 0.02,
+ "by_account": {
+  "lincoln": {
+   "0.000": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.001": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.002": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.003": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.004": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.005": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.006": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.007": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.008": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.009": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.010": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.011": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.012": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.013": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.014": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.015": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.016": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.017": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.018": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.019": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.020": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.021": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.022": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.023": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.024": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.025": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.026": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.027": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.028": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.029": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.030": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.031": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.032": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.033": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.034": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.035": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.036": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.037": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.038": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.039": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.040": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.041": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.042": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.043": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.044": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.045": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.046": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.047": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.048": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.049": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   },
+   "0.050": {
+    "status": "needs_human",
+    "value_km": 310.0,
+    "options": [
+     310.0
+    ]
+   }
+  },
+  "pelham": {
+   "0.000": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.001": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.002": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.003": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.004": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.005": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.006": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.007": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.008": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.009": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.010": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.011": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.012": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.013": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.014": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.015": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.016": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.017": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.018": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.019": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.020": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.021": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.022": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.023": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.024": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.025": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.026": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.027": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.028": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.029": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.030": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.031": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.032": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.033": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.034": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.035": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.036": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.037": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.038": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.039": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.040": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.041": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.042": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.043": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.044": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.045": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.046": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.047": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.048": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.049": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   },
+   "0.050": {
+    "status": "needs_human",
+    "value_km": 248.0,
+    "options": [
+     248.0
+    ]
+   }
+  },
+  "saratoga": {
+   "0.000": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.001": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.002": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.003": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.004": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.005": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.006": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.007": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.008": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.009": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.010": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.011": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.012": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.013": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.014": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.015": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.016": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.017": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.018": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.019": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.020": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.021": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.022": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.023": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.024": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.025": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.026": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.027": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.028": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.029": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.030": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.031": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.032": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.033": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.034": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.035": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.036": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.037": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.038": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.039": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.040": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.041": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.042": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.043": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.044": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.045": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.046": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.047": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.048": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.049": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   },
+   "0.050": {
+    "status": "filled",
+    "value_km": 586.1,
+    "options": [
+     586.1
+    ]
+   }
+  },
+  "tompkins": {
+   "0.000": {
+    "status": "needs_human",
+    "value_km": 483.8,
+    "options": [
+     483.8,
+     486.0
+    ]
+   },
+   "0.001": {
+    "status": "needs_human",
+    "value_km": 483.8,
+    "options": [
+     483.8,
+     486.0
+    ]
+   },
+   "0.002": {
+    "status": "needs_human",
+    "value_km": 483.8,
+    "options": [
+     483.8,
+     486.0
+    ]
+   },
+   "0.003": {
+    "status": "needs_human",
+    "value_km": 483.8,
+    "options": [
+     483.8,
+     486.0
+    ]
+   },
+   "0.004": {
+    "status": "needs_human",
+    "value_km": 483.8,
+    "options": [
+     483.8,
+     486.0
+    ]
+   },
+   "0.005": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.006": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.007": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.008": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.009": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.010": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.011": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.012": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.013": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.014": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.015": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.016": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.017": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.018": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.019": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.020": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.021": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.022": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.023": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.024": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.025": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.026": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.027": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.028": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.029": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.030": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.031": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.032": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.033": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.034": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.035": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.036": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.037": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.038": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.039": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.040": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.041": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.042": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.043": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.044": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.045": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.046": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.047": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.048": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.049": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   },
+   "0.050": {
+    "status": "filled",
+    "value_km": 483.8,
+    "options": [
+     483.8
+    ]
+   }
+  },
+  "warren": {
+   "0.000": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.001": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.002": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.003": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.004": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.005": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.006": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.007": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.008": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.009": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.010": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.011": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.012": {
+    "status": "needs_human",
+    "value_km": 393.2,
+    "options": [
+     393.2,
+     398.1
+    ]
+   },
+   "0.013": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.014": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.015": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.016": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.017": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.018": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.019": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.020": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.021": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.022": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.023": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.024": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.025": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.026": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.027": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.028": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.029": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.030": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.031": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.032": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.033": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.034": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.035": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.036": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.037": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.038": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.039": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.040": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.041": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.042": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.043": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.044": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.045": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.046": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.047": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.048": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.049": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   },
+   "0.050": {
+    "status": "filled",
+    "value_km": 398.1,
+    "options": [
+     398.1
+    ]
+   }
+  },
+  "west-lincoln": {
+   "0.000": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.001": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.002": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.003": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.004": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.005": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.006": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.007": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.008": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.009": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.010": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.011": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.012": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.013": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.014": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.015": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.016": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.017": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.018": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.019": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.020": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.021": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.022": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.023": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.024": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.025": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.026": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.027": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.028": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.029": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.030": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.031": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.032": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.033": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.034": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.035": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.036": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.037": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.038": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.039": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.040": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.041": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.042": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.043": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.044": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.045": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.046": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.047": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.048": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.049": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   },
+   "0.050": {
+    "status": "not_found",
+    "value_km": null,
+    "options": []
+   }
+  }
+ }
+}

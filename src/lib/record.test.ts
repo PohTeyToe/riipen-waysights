@@ -3,9 +3,9 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { isCite, runBySlug, runs, sourceById, wholeRoadKm, type Cite } from './data'
+import { HERO, isCite, listOrder, runBySlug, runs, sourceById, wholeRoadKm, type Cite } from './data'
 import { datasetRows, findQuote, savedText, type SavedPage } from './pages'
-import { replayTimes, shownRows, writePlan } from './record'
+import { shownRows, writePlan } from './record'
 
 const root = join(__dirname, '..', '..')
 const pages = (slug: string): SavedPage[] => JSON.parse(readFileSync(join(root, 'data/run/pages', `${slug}.json`), 'utf8'))
@@ -132,15 +132,26 @@ describe('answers change the preview, and only the preview', () => {
   })
 })
 
-describe('replay', () => {
-  it('keeps the order of the log and lands near ten seconds', () => {
-    for (const run of runs) {
-      const at = replayTimes(run.steps)
-      expect(at).toHaveLength(run.steps.length)
-      for (let i = 1; i < at.length; i++) expect(at[i]).toBeGreaterThanOrEqual(at[i - 1])
-      expect(at[at.length - 1]).toBeGreaterThan(5_000)
-      expect(at[at.length - 1]).toBeLessThan(16_000)
+describe('rows a person chooses not to write', () => {
+  it('a dropped field leaves the Account update; the rest stay', () => {
+    const plan = writePlan(runBySlug.tompkins, {}, new Set(['email', 'brief']))
+    const account = plan.requests[0].body.data[0]
+    expect(account.Public_Works_Email).toBeUndefined()
+    expect(account.Account_Brief).toBeUndefined()
+    expect(account.Public_Works_Phone).toBe('(607) 274-0300')
+    expect(plan.changes).toBe(writePlan(runBySlug.tompkins, {}).changes - 2)
+  })
+
+  it("a dropped roads head drops its Contact request, and Warren's merge with it", () => {
+    for (const slug of ['tompkins', 'warren']) {
+      const plan = writePlan(runBySlug[slug], {}, new Set(['roads_head']))
+      expect(plan.requests.some((r) => r.url.endsWith('/Contacts')), slug).toBe(false)
     }
+  })
+
+  it('a dropped road length stays blank even after "Centerline"', () => {
+    const plan = writePlan(runBySlug.lincoln, { road_length_km: 0 }, new Set(['road_length_km']))
+    expect(plan.requests[0].body.data[0].Road_Network_Centerline_km).toBeUndefined()
   })
 })
 
@@ -160,5 +171,12 @@ describe('road figures in whole km', () => {
   it('rounds once from the state miles, so 1,227.49 mi is 1,975 km, not 1,976', () => {
     expect(wholeRoadKm(runBySlug.tompkins)).toEqual({ owned: 484, within: 1975 })
     expect(wholeRoadKm(runBySlug.saratoga).within).toBe(Math.round(2250.53 * 1.609344))
+  })
+})
+
+describe('account list', () => {
+  it('lists every Account once, the lead county first', () => {
+    expect(listOrder.map((r) => r.account.slug).sort()).toEqual(runs.map((r) => r.account.slug).sort())
+    expect(listOrder[0].account.slug).toBe(HERO)
   })
 })

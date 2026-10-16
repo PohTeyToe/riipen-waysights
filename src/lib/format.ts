@@ -47,3 +47,14 @@ export function cleanTitle(title: string): string {
   const cut = title.split(/ \| | – /)[0].trim()
   return cut || title
 }
+
+const nf1fixed = new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+/** Always one decimal: 1,975.5 and 486.0. */
+export function fmtKm1(n: number): string {
+  return nf1fixed.format(n)
+}
+
+/** "0.4%" from 0.004. */
+export function fmtPct(share: number): string {
+  return `${(share * 100).toFixed(1)}%`
+}

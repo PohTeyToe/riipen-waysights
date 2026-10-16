@@ -5,6 +5,8 @@ pipeline/.cache/
 # Local-only files
 BRIEF.md
 REVIEW.md
+PRODUCT.md
+DESIGN.md
 _review_screenshots/
 node_modules/
 dist/

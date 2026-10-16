@@ -33,6 +33,7 @@ The model step uses the Claude Code CLI (`claude -p`). Swap `extract.PROVIDER` f
 | `service.py` | The FastAPI service the button calls. Not hosted. |
 | `zoho/enrich_account.deluge` | The button's function. Draft, never run in a Zoho org. |
 | `run.py`, `report.py` | The offline run and the scorecard. |
+| `sweep_near.py` | Re-runs rule 4 on the saved model output at 0% to 5% and writes `src/lib/rule4.sweep.json`, which the page's slider is tested against. No network, no model call. |
 
 ## The five rules (`validate.py`)
 

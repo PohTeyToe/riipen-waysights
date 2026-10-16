@@ -1,4 +1,4 @@
-// A small history router: four paths and one query parameter don't need a library.
+// A small history router: three pages and one query parameter don't need a library.
 import { useSyncExternalStore, type AnchorHTMLAttributes, type MouseEvent } from 'react'
 
 const EVENT = 'app:navigate'
@@ -21,9 +21,10 @@ export function useLocation(): { path: string; query: URLSearchParams } {
   return { path: path.replace(/\/+$/, '') || '/', query: new URLSearchParams(search) }
 }
 
-export function navigate(to: string, { keepScroll = false } = {}) {
+export function navigate(to: string, { keepScroll = false, replace = false } = {}) {
   if (to === here()) return
-  window.history.pushState(null, '', to)
+  if (replace) window.history.replaceState(null, '', to)
+  else window.history.pushState(null, '', to)
   window.dispatchEvent(new Event(EVENT))
   const hash = to.split('#')[1]
   if (hash) requestAnimationFrame(() => focusOn(document.getElementById(hash)))

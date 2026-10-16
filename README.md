@@ -12,14 +12,13 @@ The outputs in `data/` come from one final run on six real municipalities on Oct
 |---|---|
 | `pipeline/` | The Python service: fetcher, discovery, PDF reading, the model step, the five validation rules, duplicate check, Account brief, Zoho write-back builder, FastAPI service, Deluge button draft, and offline tests. See `pipeline/README.md`. |
 | `data/` | The run's real outputs (`run/`), the answer key written before the first run, the scorecard, the sample CRM state, and `SOURCES.md` (every page with its fetch time, HTTP status and hash, and every change made along the way). |
-| `src/` | The page (Vite, React, TypeScript). It reads `data/` as is and shows the pipeline files as read-only code. It never regenerates anything. |
+| `src/` | The page (Vite, React, TypeScript). It reads `data/` as is and shows the pipeline files as read-only code. It never regenerates anything; the rule-4 slider recomputes road rows in the browser and is tested against `pipeline/sweep_near.py` at 51 settings. |
 
 ## The page
 
-- `/` A short walkthrough: Tompkins County before and after (its road length, roads head, email, phone and brief, each with the line it came from), and the one question only Waysights can answer: does pricing count the roads a county owns, or every road inside it.
-- `/demo` A CRM-style Account record. Press **Enrich Account** to replay the run log for that Account (about 10 seconds, with a skip), then see each proposed change with its quoted line, source link, PDF page and fetch date. Every quote can be opened in place in the saved page text it was checked against. Answer the question, look at what validation rejected, and preview the exact Zoho requests (nothing is sent).
+- `/` and `/demo` The run board, then the Account under it, then the scorecard. The board replays the Oct 15 run on one time axis: six Accounts, three workers, every HTTP request with the pause the shared host clock added before it, each Claude call with its length, the checks with how many values they refused, and each question for a person. Play, pause (Space), scrub or change speed; hover a mark to read the logged step, click it to open that step. Below it, the selected Account in Zoho's terms: what Zoho has now, what the run proposes, the check each value passed and a switch to leave a field out. Every quote opens the saved page text with the line marked. Answer a question in one click and the Zoho requests change, shown as a diff. The inspector beside the record has the run log, what Claude returned next to what the checks did with it, the source text and the requests. The scorecard compares the run with the answer key, misses in words, and its slider re-runs rule 4 at any tolerance from 0% to 5% in the browser. `?account=warren` and the like open one Account and wait for **Enrich Account**.
 - `/demo/zoho` The Zoho side: the button flow and the Deluge, write-back and service code, read straight from `pipeline/`.
-- `/demo/plan` What I'd own, one way to split the rest, the brief item by item, and five questions only Waysights can answer. Two of them are policy questions: one answer settles every Account like it.
+- `/demo/plan` The brief item by item, one way to split three seats, and five questions only Waysights can answer (`#q1` to `#q5`).
 
 ## Run it
 

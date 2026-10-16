@@ -1,480 +1,499 @@
-import { useEffect, useRef, useState } from 'react'
-import { filledByRule, readableUrl, runs, scorecard, seedBySlug, shortName, sourceById, type Cite, type Run } from '../lib/data'
-import { cleanTitle, fmtDate, fmtDateTime, prettyUrl } from '../lib/format'
-import { fillMarks, openQuestions, revealAt, shownRows, writePlan, FIELD_ORDER, type ShownRow } from '../lib/record'
-import { Link } from '../lib/router'
-import { useStore, type AccountState } from '../lib/store'
-import { FieldRow, SampleTag } from './Fields'
-import { RunLog } from './RunLog'
-import { Quote } from './Source'
-import { Chip, Dot, Glyph, Marks } from './Status'
-import { Tabs } from './Tabs'
-import { Tested } from './Tested'
+// The Zoho Account as the button leaves it: what Zoho has now, what the run proposes, the check
+// each value passed, and whether it gets written. Values land when the replay reaches the step that
+// produced them. Answers, dropped fields and the approval live in this tab only.
+import { type ReactNode } from 'react'
+import { isCite, runBySlug, seedBySlug, type Cite, type DocLink, type ProposedRow } from '../lib/data'
+import { cleanTitle, fmtDateTime, fmtKm, fmtKm1, prettyUrl } from '../lib/format'
+import { quotedBits, sourceIdFor, type Focus } from '../lib/marks'
+import { shownRows, writePlan, type ShownRow, type ShownStatus } from '../lib/record'
+import { useStore } from '../lib/store'
+import { laneBySlug, laneNow } from '../lib/timeline'
+import { Glyph, type GlyphKind } from './Glyph'
 
-function statusWord(run: Run, st: AccountState): string {
-  if (st.phase === 'idle') return seedBySlug[run.account.slug].Enrichment_Status
-  if (st.phase === 'running') {
-    const last = run.steps.slice(0, st.shown + 1).filter((s) => s.step === 'status').at(-1)
-    return last?.msg === 'Queued' ? 'Queued' : 'Running'
-  }
-  if (st.phase === 'proposed') return 'Changes proposed'
-  return writePlan(run, st.answers).status
+const LABEL: Record<ProposedRow['field'], string> = {
+  road_length_km: 'Road network',
+  email: 'Public Works email',
+  phone: 'Public Works phone',
+  roads_head: 'Roads head',
+  key_documents: 'Key documents',
+  brief: 'Account brief',
+}
+const UNIT: Partial<Record<ProposedRow['field'], string>> = { road_length_km: 'centerline km', roads_head: 'Contact' }
+
+const CHECK: Record<ShownStatus, { glyph: GlyphKind; word: string }> = {
+  filled: { glyph: 'filled', word: 'Checked' },
+  needs_human: { glyph: 'person', word: 'Ask' },
+  not_found: { glyph: 'blank', word: 'Blank' },
+  blank: { glyph: 'blank', word: 'Blank' },
+  merge: { glyph: 'merge', word: 'Merge' },
+  empty: { glyph: 'blank', word: 'Blank' },
 }
 
-function AccountList({ current }: { current: string }) {
-  const store = useStore()
+const clip = (s: string, n = 96) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s)
+const oneLine = (s: string) => s.replace(/\s*\n\s*/g, ' ')
+
+function Quote({ c, slug, onOpen, active }: { c: Cite; slug: string; onOpen: (f: Focus) => void; active: boolean }) {
+  const isData = c.column !== undefined
   return (
-    <nav className="accounts" aria-label="Example public accounts">
-      <p className="accounts-head">
-        Example public accounts <span className="accounts-count">{runs.length}</span>
-      </p>
-      <ul>
-        {runs.map((r) => {
-          const slug = r.account.slug
-          const st = store.get(slug)
-          const ran = st.phase === 'proposed' || st.phase === 'written'
-          const marks = fillMarks(r, st.answers, ran)
-          const filled = marks.filter((m) => m === 'filled' || m === 'merge').length
-          const open = ran ? openQuestions(r, st.answers) : 0
-          const state = !ran ? (st.phase === 'running' ? 'Running' : 'Never run') : `${filled} filled`
-          const label = ran ? `${filled} of ${FIELD_ORDER.length} fields filled${open ? `, ${open} question to answer` : ''}` : state
-          return (
-            <li key={slug}>
-              <Link
-                to={`/demo?account=${slug}`}
-                keepScroll
-                aria-current={slug === current ? 'page' : undefined}
-                className="account"
-              >
-                <span className="account-name">
-                  <span className="account-full">{r.account.name}</span>
-                  <span className="account-short">{shortName[slug]}</span>
-                </span>
-                <span className="account-region">{r.account.jurisdiction === 'ON' ? 'Ontario' : 'New York'}</span>
-                <span className="account-state">
-                  <Marks marks={marks} label={label} />
-                  <span aria-hidden="true">
-                    {state}
-                    {open ? (
-                      <>
-                        {' '}
-                        <Dot /> {open} question
-                      </>
-                    ) : null}
-                  </span>
-                </span>
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
-    </nav>
-  )
-}
-
-function Head({ run, st }: { run: Run; st: AccountState }) {
-  const store = useStore()
-  const slug = run.account.slug
-  const seed = seedBySlug[slug]
-  const ran = st.phase === 'proposed' || st.phase === 'written'
-  const rule = run.steps.find((s) => s.rate_rule)?.rate_rule ?? 'One run per Account per day. Last run: never.'
-  const lastRun = fmtDateTime(run.run.finished_at)
-  const word = statusWord(run, st)
-  const enrichBtn = useRef<HTMLButtonElement>(null)
-  const tone = word === 'Done' ? 'filled' : word === 'Needs review' ? 'needs_human' : null
-  return (
-    <header className="rec-head">
-      <div className="rec-id">
-        <p className="eyebrow">
-          Account <Dot /> example public account
-        </p>
-        <h1>{run.account.name}</h1>
-        <dl className="rec-meta">
-          <div>
-            <dt>Website</dt>
-            <dd>
-              <a href={run.account.website} target="_blank" rel="noreferrer">
-                {prettyUrl(run.account.website)}
-              </a>
-            </dd>
-          </div>
-          <div>
-            <dt>Region</dt>
-            <dd>{run.account.region}</dd>
-          </div>
-          <div>
-            <dt>Account type</dt>
-            <dd>
-              {seed.Account_Type} <SampleTag />
-            </dd>
-          </div>
-          <div>
-            <dt>Record id</dt>
-            <dd>
-              <code>{seed.crm_id}</code> <SampleTag />
-            </dd>
-          </div>
-        </dl>
-      </div>
-      <div className="rec-actions">
-        <button
-          type="button"
-          ref={enrichBtn}
-          className="btn btn--enrich"
-          onClick={() => store.enrich(slug)}
-          disabled={st.phase === 'running'}
-          aria-describedby="rate-rule"
-        >
-          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-            <path d="M2 8h9M8 4.5 11.5 8 8 11.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M14 3v10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-          </svg>
-          Enrich Account
-        </button>
-        <p id="rate-rule" className="rate">
-          {ran ? `One run per Account per day. Last run: ${lastRun}.` : rule}
-        </p>
-        {st.blocked ? (
-          <p className="rate-blocked" role="status">
-            Already enriched in the last 24 hours.{' '}
-            <button
-              type="button"
-              className="linkish"
-              onClick={() => {
-                store.reset(slug)
-                enrichBtn.current?.focus() // this link goes away; the next thing to press is Enrich
-              }}
-            >
-              Start this Account over
-            </button>
-          </p>
-        ) : null}
-      </div>
-      <dl className="rec-status">
-        <div>
-          <dt>Enrichment status</dt>
-          <dd aria-live="polite">
-            {tone ? <Chip kind={tone} label={word} /> : <span className={`status-word status-word--${st.phase}`}>{word}</span>}
-            {st.phase === 'idle' ? <SampleTag /> : null}
-          </dd>
-        </div>
-        <div>
-          <dt>Last enriched</dt>
-          <dd>{st.phase === 'written' ? lastRun : <span className="nil">empty</span>}</dd>
-        </div>
-      </dl>
-    </header>
-  )
-}
-
-function Fields({ run, st }: { run: Run; st: AccountState }) {
-  const store = useStore()
-  const slug = run.account.slug
-  // When the replay ends, the Skip button goes away; keep keyboard focus on the result, not the page body.
-  const head = useRef<HTMLHeadingElement>(null)
-  const prev = useRef(st.phase)
-  useEffect(() => {
-    const lost = !document.activeElement || document.activeElement === document.body
-    const el = head.current
-    if (prev.current === 'running' && st.phase === 'proposed' && lost && el) {
-      el.focus({ preventScroll: true })
-      // On a phone the result sits below the run log: bring it into view. On a wide screen it already is.
-      const { top, bottom } = el.getBoundingClientRect()
-      if (top < 0 || bottom > window.innerHeight) el.scrollIntoView({ block: 'start' })
-    }
-    prev.current = st.phase
-  }, [st.phase])
-  const reveal = st.phase === 'proposed' || st.phase === 'written' || (st.phase === 'running' && st.shown >= revealAt(run.steps, 'check'))
-  const rows = shownRows(run, st.answers)
-  return (
-    <section className="fields" aria-labelledby="fields-h">
-      <header className="section-head">
-        <h2 id="fields-h" ref={head} tabIndex={-1}>
-          {st.phase === 'written' ? 'Changes' : reveal ? 'Proposed changes' : 'Fields'}
-        </h2>
-        <p className="section-note">
-          {st.phase === 'written'
-            ? 'Each value shows the line it came from. The write below is a preview; nothing was sent.'
-            : reveal
-              ? 'Each value shows the line it came from. Nothing is written until you press Write below.'
-              : 'Blank, as the sample CRM record starts. The run fills what the sources settle.'}
-        </p>
-      </header>
-      <ul className="field-list">
-        {rows.map((row) =>
-          reveal ? (
-            <li key={row.field} className={`field field--${row.shown} field--in`} data-field={row.field}>
-              {row.field === 'brief' ? <BriefRow run={run} row={row} /> : <FieldRow run={run} row={row} onAnswer={(o) => store.answer(slug, row.field, o)} />}
-              <KeyNote run={run} field={row.field} />
-            </li>
-          ) : (
-            <li key={row.field} className="field field--before">
-              <div className="field-head">
-                <h3 className="field-label">{row.label}</h3>
-                <div className="diff">
-                  <span className="diff-cur">
-                    {row.current ? (
-                      <>
-                        {row.current} <SampleTag />
-                      </>
-                    ) : (
-                      <span className="nil">empty</span>
-                    )}
-                  </span>
-                </div>
-              </div>
-            </li>
-          ),
-        )}
-      </ul>
-      {reveal ? <Rejected run={run} /> : null}
-    </section>
-  )
-}
-
-const SCORED: Record<string, string[]> = {
-  road_length_km: ['road_length_km'],
-  email: ['email'],
-  phone: ['phone'],
-  roads_head: ['roads_head_name', 'roads_head_title'],
-  key_documents: ['key_document'],
-}
-
-/** If the answer key scored this field wrong or missed, say so on the row itself. */
-function KeyNote({ run, field }: { run: Run; field: string }) {
-  const miss = scorecard.misses.find((m) => m.account === run.account.slug && (SCORED[field] ?? []).includes(m.field))
-  if (!miss) return null
-  const expected = Array.isArray(miss.expected) ? miss.expected.join(' or ') : String(miss.expected)
-  if (filledByRule(miss))
-    return (
-      <p className="keynote keynote--asked">
-        <Glyph kind="needs_human" />
-        <span>
-          The answer key, written before the first run, sends this to a person to pick <code>{expected}</code>. The 2% rule
-          came after it, so the key counts this as wrong. <a href="#tested-h">How this was tested</a>
+    <button
+      type="button"
+      className={`quote${active ? ' is-active' : ''}`}
+      onClick={() => onOpen({ source: c.source, quote: c.quote, pdf_page: c.pdf_page, row: slug })}
+    >
+      {isData ? (
+        <span className="quote-text">
+          {c.sum_mi} mi, sum of <code>{c.column}</code> over {c.rows} rows
         </span>
-      </p>
-    )
-  const verdict =
-    miss.outcome === 'wrong' ? 'scores this wrong' : miss.outcome === 'missed' ? 'scores this as missed' : 'would fill this'
-  return (
-    <p className={`keynote${miss.outcome === 'sent_to_person' ? ' keynote--asked' : ''}`}>
-      <Glyph kind={miss.outcome === 'sent_to_person' ? 'needs_human' : 'rejected'} />
-      <span>
-        The answer key {verdict}: it expects <code>{expected}</code>. <a href="#tested-h">How this was tested</a>
+      ) : (
+        <span className="quote-text">"{clip(oneLine(c.quote))}"</span>
+      )}
+      <span className="quote-src">
+        {clip(cleanTitle(c.title), 48)}
+        {c.pdf_page ? `, p. ${c.pdf_page}` : ''}
       </span>
-    </p>
+    </button>
   )
 }
 
-function BriefRow({ run, row }: { run: Run; row: ShownRow }) {
-  const b = run.brief
-  const n = b.sentences.length
-  const ids = [...new Set(b.sentences.flatMap((s) => s.cites))]
-  if (!n)
-    return (
-      <>
-        <div className="field-head">
-          <h3 className="field-label">Account brief</h3>
-          <div className="diff">
-            <span className="diff-cur">
-              <span className="nil">empty</span>
-            </span>
-            <span className="diff-arrow" aria-label="becomes">
-              →
-            </span>
-            <span className="diff-new">
-              <span className="nil">stays empty</span>
-            </span>
-          </div>
-          <Chip kind="not_found" />
-        </div>
-        {row.detail ? (
-          <div className="field-body">
-            <p className="detail">{row.detail}</p>
-          </div>
-        ) : null}
-      </>
-    )
-  return (
-    <>
-      <div className="field-head">
-        <h3 className="field-label">Account brief</h3>
-        <div className="diff">
-          <span className="diff-cur">
-            <span className="nil">empty</span>
-          </span>
-          <span className="diff-arrow" aria-label="becomes">
-            →
-          </span>
-          <span className="diff-new">
-            {n} {n === 1 ? 'sentence' : 'sentences'}
-          </span>
-        </div>
-        <Chip kind="filled" />
-      </div>
-      <div className="field-body">
-        <p className="brief">
-          {b.sentences.map((s, i) => (
-            <span key={i} className="brief-s">
-              {s.text}
-              {s.cites.map((id) => {
-                const src = sourceById(run, id)
-                return (
-                  <a key={id} className="cite" href={src && readableUrl(src.url)} target="_blank" rel="noreferrer" title={src?.title}>
-                    {id}
-                  </a>
-                )
-              })}{' '}
-            </span>
+function Value({ row, slug, focus, onOpen }: { row: ShownRow; slug: string; focus: Focus | null; onOpen: (f: Focus) => void }) {
+  const run = runBySlug[slug]
+  const cites = row.sources.filter(isCite)
+  const isActive = (c: Cite) => !!focus && focus.source === c.source && focus.quote === c.quote
+  const quotes = (list: Cite[]) => (
+    <div className="quotes">
+      {list.map((c, i) => (
+        <Quote key={i} c={c} slug={slug} onOpen={onOpen} active={isActive(c)} />
+      ))}
+    </div>
+  )
+
+  switch (row.field) {
+    case 'road_length_km': {
+      const answered = row.answered
+      const main =
+        answered?.result === 'filled' && answered.option.value_km != null
+          ? `${fmtKm(answered.option.value_km)} km`
+          : typeof row.proposed === 'string'
+            ? row.proposed.split(' (')[0]
+            : null
+      const parts = typeof row.proposed === 'string' && row.proposed.includes(' (') ? row.proposed.slice(row.proposed.indexOf(' (') + 2, -1) : null
+      const within = row.within
+      const value = run.validated.road_length_km.value_km
+      return (
+        <>
+          {main && row.shown !== 'blank' ? (
+            <p className="v-big">
+              {main}
+              {parts ? <span className="v-parts">= {parts}</span> : null}
+            </p>
+          ) : (
+            <p className="v-none">{row.shown === 'blank' ? 'Left blank, as answered' : 'No whole-network length'}</p>
+          )}
+          {cites.length ? quotes(cites) : null}
+          {row.partial?.map((p, i) => (
+            <div key={i} className="v-partial">
+              <p className="v-note">{fmtKm1(p.km)} km found, but it covers only part of the roads.</p>
+              {quotes(p.sources)}
+            </div>
           ))}
-        </p>
-        <p className="brief-by">
-          Written by <code>{b.model}</code> on {fmtDate(run.run.finished_at)} from the checked fields and quoted lines only.
-          A sentence is dropped if it cites a page the run didn't read, uses a number the checks didn't pass, shares nothing
-          with a page it cites, or uses a word its pages don't print (apart from small connecting words).
-        </p>
-        <ul className="brief-key">
-          {ids.map((id) => {
-            const src = sourceById(run, id)
+          {within && value ? (
+            <div className="compare" aria-label="Roads the county owns against every road inside it">
+              <div className="cmp-row">
+                <span>County owns</span>
+                <span className="cmp-bar">
+                  <span className="cmp-fill cmp-fill--own" style={{ width: `${(value / within.km) * 100}%` }} />
+                </span>
+                <span className="mono">{fmtKm1(value)} km</span>
+              </div>
+              <div className="cmp-row">
+                <span>Every road inside</span>
+                <span className="cmp-bar">
+                  <span className="cmp-fill" style={{ width: '100%' }} />
+                </span>
+                <span className="mono">{fmtKm1(within.km)} km</span>
+              </div>
+              <p className="v-note">
+                NYSDOT {within.year}. Which one sets the price is <a href="/demo/plan#q1">question 1</a>.
+              </p>
+            </div>
+          ) : null}
+          {row.detail && !row.partial ? <p className="v-note">{row.detail}</p> : null}
+        </>
+      )
+    }
+    case 'roads_head': {
+      if (row.shown === 'merge' && row.merge) {
+        return (
+          <>
+            <p className="v-diff">
+              <del>{row.current}</del>
+              <span className="v-arrow" aria-hidden="true">
+                →
+              </span>
+              <ins>{String(row.proposed)}</ins>
+            </p>
+            {quotes(cites)}
+            <p className="v-note">Merges into the existing Contact (sample): {row.merge.matched_on}.</p>
+          </>
+        )
+      }
+      if (!row.proposed)
+        return (
+          <>
+            <p className="v-none">{row.detail?.startsWith('The site lists the role') ? 'Title only, no name' : 'Not on the pages read'}</p>
+            {cites.length ? quotes(cites) : null}
+          </>
+        )
+      return (
+        <>
+          <p className="v-main">{String(row.proposed)}</p>
+          {quotes(cites)}
+          <p className="v-note">New Contact on this Account.</p>
+        </>
+      )
+    }
+    case 'key_documents': {
+      const docs = row.sources as DocLink[]
+      return (
+        <ul className="docs">
+          {docs.map((d) => {
+            const id = sourceIdFor(run, d.url)
             return (
-              <li key={id}>
-                <span className="cite cite--key">{id}</span>
-                <a href={src && readableUrl(src.url)} target="_blank" rel="noreferrer">
-                  {src ? cleanTitle(src.title) : id}
-                </a>
+              <li key={d.url}>
+                {id ? (
+                  <button type="button" className="doc" onClick={() => onOpen({ source: id, row: slug })}>
+                    {cleanTitle(d.title)}
+                  </button>
+                ) : (
+                  <a className="doc" href={d.url} target="_blank" rel="noreferrer">
+                    {cleanTitle(d.title)}
+                  </a>
+                )}
+                <span className="doc-host mono">{prettyUrl(d.url).split('/')[0]}</span>
               </li>
             )
           })}
         </ul>
-      </div>
-    </>
-  )
-}
-
-const FIELD_NAME: Record<string, string> = {
-  road_length_km: 'road length',
-  brief: 'a brief sentence',
-  sign_work: 'a sign line',
-  email: 'the Public Works email',
-  phone: 'the Public Works phone',
-  roads_head: 'the roads head',
-}
-
-function Rejected({ run }: { run: Run }) {
-  const n = run.rejected.length
-  return (
-    <details className="rejected">
-      <summary>
-        <Glyph kind="rejected" />
-        <span>Rejected by validation ({n})</span>
-        <span className="rejected-sub">{n ? 'what the checks threw out in this run' : 'the checks refused nothing on this Account'}</span>
-      </summary>
-      {n ? (
-        <ul>
-          {run.rejected.map((r, i) => (
-            <li key={i}>
-              <p className="rej-head">
-                {r.value ? <code className="rej-value">{r.value}</code> : null}
-                <span>
-                  offered as {FIELD_NAME[r.field] ?? r.field}, refused: {r.reason}
-                  {r.cites?.length ? ` (cites ${r.cites.join(', ')})` : null}
-                </span>
-              </p>
-              {r.source && r.url && r.quote ? (
-                <Quote slug={run.account.slug} cite={r as Cite} value={r.field === 'road_length_km' ? r.value?.split(' ')[0] : r.value} />
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="rejected-none">
-          Every value the model offered for {run.account.name} passed the checks.
-        </p>
-      )}
-    </details>
-  )
-}
-
-function Write({ run, st }: { run: Run; st: AccountState }) {
-  const store = useStore()
-  const plan = writePlan(run, st.answers)
-  const written = st.phase === 'written'
-  const [picked, setShown] = useState(0)
-  const shown = Math.min(picked, plan.requests.length - 1)
-  const label = `Write ${plan.changes} ${plan.changes === 1 ? 'change' : 'changes'}${plan.notes ? ` and ${plan.notes} ${plan.notes === 1 ? 'Note' : 'Notes'}` : ''}`
-  const why = plan.openQuestions ? ', because a question is still open' : plan.notes ? `, because ${plan.notes === 1 ? 'a Note needs' : 'Notes need'} a person` : ''
-  const below = plan.requests.length === 1 ? 'Below is the request' : `Below are the ${plan.requests.length} requests`
-  return (
-    <section className="write" aria-labelledby="write-h">
-      <header className="section-head">
-        <h2 id="write-h">Write back to Zoho</h2>
-        <p className="section-note">Draft, never run in a Zoho org; field names are guesses.</p>
-      </header>
-      <div className="write-row">
-        {written ? (
-          <p className="write-hint">
-            Preview only: nothing was sent. {below} the service would make. Status: <strong>{plan.status}</strong>
-            {why}.
-          </p>
-        ) : (
-          <>
-            <button type="button" className="btn btn--primary" onClick={() => store.write(run.account.slug)}>
-              {label}
-            </button>
-            <span className="write-hint">
-              Preview only: nothing is sent. Status after the write: <strong>{plan.status}</strong>
-              {why}.
-            </span>
-          </>
-        )}
-      </div>
-      {written ? (
-        <div className="payload">
-          {plan.changedByAnswer ? <p className="payload-note">Changed on this page by your answer. The run's own output is in data/run/{run.account.slug}.json.</p> : null}
-          <Tabs
-            label="Requests"
-            items={plan.requests.map((r) => (
-              <>
-                <span className="payload-method">{r.method}</span> {r.url.replace('https://www.zohoapis.com/crm/v8', '')}
-              </>
-            ))}
-            selected={shown}
-            onSelect={setShown}
-            listClass="payload-tabs"
-            tabClass="payload-tab"
-            panelClass="payload-body"
-          >
-            <p className="payload-url">
-              <code>
-                {plan.requests[shown].method} {plan.requests[shown].url}
-              </code>
+      )
+    }
+    case 'brief': {
+      if (!run.brief.sentences.length) return <p className="v-none">No brief: no page read mentions its signs</p>
+      return (
+        <div className="brief">
+          {run.brief.sentences.map((s, i) => (
+            <p key={i}>
+              <BriefText text={s.text} />{' '}
+              {s.cites.map((c) => {
+                const q = quotedBits(s.text)[0]
+                return (
+                  <button key={c} type="button" className="cite mono" onClick={() => onOpen({ source: c, quote: q, row: slug })} aria-label={`Open source ${c}`}>
+                    {c}
+                  </button>
+                )
+              })}
             </p>
-            <pre>{JSON.stringify(plan.requests[shown].body, null, 2)}</pre>
-          </Tabs>
+          ))}
+          <p className="v-note">Written by Claude, then checked word by word against the pages it cites.</p>
         </div>
-      ) : null}
-    </section>
+      )
+    }
+    default: {
+      // email, phone
+      if (row.status === 'needs_human' && row.field === 'phone') {
+        return (
+          <>
+            <p className="v-none">Two numbers printed, left for a person</p>
+            {quotes(cites)}
+          </>
+        )
+      }
+      if (!row.proposed) return <p className="v-none">{row.detail?.includes('Cloudflare') ? 'Hidden from scripts by the site' : 'Not on the pages read'}</p>
+      return (
+        <>
+          <p className="v-main mono">{String(row.proposed)}</p>
+          {quotes(cites)}
+        </>
+      )
+    }
+  }
+}
+
+/** The requests in a line: method and what each one writes. */
+function planParts(plan: ReturnType<typeof writePlan>): { method: string; what: string }[] {
+  const out: { method: string; what: string }[] = []
+  const contact = plan.requests.find((r) => r.url.endsWith('/Contacts'))
+  const fields = plan.changes - (contact ? 1 : 0)
+  out.push({ method: 'PUT', what: `Account, ${fields} ${fields === 1 ? 'field' : 'fields'}` })
+  if (contact) out.push({ method: contact.method, what: 'Contact' })
+  if (plan.notes) out.push({ method: 'POST', what: plan.notes === 1 ? '1 Note' : `${plan.notes} Notes` })
+  return out
+}
+
+/** A brief sentence with the words copied from the page set apart. */
+function BriefText({ text }: { text: string }) {
+  const out: ReactNode[] = []
+  const re = /"([^"]+)"/g
+  let at = 0
+  let m: RegExpExecArray | null
+  let k = 0
+  while ((m = re.exec(text))) {
+    out.push(text.slice(at, m.index))
+    out.push(<q key={k++}>{m[1]}</q>)
+    at = m.index + m[0].length
+  }
+  out.push(text.slice(at))
+  return <>{out}</>
+}
+
+function Question({ row, slug }: { row: ShownRow; slug: string }) {
+  const store = useStore()
+  const q = row.question!
+  const pick = store.get(slug).answers[row.field]
+  return (
+    <div className="ask" role="group" aria-label={q.text}>
+      <p className="ask-q">
+        <Glyph kind="person" size={13} />
+        {q.text}
+      </p>
+      <div className="ask-opts">
+        {q.options.map((o, i) => (
+          <button
+            key={o.label}
+            type="button"
+            className="opt"
+            aria-pressed={pick === i}
+            onClick={() => store.answer(slug, row.field, pick === i ? null : i)}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
   )
 }
 
-export function RecordView({ slug }: { slug: string }) {
+export function Record({
+  slug,
+  shown,
+  t,
+  playing,
+  focus,
+  onOpen,
+  onEnrich,
+  onZoho,
+}: {
+  slug: string
+  shown: number
+  t: number
+  playing: boolean
+  focus: Focus | null
+  onOpen: (f: Focus) => void
+  onEnrich: () => void
+  onZoho: () => void
+}) {
   const store = useStore()
-  const run = runs.find((r) => r.account.slug === slug) ?? runs[0]
-  const st = store.get(run.account.slug)
-  const done = st.phase === 'proposed' || st.phase === 'written'
+  const run = runBySlug[slug]
+  const lane = laneBySlug[slug]
+  const review = store.get(slug)
+  const now = laneNow(lane, shown, t)
+  const done = shown >= lane.times.length
+  const ready = lane.checkStep >= 0 && shown > lane.checkStep
+  const briefReady = lane.briefStep >= 0 && shown > lane.briefStep
+  const running = shown > 0 && !done
+  const queued = shown === 0 && (playing || t > 0)
+  const rows = shownRows(run, review.answers)
+  const plan = writePlan(run, review.answers, review.dropped)
+  const seed = seedBySlug[slug]
+
+  const status = done
+    ? plan.status
+    : running
+      ? 'Running'
+      : queued
+        ? 'Queued'
+        : seed.Enrichment_Status
+  const statusTone = done ? (plan.status === 'Done' ? 'done' : 'ask') : running || queued ? 'run' : 'idle'
+  const doing = running
+    ? now.phase === 'model'
+      ? lane.blocks.find((b) => b.from <= t && t < b.to)?.kind === 'brief'
+        ? 'Claude is writing the brief'
+        : 'Claude is reading the pages'
+      : now.phase === 'checking' || now.phase === 'writing'
+        ? 'Checking every value'
+        : now.doing
+    : queued
+      ? 'Waiting for one of 3 workers'
+      : null
+
+  const hasLanded = (f: ProposedRow['field']) => (f === 'brief' ? briefReady : ready)
+  const filledNow = done ? rows.filter((r) => r.shown === 'filled' || r.shown === 'merge').length : 0
+
   return (
-    <div className="record-grid">
-      <AccountList current={run.account.slug} />
-      <div className="rec-main" key={run.account.slug}>
-        <Head run={run} st={st} />
-        <Fields run={run} st={st} />
-        {done ? <Write run={run} st={st} /> : null}
+    <article className="record" aria-labelledby="rec-h">
+      <header className="rec-head">
+        <div className="rec-id">
+          <p className="rec-kicker">
+            <span className="tag">{run.account.jurisdiction}</span>
+            <span>Account</span>
+            <span className="mono rec-crm" title="Sample record id">
+              {run.account.crm_id}
+            </span>
+          </p>
+          <h2 id="rec-h">{run.account.name}</h2>
+          <a className="rec-site" href={run.account.website} target="_blank" rel="noreferrer">
+            {prettyUrl(run.account.website)}
+          </a>
+        </div>
+        <div className="rec-act">
+          <button
+            type="button"
+            className={`btn ${shown === 0 && !playing ? 'btn--primary' : 'btn--quiet'}`}
+            onClick={onEnrich}
+            disabled={playing && (running || queued)}
+          >
+            {playing && queued ? 'Queued' : playing && running ? 'Running' : shown === 0 ? 'Enrich Account' : 'Run again'}
+          </button>
+          <p className="hint">Replays the recorded run</p>
+        </div>
+      </header>
+
+      <dl className="rec-stats">
+        <div>
+          <dt>Status</dt>
+          <dd className={`st st--${statusTone}`}>
+            {statusTone === 'ask' ? <Glyph kind="person" size={12} /> : statusTone === 'done' ? <Glyph kind="filled" size={11} /> : null}
+            {status}
+          </dd>
+        </div>
+        <div>
+          <dt>Fields filled</dt>
+          <dd className="mono">
+            {filledNow} <span className="of">/ 6</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Pages read</dt>
+          <dd className="mono">
+            {now.pages} <span className="of">/ {run.run.page_budget}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Run time</dt>
+          <dd className="mono">{done ? `${((lane.end - lane.start) / 1000).toFixed(1)} s` : running ? '…' : '0 s'}</dd>
+        </div>
+      </dl>
+      {doing ? (
+        <p className="rec-doing" aria-live="polite">
+          <span className="pulse" aria-hidden="true" />
+          {doing}
+        </p>
+      ) : null}
+
+      <div className="fields" role="table" aria-label={`${run.account.name} fields`}>
+        <div className="f-row f-row--head" role="row">
+          <span role="columnheader">Field</span>
+          <span role="columnheader">
+            Zoho now → proposed <span className="hint">Click a quote to see its page</span>
+          </span>
+          <span role="columnheader">Check</span>
+          <span role="columnheader">Write</span>
+        </div>
+        {rows.map((row) => {
+          const landed = hasLanded(row.field)
+          const chk = CHECK[row.shown]
+          const writable = row.shown === 'filled' || row.shown === 'merge'
+          const dropped = review.dropped.has(row.field)
+          return (
+            <div key={row.field} className={`f-row${landed ? ' is-landed' : ''}${dropped ? ' is-dropped' : ''}`} role="row" data-field={row.field}>
+              <span className="f-label" role="rowheader">
+                {LABEL[row.field]}
+                {UNIT[row.field] ? <span className="f-unit">{UNIT[row.field]}</span> : null}
+              </span>
+              <div className="f-val" role="cell">
+                {landed ? (
+                  <>
+                    {row.field !== 'roads_head' || row.shown !== 'merge' ? (
+                      <p className="was">
+                        <span className="was-v">{row.current ?? 'empty'}</span>
+                        <span aria-hidden="true">→</span>
+                      </p>
+                    ) : null}
+                    <Value row={row} slug={slug} focus={focus} onOpen={onOpen} />
+                    {row.question && row.status === 'needs_human' ? <Question row={row} slug={slug} /> : null}
+                  </>
+                ) : (
+                  <p className="f-wait">
+                    <span className="was-v">{row.current ?? 'empty'}</span>
+                    {running ? <span className="f-bar" aria-hidden="true" /> : null}
+                  </p>
+                )}
+              </div>
+              <span className="f-chk" role="cell">
+                {landed ? (
+                  <span className={`chk chk--${chk.glyph}`}>
+                    <Glyph kind={chk.glyph} size={12} />
+                    {row.answered && row.shown === 'filled' ? 'Answered' : chk.word}
+                  </span>
+                ) : null}
+              </span>
+              <span className="f-write" role="cell">
+                {landed && writable ? (
+                  <label className="sw">
+                    <input
+                      type="checkbox"
+                      checked={!dropped}
+                      onChange={() => store.toggle(slug, row.field)}
+                      aria-label={`Write ${LABEL[row.field]} to Zoho`}
+                    />
+                    <span className="sw-ui" aria-hidden="true" />
+                  </label>
+                ) : landed && row.shown === 'needs_human' ? (
+                  <span className="f-note">Note</span>
+                ) : null}
+              </span>
+            </div>
+          )
+        })}
       </div>
-      <aside className="rec-log">
-        <RunLog run={run} st={st} onSkip={() => store.skip(run.account.slug)} onEnrich={() => store.enrich(run.account.slug)} />
-      </aside>
-      <Tested />
-    </div>
+
+      <footer className={`rec-foot${done ? '' : ' is-off'}`}>
+        <div className="rec-plan">
+          <p className="rec-plan-h">Zoho update</p>
+          <p className="rec-plan-v">
+            {done ? (
+              planParts(plan).map((x) => (
+                <span key={x.what}>
+                  <span className="mono">{x.method}</span> {x.what}
+                </span>
+              ))
+            ) : (
+              <span>Built when the run finishes</span>
+            )}
+          </p>
+          {done ? (
+            <button type="button" className="linkish" onClick={onZoho}>
+              See the requests
+            </button>
+          ) : null}
+        </div>
+        <div className="rec-approve">
+          {review.approved ? (
+            <>
+              <p className="approved">
+                <Glyph kind="filled" size={12} /> Approved{run.writeback.sent ? '' : '. Not sent: preview only'}
+              </p>
+              <button type="button" className="linkish" onClick={() => store.approve(slug, false)}>
+                Undo
+              </button>
+            </>
+          ) : (
+            <button type="button" className={`btn ${done ? 'btn--primary' : 'btn--quiet'}`} disabled={!done} onClick={() => store.approve(slug, true)}>
+              Approve update
+            </button>
+          )}
+        </div>
+      </footer>
+      {done ? <p className="rec-when mono">Run {fmtDateTime(run.run.finished_at)} · sample CRM state</p> : null}
+    </article>
   )
 }

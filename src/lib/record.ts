@@ -1,6 +1,6 @@
 // What the record shows once the run is in, and how one answer on the page changes it.
 // The answer lives only in this browser tab. The payload logic mirrors pipeline/writeback.py.
-import type { OptionResult, ProposedRow, QuestionOption, Run, Step, ZohoRequest } from './data'
+import type { OptionResult, ProposedRow, QuestionOption, Run, ZohoRequest } from './data'
 
 export type Answers = Record<string, number> // field -> chosen option index
 
@@ -25,16 +25,6 @@ export function shownRows(run: Run, answers: Answers): ShownRow[] {
     })
 }
 
-/** One mark per field for the Account list: what the record would hold after this run. */
-export function fillMarks(run: Run, answers: Answers, ran: boolean): ShownStatus[] {
-  if (!ran) return FIELD_ORDER.map(() => 'empty')
-  return shownRows(run, answers).map((r) => r.shown)
-}
-
-export function openQuestions(run: Run, answers: Answers): number {
-  return shownRows(run, answers).filter((r) => r.question && r.shown === 'needs_human').length
-}
-
 export type WritePlan = {
   requests: ZohoRequest[]
   changes: number
@@ -48,13 +38,42 @@ export type WritePlan = {
 const BOOKKEEPING = new Set(['id', 'Enrichment_Status', 'Last_Enriched'])
 const F_ROAD_KM = 'Road_Network_Centerline_km'
 
+/** The road length goes where writeback.account_update puts it: right after Last_Enriched. */
+function withRoad(row: Record<string, unknown>, km: number): Record<string, unknown> {
+  const out: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(row)) {
+    if (k !== F_ROAD_KM) out[k] = v
+    if (k === 'Last_Enriched') out[F_ROAD_KM] = km
+  }
+  return out
+}
+
 /** The Account update: the button sends the record id, so the Account is updated by it (writeback.account_update). */
 const isAccount = (r: ZohoRequest) => r.method === 'PUT' && r.url.endsWith('/Accounts')
 const isNotes = (r: ZohoRequest) => r.url.endsWith('/Notes')
 const firstLine = (n: Record<string, unknown>) => String(n.Note_Content).split('\n')[0]
 
-export function writePlan(run: Run, answers: Answers): WritePlan {
-  const requests: ZohoRequest[] = structuredClone(run.writeback.requests)
+/** The Account field each record row writes (writeback.account_update), or the Contact for the roads head. */
+export const API_FIELD: Partial<Record<ProposedRow['field'], string>> = {
+  road_length_km: F_ROAD_KM,
+  email: 'Public_Works_Email',
+  phone: 'Public_Works_Phone',
+  key_documents: 'Key_Documents',
+  brief: 'Account_Brief',
+}
+
+/**
+ * The Zoho requests after a person's answers and any rows they chose not to write.
+ * A dropped row is left out of the update; a dropped roads head drops its Contact request.
+ */
+export function writePlan(run: Run, answers: Answers, dropped: ReadonlySet<string> = new Set()): WritePlan {
+  let requests: ZohoRequest[] = structuredClone(run.writeback.requests)
+  if (dropped.has('roads_head')) requests = requests.filter((r) => !r.url.endsWith('/Contacts'))
+  const acct = requests.find(isAccount)
+  for (const f of dropped) {
+    const key = API_FIELD[f as ProposedRow['field']]
+    if (acct && key) delete acct.body.data[0][key]
+  }
   let changedByAnswer = false
   // A Note's first line is its question (writeback.notes), which is how an answer finds its Note.
   const settled = new Set<string>()
@@ -67,7 +86,7 @@ export function writePlan(run: Run, answers: Answers): WritePlan {
     changedByAnswer = true
     if (option.result === 'filled' && option.value_km !== null) {
       const account = requests.find(isAccount)
-      if (account && q.field === 'road_length_km') account.body.data[0][F_ROAD_KM] = option.value_km
+      if (account && q.field === 'road_length_km' && !dropped.has('road_length_km')) account.body.data[0] = withRoad(account.body.data[0], option.value_km)
       settled.add(q.text)
     } else {
       answerLine.set(q.text, `Answered on the page: ${option.label}.`)
@@ -108,31 +127,4 @@ export function writePlan(run: Run, answers: Answers): WritePlan {
     status,
     changedByAnswer,
   }
-}
-
-/**
- * When each log line appears in the replay, in ms from the press. The real gaps are kept in
- * proportion and squeezed to about `target` ms, with a floor so bursts stay readable.
- */
-export function replayTimes(steps: Step[], target = 10_000, min = 45, max = 1_400): number[] {
-  const ts = steps.map((s) => Date.parse(s.t))
-  const span = Math.max(1, ts[ts.length - 1] - ts[0])
-  const k = target / span
-  const out: number[] = []
-  let at = 250
-  ts.forEach((t, i) => {
-    if (i > 0) at += Math.min(max, Math.max(min, (t - ts[i - 1]) * k))
-    out.push(Math.round(at))
-  })
-  return out
-}
-
-export function realSpanMs(steps: Step[]): number {
-  return Date.parse(steps[steps.length - 1].t) - Date.parse(steps[0].t)
-}
-
-/** Index of the first log line at which the record starts to show results. */
-export function revealAt(steps: Step[], step: string): number {
-  const i = steps.findIndex((s) => s.step === step)
-  return i === -1 ? steps.length - 1 : i
 }
