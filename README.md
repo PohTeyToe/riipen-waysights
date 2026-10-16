@@ -35,7 +35,7 @@ The pipeline has its own setup and tests (Python 3.12, no network for the tests)
 
 ## Deploy
 
-Static site, no backend, no secrets, no environment variables. Vercel builds it as is from the repo root (`vercel.json` sets the build, the output folder, the client-side routes and a `noindex` header). `.vercelignore` keeps the Python environment and fetch cache out of the upload.
+Static site, no backend, no secrets, no environment variables. Vercel builds it as is from the repo root (`vercel.json` sets the build, the output folder, the client-side routes, a `noindex` header and a year-long cache for the hashed files in `assets/`, which never fall back to the page). `.vercelignore` keeps the Python environment and fetch cache out of the upload.
 
 ## Data sources
 

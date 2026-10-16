@@ -6,11 +6,16 @@ import { datasetRows, loadPages, savedText, type SavedPage } from '../lib/pages'
 
 const MI_KM = 1.609344
 
-function useSaved(slug: string) {
-  const [pages, setPages] = useState<{ slug: string; pages: SavedPage[] } | null>(null)
+/** The saved pages for one Account: null while loading, 'failed' if they couldn't be fetched (say a tab
+ * left open across a redeploy asks for a file that's gone; the browser won't retry it, so the fix is a reload). */
+function useSaved(slug: string): SavedPage[] | null | 'failed' {
+  const [pages, setPages] = useState<{ slug: string; pages: SavedPage[] | 'failed' } | null>(null)
   useEffect(() => {
     let live = true
-    loadPages(slug).then((p) => live && setPages({ slug, pages: p }))
+    loadPages(slug).then(
+      (p) => live && setPages({ slug, pages: p }),
+      () => live && setPages({ slug, pages: 'failed' }),
+    )
     return () => {
       live = false
     }
@@ -38,7 +43,8 @@ function Marked({ text, spans }: { text: string; spans: Span[] }) {
 export function SourceView({ slug, focus, onClose }: { slug: string; focus: Focus; onClose?: () => void }) {
   const run = runBySlug[slug]
   const src = run.sources.find((s) => s.id === focus.source)
-  const pages = useSaved(slug)
+  const saved = useSaved(slug)
+  const pages = saved === 'failed' ? null : saved
   const page = pages?.find((p) => p.id === focus.source)
   const pdfPages = page?.pdf_pages ? Object.keys(page.pdf_pages).map(Number) : []
   // A brief citation names its sentence's quotes, with no page: open on the one this source prints.
@@ -78,7 +84,14 @@ export function SourceView({ slug, focus, onClose }: { slug: string; focus: Focu
           ))}
         </div>
       ) : null}
-      {!pages ? (
+      {saved === 'failed' ? (
+        <p className="srcv-empty">
+          The saved text didn't load.{' '}
+          <button type="button" className="linkish" onClick={() => window.location.reload()}>
+            Reload the page
+          </button>
+        </p>
+      ) : !pages ? (
         <p className="srcv-empty">Loading the saved text</p>
       ) : !page || (!text && page.kind !== 'dataset') ? (
         <p className="srcv-empty">Read during the run, no value taken from it, so its text isn't saved.</p>
