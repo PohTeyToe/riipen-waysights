@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { readableUrl, runBySlug, type Source } from '../lib/data'
 import { cleanTitle, fmtBytes, fmtKm1, fmtMi, fmtTime, prettyUrl } from '../lib/format'
-import { marksFor, type Focus, type LineMark } from '../lib/marks'
-import { datasetRows, findQuote, loadPages, savedText, type SavedPage } from '../lib/pages'
+import { locate, marksFor, spansIn, type Focus, type Span } from '../lib/marks'
+import { datasetRows, loadPages, savedText, type SavedPage } from '../lib/pages'
 
 const MI_KM = 1.609344
 
@@ -16,27 +16,6 @@ function useSaved(slug: string) {
     }
   }, [slug])
   return pages?.slug === slug ? pages.pages : null
-}
-
-type Span = { start: number; end: number; mark: LineMark; focused: boolean }
-
-function spansIn(text: string, marks: LineMark[], focus?: string): Span[] {
-  const spans: Span[] = []
-  for (const m of marks) {
-    const at = findQuote(text, m.quote)
-    if (at) spans.push({ ...at, mark: m, focused: !!focus && m.quote === focus })
-  }
-  spans.sort((a, b) => a.start - b.start || Number(b.focused) - Number(a.focused))
-  const out: Span[] = []
-  for (const s of spans) {
-    const prev = out[out.length - 1]
-    if (prev && s.start < prev.end) {
-      if (s.focused) prev.focused = true
-      continue
-    }
-    out.push(s)
-  }
-  return out
 }
 
 function Marked({ text, spans }: { text: string; spans: Span[] }) {
@@ -62,13 +41,16 @@ export function SourceView({ slug, focus, onClose }: { slug: string; focus: Focu
   const pages = useSaved(slug)
   const page = pages?.find((p) => p.id === focus.source)
   const pdfPages = page?.pdf_pages ? Object.keys(page.pdf_pages).map(Number) : []
-  const [pdfPage, setPdfPage] = useState<number | null>(focus.pdf_page ?? null)
-  useEffect(() => setPdfPage(focus.pdf_page ?? null), [focus])
-  const shownPdf = pdfPage ?? pdfPages[0] ?? null
+  // A brief citation names its sentence's quotes, with no page: open on the one this source prints.
+  const found = useMemo(() => (page && focus.quotes ? locate(page, focus.quotes) : null), [page, focus.quotes])
+  const quote = focus.quote ?? found?.quote
+  const [picked, setPicked] = useState<number | null>(null)
+  useEffect(() => setPicked(null), [focus])
+  const shownPdf = page?.kind === 'pdf' ? (picked ?? focus.pdf_page ?? found?.pdf_page ?? pdfPages[0] ?? null) : null
 
-  const marks = useMemo(() => marksFor(run, focus.source).filter((m) => page?.kind !== 'pdf' || m.pdf_page === shownPdf), [run, focus.source, page, shownPdf])
+  const marks = useMemo(() => marksFor(run, focus.source), [run, focus.source])
   const text = page ? savedText(page, shownPdf) : null
-  const spans = useMemo(() => (text ? spansIn(text, marks, focus.quote) : []), [text, marks, focus.quote])
+  const spans = useMemo(() => (text ? spansIn(text, marks, shownPdf, quote) : []), [text, marks, shownPdf, quote])
 
   const box = useRef<HTMLPreElement>(null)
   useLayoutEffect(() => {
@@ -90,7 +72,7 @@ export function SourceView({ slug, focus, onClose }: { slug: string; focus: Focu
       {pdfPages.length > 1 ? (
         <div className="srcv-pages" role="group" aria-label="Saved PDF pages">
           {pdfPages.map((n) => (
-            <button key={n} type="button" className="seg" aria-pressed={n === shownPdf} onClick={() => setPdfPage(n)}>
+            <button key={n} type="button" className="seg" aria-pressed={n === shownPdf} onClick={() => setPicked(n)}>
               p. {n}
             </button>
           ))}

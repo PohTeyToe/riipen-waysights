@@ -1,6 +1,7 @@
 // The run against the answer key written before its first run, misses in words, and rule 4's
 // tolerance as a slider that re-decides the road rows in the browser (src/lib/rule4.ts, tested
 // against pipeline/validate.py at every setting from 0% to 5%).
+import type { ReactNode } from 'react'
 import { runs, scorecard, shortName, type ScoreOutcome, type ScoreRow } from '../lib/data'
 import { fmtKm, fmtPct } from '../lib/format'
 import { RECORDED_NEAR, type Rescore } from '../lib/rule4'
@@ -17,16 +18,42 @@ const COUNTS: { key: ScoreOutcome; label: string }[] = [
 ]
 
 const km = (v: unknown) => (typeof v === 'number' ? `${fmtKm(v)} km` : String(v))
+/** A value stays on one line: a phone number shouldn't break at its hyphens. */
+const val = (v: unknown, i = 0) => (
+  <span key={i} className="nw">
+    {String(v)}
+  </span>
+)
+const either = (vs: unknown[]) => vs.flatMap((v, i) => (i ? [' or ', val(v, i)] : [val(v, i)]))
 
 /** One line per miss, from the scorecard's own fields. */
-function missLine(r: ScoreRow): string {
+function missLine(r: ScoreRow): ReactNode {
   const name = shortName[r.account]
+  const what = KEY_LABEL[r.field].toLowerCase()
   const expected = Array.isArray(r.expected) ? r.expected : []
   if (r.field === 'road_length_km' && r.outcome === 'wrong')
-    return `${name} road length: filled ${km(r.got)}. The key wanted a person to pick ${expected.map(km).join(' or ')}.`
-  if (r.outcome === 'sent_to_person') return `${name} ${KEY_LABEL[r.field].toLowerCase()}: sent to a person. The key takes ${expected[0]}.`
-  if (r.outcome === 'missed') return `${name} ${KEY_LABEL[r.field].toLowerCase()}: left blank, the key has ${String(expected[0])}.`
-  return `${name} ${KEY_LABEL[r.field].toLowerCase()}: got ${String(r.got)}, the key has ${expected.map(String).join(' or ')}.`
+    return (
+      <>
+        {name} road length: filled {val(km(r.got))}. The key wanted a person to pick {either(expected.map(km))}.
+      </>
+    )
+  if (r.outcome === 'sent_to_person')
+    return (
+      <>
+        {name} {what}: sent to a person. The key takes {val(expected[0])}.
+      </>
+    )
+  if (r.outcome === 'missed')
+    return (
+      <>
+        {name} {what}: left blank, the key has {val(expected[0])}.
+      </>
+    )
+  return (
+    <>
+      {name} {what}: got {val(r.got)}, the key has {either(expected)}.
+    </>
+  )
 }
 
 export function Score({ score, onPick }: { score: Rescore; onPick: (slug: string) => void }) {

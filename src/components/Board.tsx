@@ -59,8 +59,11 @@ const Ink = memo(function Ink({ lane }: { lane: Lane }) {
       ))}
       {lane.blocks.map((b) => (
         <span key={b.i} className={`ink-model ink-model--${b.kind}`} style={{ left: pct(b.from), width: pct(b.to - b.from) }}>
+          {/* Laid out right to left so whatever doesn't fit wraps out of sight: the words first, then the time. */}
           <span className="ink-model-l">
-            {b.kind === 'extract' ? 'Claude reads' : 'Claude brief'} <b>{secs(b.to - b.from)}</b>
+            <i />
+            <b>{secs(b.to - b.from)}</b>
+            <span>{b.kind === 'extract' ? 'Claude reads' : 'Claude brief'}</span>
           </span>
         </span>
       ))}
@@ -361,13 +364,24 @@ export function Board({
                 type="range"
                 min={0}
                 max={SPAN}
-                step={100}
+                step={1}
                 defaultValue={0}
                 aria-label="Run time"
                 aria-valuetext={`${clock(t)} of ${clock(SPAN)}`}
                 onInput={(e) => {
+                  // Read first: pausing redraws the frame, which resets an unfocused slider to the old time.
+                  const to = Number(e.currentTarget.value)
                   player.pause()
-                  player.seek(Number(e.currentTarget.value))
+                  player.seek(to)
+                }}
+                onKeyDown={(e) => {
+                  // Arrows move a second (Shift: ten); Home, End and Page keys keep their own steps.
+                  const dir = e.key === 'ArrowRight' || e.key === 'ArrowUp' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowDown' ? -1 : 0
+                  if (!dir) return
+                  e.preventDefault()
+                  player.pause()
+                  player.seek(player.t + dir * (e.shiftKey ? 10_000 : 1000))
+                  e.currentTarget.value = String(Math.round(player.t))
                 }}
               />
             </div>

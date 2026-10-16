@@ -1,6 +1,8 @@
 import { checkItems } from '../lib/checks'
 import { runBySlug } from '../lib/data'
 import type { Focus } from '../lib/marks'
+import { writePlan } from '../lib/record'
+import { useStore } from '../lib/store'
 import { laneBySlug } from '../lib/timeline'
 import { ChecksView } from './ChecksView'
 import { RunLog } from './RunLog'
@@ -32,6 +34,7 @@ export function Inspector({
 }) {
   const run = runBySlug[slug]
   const lane = laneBySlug[slug]
+  const review = useStore().get(slug)
   const done = shown >= lane.times.length
   const checked = lane.checkStep >= 0 && shown > lane.checkStep
   const labels = [
@@ -43,7 +46,7 @@ export function Inspector({
     </>,
     <>Source</>,
     <>
-      Zoho {done ? <span className="tab-n mono">{run.writeback.requests.length}</span> : null}
+      Zoho {done ? <span className="tab-n mono">{writePlan(run, review.answers, review.dropped).requests.length}</span> : null}
     </>,
   ]
   return (

@@ -79,6 +79,8 @@ export function Run({ account, autoplay }: { account: string; autoplay: boolean 
           onOpen={open}
           onEnrich={() => {
             const l = laneBySlug[account]
+            // A new run needs a new approval.
+            store.approve(account, false)
             setActive(null)
             setTab('log')
             player.play(Math.max(0, l.start - 300), l.end + 200)

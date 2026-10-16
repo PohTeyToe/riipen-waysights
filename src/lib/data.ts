@@ -168,6 +168,8 @@ export type Run = {
   proposed: ProposedRow[]
   questions: Question[]
   merge: Merge | null
+  /** Lines about sign work that passed the checks: what the brief may quote, with the PDF page each sits on. */
+  sign_work: Pick<Cite, 'quote' | 'source' | 'pdf_page'>[]
   brief: { sentences: { text: string; cites: string[] }[]; model: string | null; skipped?: string }
   writeback: { sent: boolean; note: string; requests: ZohoRequest[] }
 }

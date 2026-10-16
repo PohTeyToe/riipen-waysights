@@ -1,8 +1,12 @@
 // Which lines of a saved page the run used, and which it refused. The source viewer highlights them.
 import { isCite, type Cite, type Run } from './data'
+import { findQuote, type SavedPage } from './pages'
 
-/** What the viewer opens: a page the run read, and optionally one line on it. */
-export type Focus = { source: string; quote?: string; pdf_page?: number | null; row?: string }
+/**
+ * What the viewer opens: a page the run read, and optionally one line on it. `quotes` is for a brief
+ * sentence that quotes several sources: the viewer focuses whichever of them this page prints.
+ */
+export type Focus = { source: string; quote?: string; quotes?: string[]; pdf_page?: number | null; row?: string }
 
 export type Tone = 'used' | 'rejected'
 export type LineMark = { quote: string; tone: Tone; row: string; pdf_page: number | null }
@@ -33,6 +37,47 @@ export function marksFor(run: Run, source: string): LineMark[] {
     seen.add(k)
     return true
   })
+}
+
+/**
+ * The first of `quotes` a saved page prints, and on a PDF the saved page it is on. The brief logs
+ * its quotes without a page, so this is how its citation opens on the right PDF page.
+ */
+export function locate(page: SavedPage, quotes: string[]): { quote: string; pdf_page: number | null } | null {
+  for (const quote of quotes) {
+    if (page.kind !== 'pdf') {
+      if (page.text && findQuote(page.text, quote)) return { quote, pdf_page: null }
+      continue
+    }
+    for (const [n, text] of Object.entries(page.pdf_pages ?? {})) if (findQuote(text, quote)) return { quote, pdf_page: Number(n) }
+  }
+  return null
+}
+
+export type Span = { start: number; end: number; mark: LineMark; focused: boolean }
+
+/**
+ * Where each mark sits in one saved text, overlaps merged. On a PDF page, a mark logged for another
+ * page is skipped; a mark logged without a page (a brief quote) is drawn wherever this page prints it.
+ */
+export function spansIn(text: string, marks: LineMark[], pdfPage: number | null, focus?: string): Span[] {
+  const spans: Span[] = []
+  for (const m of marks) {
+    if (pdfPage !== null && m.pdf_page !== null && m.pdf_page !== pdfPage) continue
+    const at = findQuote(text, m.quote)
+    if (at) spans.push({ ...at, mark: m, focused: !!focus && m.quote === focus })
+  }
+  spans.sort((a, b) => a.start - b.start || Number(b.focused) - Number(a.focused))
+  const out: Span[] = []
+  for (const s of spans) {
+    const prev = out[out.length - 1]
+    if (prev && s.start < prev.end) {
+      if (s.focused) prev.focused = true
+      continue
+    }
+    out.push(s)
+  }
+  return out
 }
 
 /** The source id the run gave a URL (key documents carry the URL, not the id). */

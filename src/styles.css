@@ -86,6 +86,8 @@ body {
   font-size: 0.875rem;
   line-height: 1.5;
   font-optical-sizing: auto;
+  /* Overpass Mono joins "ffl" into one cell, which breaks the mono grid ("offline"). */
+  font-variant-ligatures: no-common-ligatures;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -802,7 +804,6 @@ code,
   box-shadow: 0 0 0 1px var(--night);
   background: var(--orange);
   color: var(--night);
-  container-type: inline-size;
   overflow: hidden;
 }
 
@@ -810,33 +811,36 @@ code,
   background: var(--orange-soft);
 }
 
-.ink-model-l {
-  display: block;
-  padding: 0 6px;
+/* Right to left with wrapping: a part that doesn't fit drops to the hidden second line, words before the
+   time, and the empty first item lets even the time drop out. No label is ever cut mid-word. */
+.ink-model .ink-model-l {
+  position: static;
+  display: flex;
+  flex-flow: row-reverse wrap;
+  justify-content: flex-end;
+  align-content: flex-start;
+  height: 18px;
+  padding: 0 5px;
+  overflow: hidden;
   font-size: 0.6875rem;
   font-weight: 650;
   line-height: 18px;
   white-space: nowrap;
 }
 
+/* A full-height line of its own, so a time that doesn't fit drops below it. */
+.ink-model-l i {
+  width: 0;
+  height: 18px;
+}
+
+.ink-model-l span {
+  margin-right: 0.3em;
+}
+
 .ink-model-l b {
   font-family: var(--mono);
   font-weight: 600;
-}
-
-@container (max-width: 96px) {
-  .ink-model-l {
-    font-size: 0;
-  }
-  .ink-model-l b {
-    font-size: 0.6875rem;
-  }
-}
-
-@container (max-width: 40px) {
-  .ink-model-l {
-    display: none;
-  }
 }
 
 .ink-mark {
@@ -1742,7 +1746,7 @@ code,
 
 .log-btn {
   display: grid;
-  grid-template-columns: 42px 54px minmax(0, 1fr);
+  grid-template-columns: 42px 66px minmax(0, 1fr);
   gap: 8px;
   width: 100%;
   text-align: left;
@@ -1836,6 +1840,7 @@ button.log-btn:hover {
   font-family: var(--mono);
   font-size: 0.6875rem;
   color: var(--ink-faint);
+  overflow-wrap: anywhere;
 }
 
 .log-why {
@@ -2418,6 +2423,10 @@ mark.m.is-focus {
   transform: translateY(2px);
 }
 
+.nw {
+  white-space: nowrap;
+}
+
 /* ---------- Footer ---------- */
 
 .foot {
@@ -2870,9 +2879,6 @@ mark.m.is-focus {
   .ink-queue-l {
     display: none;
   }
-  .ink-model-l {
-    display: none;
-  }
   .ink-mark {
     transform: translateX(calc(-50% + var(--slot, 0) * 15px)) scale(0.85);
   }
@@ -2952,7 +2958,7 @@ mark.m.is-focus {
     padding: 10px 9px 9px;
   }
   .log-btn {
-    grid-template-columns: 36px 50px minmax(0, 1fr);
+    grid-template-columns: 36px 66px minmax(0, 1fr);
     gap: 6px;
     padding: 5px 10px;
   }

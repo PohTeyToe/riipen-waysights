@@ -49,7 +49,7 @@ function Quote({ c, slug, onOpen, active }: { c: Cite; slug: string; onOpen: (f:
       )}
       <span className="quote-src">
         {clip(cleanTitle(c.title), 48)}
-        {c.pdf_page ? `, p. ${c.pdf_page}` : ''}
+        {c.pdf_page ? `, p.\u00a0${c.pdf_page}` : ''}
       </span>
     </button>
   )
@@ -183,14 +183,11 @@ function Value({ row, slug, focus, onOpen }: { row: ShownRow; slug: string; focu
           {run.brief.sentences.map((s, i) => (
             <p key={i}>
               <BriefText text={s.text} />{' '}
-              {s.cites.map((c) => {
-                const q = quotedBits(s.text)[0]
-                return (
-                  <button key={c} type="button" className="cite mono" onClick={() => onOpen({ source: c, quote: q, row: slug })} aria-label={`Open source ${c}`}>
-                    {c}
-                  </button>
-                )
-              })}
+              {s.cites.map((c) => (
+                <button key={c} type="button" className="cite mono" onClick={() => onOpen({ source: c, quotes: quotedBits(s.text), row: slug })} aria-label={`Open source ${c}`}>
+                  {c}
+                </button>
+              ))}
             </p>
           ))}
           <p className="v-note">Written by Claude, then checked word by word against the pages it cites.</p>
@@ -304,6 +301,8 @@ export function Record({
   const rows = shownRows(run, review.answers)
   const plan = writePlan(run, review.answers, review.dropped)
   const seed = seedBySlug[slug]
+  // An approval is for a finished run. Run again clears it; scrubbing back hides it until the run is done.
+  const approved = review.approved && done
 
   const status = done
     ? plan.status
@@ -477,7 +476,7 @@ export function Record({
           ) : null}
         </div>
         <div className="rec-approve">
-          {review.approved ? (
+          {approved ? (
             <>
               <p className="approved">
                 <Glyph kind="filled" size={12} /> Approved{run.writeback.sent ? '' : '. Not sent: preview only'}

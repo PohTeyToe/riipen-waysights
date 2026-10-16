@@ -92,9 +92,8 @@ export function checkItems(run: Run): CheckItem[] {
     else items.push({ ...base, verdict: phone.value === p.value ? 'kept' : 'unused', why: phone.value === p.value ? 'printed whole on the page' : 'another number was kept' })
   }
 
-  const signs = (run as unknown as { sign_work: { quote: string }[] }).sign_work
   for (const s of ex.sign_work ?? []) {
-    const kept = signs.some((k) => same(k.quote, s.quote))
+    const kept = run.sign_work.some((k) => same(k.quote, s.quote))
     const no = refusal('sign_work', s.quote)
     items.push({
       field: 'sign',
