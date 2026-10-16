@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Board } from '../components/Board'
 import { Inspector, type ITab } from '../components/Inspector'
 import { Record } from '../components/Record'
@@ -13,6 +13,8 @@ import { useStore } from '../lib/store'
 import { laneBySlug, lanes } from '../lib/timeline'
 
 let started = false
+
+const smooth = () => (prefersReducedMotion() ? 'auto' : 'smooth') as ScrollBehavior
 
 /** The run board on top; the selected Account's record and inspector under it; the scorecard last. */
 export function Run({ account, autoplay }: { account: string; autoplay: boolean }) {
@@ -43,76 +45,82 @@ export function Run({ account, autoplay }: { account: string; autoplay: boolean 
     pending.current = null
   }, [account])
 
-  const smooth = () => (prefersReducedMotion() ? 'auto' : 'smooth') as ScrollBehavior
+  // The handlers keep their identity while the replay plays, so the lanes, the record, the
+  // inspector and the scorecard re-render only for their own changes, not on every step.
+  const select = useCallback(
+    (slug: string, scroll = !wide) => {
+      if (slug !== account) navigate(`/demo?account=${slug}`, { keepScroll: true, replace: true })
+      if (scroll) desk.current?.scrollIntoView({ behavior: smooth(), block: 'start' })
+    },
+    [account, wide],
+  )
 
-  const select = (slug: string, scroll = !wide) => {
-    if (slug !== account) navigate(`/demo?account=${slug}`, { keepScroll: true, replace: true })
-    if (scroll) desk.current?.scrollIntoView({ behavior: smooth(), block: 'start' })
-  }
+  const open = useCallback(
+    (f: Focus) => {
+      setFocus(f)
+      setTab('source')
+      if (!wide) inspector.current?.scrollIntoView({ behavior: smooth(), block: 'start' })
+    },
+    [wide],
+  )
 
-  const open = (f: Focus) => {
-    setFocus(f)
-    setTab('source')
+  const onStep = useCallback(
+    (slug: string, step: number) => {
+      if (slug !== account) pending.current = step
+      else setActive(step)
+      select(slug)
+      setTab('log')
+    },
+    [account, select],
+  )
+
+  const { approve } = store
+  const onEnrich = useCallback(() => {
+    const l = laneBySlug[account]
+    // A new run needs a new approval.
+    approve(account, false)
+    setActive(null)
+    setTab('log')
+    player.play(Math.max(0, l.start - 300), l.end + 200)
+  }, [account, approve])
+
+  const onZoho = useCallback(() => {
+    setTab('zoho')
     if (!wide) inspector.current?.scrollIntoView({ behavior: smooth(), block: 'start' })
-  }
+  }, [wide])
+
+  const pickTab = useCallback((x: ITab) => {
+    setTab(x)
+    if (x !== 'log') setActive(null)
+  }, [])
+
+  const onPick = useCallback(
+    (slug: string) => {
+      select(slug, false)
+      desk.current?.scrollIntoView({ behavior: smooth(), block: 'start' })
+    },
+    [select],
+  )
 
   return (
     <>
-      <Board
-        selected={account}
-        score={score}
-        onSelect={(slug) => select(slug)}
-        onStep={(slug, step) => {
-          if (slug !== account) pending.current = step
-          else setActive(step)
-          select(slug)
-          setTab('log')
-        }}
-      />
+      <Board selected={account} score={score} onSelect={select} onStep={onStep} />
       <div className="desk" ref={desk}>
         <Record
           slug={account}
           shown={shown[i]}
-          t={t}
+          started={playing || t > 0}
           playing={playing}
           focus={focus}
           onOpen={open}
-          onEnrich={() => {
-            const l = laneBySlug[account]
-            // A new run needs a new approval.
-            store.approve(account, false)
-            setActive(null)
-            setTab('log')
-            player.play(Math.max(0, l.start - 300), l.end + 200)
-          }}
-          onZoho={() => {
-            setTab('zoho')
-            if (!wide) inspector.current?.scrollIntoView({ behavior: smooth(), block: 'start' })
-          }}
+          onEnrich={onEnrich}
+          onZoho={onZoho}
         />
         <div className="desk-side" ref={inspector}>
-          <Inspector
-            slug={account}
-            shown={shown[i]}
-            playing={playing}
-            tab={tab}
-            setTab={(x) => {
-              setTab(x)
-              if (x !== 'log') setActive(null)
-            }}
-            focus={focus}
-            active={active}
-            onOpen={open}
-          />
+          <Inspector slug={account} shown={shown[i]} playing={playing} tab={tab} setTab={pickTab} focus={focus} active={active} onOpen={open} />
         </div>
       </div>
-      <Score
-        score={score}
-        onPick={(slug) => {
-          select(slug, false)
-          desk.current?.scrollIntoView({ behavior: smooth(), block: 'start' })
-        }}
-      />
+      <Score score={score} onPick={onPick} />
       <footer className="foot">
         <p className="mono">
           Pipeline commit {meta.pipeline_commit.slice(0, 7)} · {meta.tests.passed} pipeline tests pass offline · nothing on this page calls a model

@@ -115,8 +115,14 @@ export type LaneNow = {
 
 const HTTP = new Set(['fetch', 'robots', 'redirect'])
 
-/** The lane's state once `shown` steps have happened (t is only needed to tell a model call in flight). */
-export function laneNow(lane: Lane, shown: number, t: number): LaneNow {
+/** The model call out once `shown` steps have happened. A call runs from the step before it to its
+ * own step, so it's out exactly while the lane has shown everything up to that step. */
+export function inFlight(lane: Lane, shown: number): Block | undefined {
+  return lane.blocks.find((b) => b.i === shown)
+}
+
+/** The lane's state once `shown` steps have happened. */
+export function laneNow(lane: Lane, shown: number): LaneNow {
   const steps = lane.run.steps.slice(0, shown)
   const pages = steps.filter((s) => s.step === 'fetch' && s.page && s.status === 200 && !isData(s)).length
   const now: LaneNow = {
@@ -134,7 +140,7 @@ export function laneNow(lane: Lane, shown: number, t: number): LaneNow {
     const review = lane.run.status === 'needs_review'
     return { ...now, phase: review ? 'needs_review' : 'done', doing: review ? 'Needs review' : 'Done' }
   }
-  const inBlock = lane.blocks.find((b) => b.from <= t && t < b.to)
+  const inBlock = inFlight(lane, shown)
   if (inBlock) return { ...now, phase: 'model', doing: inBlock.kind === 'extract' ? 'Model reading the pages' : 'Model writing the brief' }
   const last = steps[steps.length - 1]
   if (shown > lane.writeStep && lane.writeStep >= 0) return { ...now, phase: 'writing', doing: 'Zoho update built' }
@@ -145,10 +151,10 @@ export function laneNow(lane: Lane, shown: number, t: number): LaneNow {
 
 export type Totals = { pages: number; requests: number; rejected: number; questions: number; asks: number; modelCalls: number; done: number }
 
-export function totalsAt(shown: number[], t: number): Totals {
+export function totalsAt(shown: number[]): Totals {
   const out: Totals = { pages: 0, requests: 0, rejected: 0, questions: 0, asks: 0, modelCalls: 0, done: 0 }
   lanes.forEach((lane, i) => {
-    const n = laneNow(lane, shown[i], t)
+    const n = laneNow(lane, shown[i])
     out.pages += n.pages
     out.requests += n.requests
     out.rejected += n.rejected

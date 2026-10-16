@@ -6,7 +6,7 @@ import { meta, scorecard, shortName } from '../lib/data'
 import { fmtBytes, fmtDate, prettyUrl } from '../lib/format'
 import { player, useReplay } from '../lib/player'
 import type { Rescore } from '../lib/rule4'
-import { clock, lanes, laneNow, SPAN, totalsAt, type Lane } from '../lib/timeline'
+import { clock, inFlight, lanes, laneNow, SPAN, totalsAt, type Lane } from '../lib/timeline'
 import { Glyph, OUTCOME } from './Glyph'
 import { How } from './How'
 
@@ -90,15 +90,12 @@ const Ink = memo(function Ink({ lane }: { lane: Lane }) {
 })
 
 /** A few words on what a lane is doing right now. */
-function phaseLabel(lane: Lane, shown: number, t: number, started: boolean): { text: string; tone: string } {
-  const now = laneNow(lane, shown, t)
+function phaseLabel(lane: Lane, shown: number, started: boolean): { text: string; tone: string } {
+  const now = laneNow(lane, shown)
   if (now.phase === 'waiting') return started ? { text: 'queued', tone: 'wait' } : { text: 'not run', tone: 'wait' }
   if (now.phase === 'done') return { text: 'done', tone: 'done' }
   if (now.phase === 'needs_review') return { text: 'needs review', tone: 'ask' }
-  if (now.phase === 'model') {
-    const b = lane.blocks.find((x) => x.from <= t && t < x.to)
-    return { text: b?.kind === 'brief' ? 'Claude: brief' : 'Claude: reading', tone: 'run' }
-  }
+  if (now.phase === 'model') return { text: inFlight(lane, shown)?.kind === 'brief' ? 'Claude: brief' : 'Claude: reading', tone: 'run' }
   if (now.phase === 'checking' || now.phase === 'writing') return { text: 'checking', tone: 'run' }
   if (now.doing === 'State road data') return { text: 'state road data', tone: 'run' }
   return { text: `reading ${now.pages}/${lane.run.run.page_budget}`, tone: 'run' }
@@ -154,10 +151,10 @@ function TipCard({ tip }: { tip: Tip }) {
   )
 }
 
-function LaneRow({
+/** One lane. It re-renders only when its own lane gains a step, not on every other lane's. */
+const LaneRow = memo(function LaneRow({
   lane,
   shown,
-  t,
   started,
   selected,
   score,
@@ -167,7 +164,6 @@ function LaneRow({
 }: {
   lane: Lane
   shown: number
-  t: number
   started: boolean
   selected: boolean
   score: Rescore
@@ -175,7 +171,7 @@ function LaneRow({
   onStep: (slug: string, i: number) => void
   onTip: (tip: Tip | null) => void
 }) {
-  const phase = phaseLabel(lane, shown, t, started)
+  const phase = phaseLabel(lane, shown, started)
   const done = shown >= lane.times.length
   const cells = KEY_FIELDS.map((f) => score.rows.find((r) => r.account === lane.slug && r.field === f)!)
   const changed = score.changed.includes(lane.slug)
@@ -220,9 +216,14 @@ function LaneRow({
         <div className="ink ink--ghost">
           <Ink lane={lane} />
         </div>
-        <div className="ink ink--lit">
-          <Ink lane={lane} />
+        <div className="lit">
+          <div className="lit-win">
+            <div className="ink ink--lit">
+              <Ink lane={lane} />
+            </div>
+          </div>
         </div>
+        <span className="head head--track" />
       </div>
       <div className={`lane-key${done ? ' is-done' : ''}${changed ? ' is-changed' : ''}`} aria-label={done ? `${lane.run.account.name} against the answer key` : undefined}>
         {cells.map((c) => (
@@ -233,7 +234,7 @@ function LaneRow({
       </div>
     </div>
   )
-}
+})
 
 export function Board({
   selected,
@@ -253,16 +254,28 @@ export function Board({
   const [tip, setTip] = useState<Tip | null>(null)
   const started = playing || t > 0
 
-  // Per frame: the playhead, the lit edge and the clock, straight into the DOM.
-  useEffect(
-    () =>
-      player.onFrame((now) => {
-        root.current?.style.setProperty('--p', String(now / SPAN))
-        if (clockRef.current) clockRef.current.textContent = clock(now)
-        if (scrub.current && document.activeElement !== scrub.current) scrub.current.value = String(Math.round(now))
-      }),
-    [],
-  )
+  // Per frame: the playheads, the lit edge and the clock, straight into the DOM. Everything that
+  // moves each frame moves by transform, so playing costs no layout or repaint of the page.
+  useEffect(() => {
+    const el = root.current
+    if (!el) return
+    // A playhead rail and a lit window both end at the playhead; the lit ink slides back the same
+    // distance so it stays in place while the window over it opens (see .lit in styles.css).
+    const ends = [...el.querySelectorAll<HTMLElement>('.head, .lit-win')]
+    const lit = [...el.querySelectorAll<HTMLElement>('.ink--lit')]
+    let second = ''
+    return player.onFrame((now) => {
+      const p = (now / SPAN) * 100
+      for (const e of ends) e.style.transform = `translateX(${p - 100}%)`
+      for (const l of lit) l.style.transform = `translateX(${100 - p}%)`
+      // The clock and the slider change once a second of run time, not every frame.
+      const c = clock(now)
+      if (c === second && player.playing) return
+      second = c
+      if (clockRef.current) clockRef.current.textContent = c
+      if (scrub.current && document.activeElement !== scrub.current) scrub.current.value = String(Math.round(now))
+    })
+  }, [])
 
   // Space plays and pauses, unless the reader is in a control that uses Space itself.
   useEffect(() => {
@@ -278,7 +291,7 @@ export function Board({
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  const totals = totalsAt(shown, t)
+  const totals = totalsAt(shown)
   const readouts: [string, number | string, string?][] = [
     ['Accounts done', totals.done, `/${lanes.length}`],
     ['Pages read', totals.pages],
@@ -384,6 +397,7 @@ export function Board({
                   e.currentTarget.value = String(Math.round(player.t))
                 }}
               />
+              <span className="head head--axis" />
             </div>
             <span className="axis-h axis-h--key">vs answer key</span>
           </div>
@@ -392,7 +406,6 @@ export function Board({
               key={lane.slug}
               lane={lane}
               shown={shown[i]}
-              t={t}
               started={started}
               selected={lane.slug === selected}
               score={score}

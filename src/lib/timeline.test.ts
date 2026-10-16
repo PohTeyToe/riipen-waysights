@@ -1,7 +1,7 @@
 // The run board draws only what the run logged. These tests hold its counts to the run's own totals.
 import { describe, expect, it } from 'vitest'
 import { meta, runs } from './data'
-import { clock, lanes, laneNow, peakWorkers, shownAt, SPAN, totalsAt } from './timeline'
+import { clock, inFlight, lanes, laneNow, peakWorkers, shownAt, SPAN, totalsAt } from './timeline'
 
 describe('run board', () => {
   it('spans the recorded run and starts every lane inside it', () => {
@@ -26,7 +26,7 @@ describe('run board', () => {
 
   it('counts pages, requests, rejections and questions the way the run did', () => {
     for (const l of lanes) {
-      const end = laneNow(l, l.times.length, SPAN)
+      const end = laneNow(l, l.times.length)
       expect(end.pages, l.slug).toBe(l.run.run.pages_read)
       expect(end.requests, l.slug).toBe(l.run.run.http_requests)
       expect(end.rejected, l.slug).toBe(l.run.rejected.length)
@@ -36,12 +36,12 @@ describe('run board', () => {
   })
 
   it("sends three fields to a person: two road questions and Pelham's two phone numbers", () => {
-    const t = totalsAt(lanes.map((x) => x.times.length), SPAN)
+    const t = totalsAt(lanes.map((x) => x.times.length))
     expect(t.questions).toBe(runs.reduce((n, r) => n + r.questions.length, 0))
     expect(t.asks).toBe(3)
     // Warren's notes about hidden email addresses are the crawler's, not questions.
     const warren = lanes.find((l) => l.slug === 'warren')!
-    expect(laneNow(warren, warren.times.length, SPAN).asks).toBe(0)
+    expect(laneNow(warren, warren.times.length).asks).toBe(0)
   })
 
   it('finds one extract call per Account and one brief call per brief written', () => {
@@ -57,16 +57,27 @@ describe('run board', () => {
     expect(shownAt(l, -1)).toBe(0)
     expect(shownAt(l, l.start)).toBeGreaterThan(0)
     expect(shownAt(l, SPAN)).toBe(l.times.length)
-    const t = totalsAt(lanes.map((x) => x.times.length), SPAN)
+    const t = totalsAt(lanes.map((x) => x.times.length))
     expect(t.done).toBe(runs.length)
     expect(t.pages).toBe(runs.reduce((n, r) => n + r.run.pages_read, 0))
   })
 
   it('says a lane is waiting before its worker picks it up, and with the model while the call is out', () => {
     const late = lanes[lanes.length - 1]
-    expect(laneNow(late, 0, 0).phase).toBe('waiting')
+    expect(laneNow(late, 0).phase).toBe('waiting')
     const call = late.blocks[0]
     const mid = (call.from + call.to) / 2
-    expect(laneNow(late, shownAt(late, mid), mid).phase).toBe('model')
+    expect(laneNow(late, shownAt(late, mid)).phase).toBe('model')
+  })
+
+  it('knows the call in flight from the steps shown alone, at every moment of the run', () => {
+    // The board, record and inspector skip re-rendering for another lane's steps, so the call in
+    // flight must not need the clock: it's the call whose time span holds t, found from shownAt(t).
+    for (const l of lanes) {
+      for (let t = -500; t <= SPAN + 500; t += 50) {
+        const byTime = l.blocks.find((b) => b.from <= t && t < b.to)
+        expect(inFlight(l, shownAt(l, t)), `${l.slug} at ${t}`).toBe(byTime)
+      }
+    }
   })
 })

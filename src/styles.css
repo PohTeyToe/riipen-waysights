@@ -350,7 +350,6 @@ code,
 /* ---------- Run board ---------- */
 
 .board {
-  --p: 0;
   background: var(--night);
   color: var(--night-ink);
   border-bottom: 1px solid var(--night-edge);
@@ -624,16 +623,26 @@ code,
   border-radius: var(--r-sm);
 }
 
-.axis-track::after {
+/* A playhead is a rail as wide as its track whose right edge is the playhead. Board.tsx slides it by
+   transform each frame, so playing costs no layout or repaint; ::after draws the mark. A rail only
+   ever sticks out to the left, where it can't widen the page. */
+.head {
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.head--axis::after {
   content: '';
   position: absolute;
-  left: calc(var(--p) * 100%);
+  right: 0;
   bottom: 0;
   width: 9px;
   height: 9px;
   background: var(--orange);
-  transform: translate(-50%, 50%) rotate(45deg);
-  pointer-events: none;
+  transform: translate(50%, 50%) rotate(45deg);
 }
 
 .lane {
@@ -709,16 +718,14 @@ code,
   cursor: crosshair;
 }
 
-.track::after {
+.head--track::after {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
-  left: calc(var(--p) * 100%);
+  right: -1px;
   width: 2px;
-  margin-left: -1px;
   background: var(--orange);
-  pointer-events: none;
 }
 
 .ink {
@@ -729,10 +736,34 @@ code,
 
 .ink--ghost {
   opacity: 0.17;
+  /* Its own layer, like the lit copy, so both copies land on the same pixels. */
+  will-change: transform;
+}
+
+/* The lit copy shows the ink up to the playhead, 8px of overflow above and below. .lit cuts at the
+   track's left edge; .lit-win slides like a playhead rail, so its right edge is the playhead; the ink
+   inside slides back by the same amount and stays put. All by transform, so no frame repaints. */
+.lit,
+.lit-win {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lit {
+  inset: -8px 0;
+}
+
+.lit-win {
+  inset: 0;
+  transform: translateX(-100%);
+  will-change: transform;
 }
 
 .ink--lit {
-  clip-path: inset(-8px calc((1 - var(--p)) * 100%) -8px 0);
+  inset: 8px 0;
+  transform: translateX(100%);
+  will-change: transform;
 }
 
 .ink > *,
@@ -1229,19 +1260,37 @@ code,
 }
 
 .f-bar {
+  position: relative;
+  overflow: hidden;
   height: 6px;
   flex: 1;
   max-width: 160px;
   border-radius: var(--r-sm);
-  background: linear-gradient(90deg, var(--panel-sunk), var(--line), var(--panel-sunk));
-  background-size: 200% 100%;
+  background: var(--panel-sunk);
+}
+
+/* The sheen slides by transform, so it runs off the main thread instead of repainting the page each frame. */
+.f-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -200%;
+  width: 400%;
+  background: linear-gradient(90deg, var(--panel-sunk), var(--line), var(--panel-sunk)) 0 0 / 50% 100%;
   animation: sheen 1.4s linear infinite;
 }
 
 @keyframes sheen {
   to {
-    background-position: -200% 0;
+    transform: translateX(50%);
   }
+}
+
+/* A replay paused part way holds still instead of looking like it's still loading. */
+.record.is-paused .pulse,
+.record.is-paused .f-bar::after {
+  animation-play-state: paused;
 }
 
 .v-big {

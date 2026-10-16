@@ -1,7 +1,7 @@
 // The run against the answer key written before its first run, misses in words, and rule 4's
 // tolerance as a slider that re-decides the road rows in the browser (src/lib/rule4.ts, tested
 // against pipeline/validate.py at every setting from 0% to 5%).
-import type { ReactNode } from 'react'
+import { memo, type ReactNode } from 'react'
 import { runs, scorecard, shortName, type ScoreOutcome, type ScoreRow } from '../lib/data'
 import { fmtKm, fmtPct } from '../lib/format'
 import { RECORDED_NEAR, type Rescore } from '../lib/rule4'
@@ -56,7 +56,8 @@ function missLine(r: ScoreRow): ReactNode {
   )
 }
 
-export function Score({ score, onPick }: { score: Rescore; onPick: (slug: string) => void }) {
+/** Memoised: the replay never changes it, only the slider and answers do. */
+export const Score = memo(function Score({ score, onPick }: { score: Rescore; onPick: (slug: string) => void }) {
   const store = useStore()
   const near = store.near
   const misses = score.rows.filter((r) => r.outcome === 'wrong' || r.outcome === 'missed' || (r.outcome === 'sent_to_person' && !r.key_agrees_unclear))
@@ -185,4 +186,4 @@ export function Score({ score, onPick }: { score: Rescore; onPick: (slug: string
       </div>
     </section>
   )
-}
+})

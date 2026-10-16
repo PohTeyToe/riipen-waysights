@@ -1,13 +1,13 @@
 // The Zoho Account as the button leaves it: what Zoho has now, what the run proposes, the check
 // each value passed, and whether it gets written. Values land when the replay reaches the step that
 // produced them. Answers, dropped fields and the approval live in this tab only.
-import { type ReactNode } from 'react'
+import { memo, type ReactNode } from 'react'
 import { isCite, runBySlug, seedBySlug, type Cite, type DocLink, type ProposedRow } from '../lib/data'
 import { cleanTitle, fmtDateTime, fmtKm, fmtKm1, prettyUrl } from '../lib/format'
 import { quotedBits, sourceIdFor, type Focus } from '../lib/marks'
 import { shownRows, writePlan, type ShownRow, type ShownStatus } from '../lib/record'
 import { useStore } from '../lib/store'
-import { laneBySlug, laneNow } from '../lib/timeline'
+import { inFlight, laneBySlug, laneNow } from '../lib/timeline'
 import { Glyph, type GlyphKind } from './Glyph'
 
 const LABEL: Record<ProposedRow['field'], string> = {
@@ -269,10 +269,11 @@ function Question({ row, slug }: { row: ShownRow; slug: string }) {
   )
 }
 
-export function Record({
+/** Memoised: while the replay plays it re-renders only when its own Account gains a step. */
+export const Record = memo(function Record({
   slug,
   shown,
-  t,
+  started,
   playing,
   focus,
   onOpen,
@@ -281,7 +282,8 @@ export function Record({
 }: {
   slug: string
   shown: number
-  t: number
+  /** The replay has been started (it's playing, or paused part way). */
+  started: boolean
   playing: boolean
   focus: Focus | null
   onOpen: (f: Focus) => void
@@ -292,12 +294,12 @@ export function Record({
   const run = runBySlug[slug]
   const lane = laneBySlug[slug]
   const review = store.get(slug)
-  const now = laneNow(lane, shown, t)
+  const now = laneNow(lane, shown)
   const done = shown >= lane.times.length
   const ready = lane.checkStep >= 0 && shown > lane.checkStep
   const briefReady = lane.briefStep >= 0 && shown > lane.briefStep
   const running = shown > 0 && !done
-  const queued = shown === 0 && (playing || t > 0)
+  const queued = shown === 0 && started
   const rows = shownRows(run, review.answers)
   const plan = writePlan(run, review.answers, review.dropped)
   const seed = seedBySlug[slug]
@@ -314,7 +316,7 @@ export function Record({
   const statusTone = done ? (plan.status === 'Done' ? 'done' : 'ask') : running || queued ? 'run' : 'idle'
   const doing = running
     ? now.phase === 'model'
-      ? lane.blocks.find((b) => b.from <= t && t < b.to)?.kind === 'brief'
+      ? inFlight(lane, shown)?.kind === 'brief'
         ? 'Claude is writing the brief'
         : 'Claude is reading the pages'
       : now.phase === 'checking' || now.phase === 'writing'
@@ -328,7 +330,7 @@ export function Record({
   const filledNow = done ? rows.filter((r) => r.shown === 'filled' || r.shown === 'merge').length : 0
 
   return (
-    <article className="record" aria-labelledby="rec-h">
+    <article className={`record${running && !playing ? ' is-paused' : ''}`} aria-labelledby="rec-h">
       <header className="rec-head">
         <div className="rec-id">
           <p className="rec-kicker">
@@ -495,4 +497,4 @@ export function Record({
       {done ? <p className="rec-when mono">Run {fmtDateTime(run.run.finished_at)} · sample CRM state</p> : null}
     </article>
   )
-}
+})

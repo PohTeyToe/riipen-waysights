@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { checkItems } from '../lib/checks'
 import { runBySlug } from '../lib/data'
 import type { Focus } from '../lib/marks'
@@ -13,7 +14,8 @@ import { ZohoView } from './ZohoView'
 export type ITab = 'log' | 'checks' | 'source' | 'zoho'
 const ORDER: ITab[] = ['log', 'checks', 'source', 'zoho']
 
-export function Inspector({
+/** Memoised: while the replay plays it re-renders only when its own Account gains a step. */
+export const Inspector = memo(function Inspector({
   slug,
   shown,
   playing,
@@ -76,4 +78,4 @@ export function Inspector({
       </Tabs>
     </aside>
   )
-}
+})
