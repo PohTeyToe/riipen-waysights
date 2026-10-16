@@ -16,7 +16,7 @@ export function Honesty({ date }: { date: string }) {
 export function Owner() {
   return (
     <p className="owner">
-      Abdallah Safi <Dot /> 4th-year Computer Engineering, Toronto Metropolitan University <Dot />{' '}
+      Abdallah Safi <Dot /> Computer Engineering, Toronto Metropolitan University <Dot />{' '}
       <a href={REPO} target="_blank" rel="noreferrer">
         github.com/PohTeyToe/riipen-waysights
       </a>
