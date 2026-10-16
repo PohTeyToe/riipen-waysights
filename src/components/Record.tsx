@@ -330,7 +330,7 @@ export const Record = memo(function Record({
   const filledNow = done ? rows.filter((r) => r.shown === 'filled' || r.shown === 'merge').length : 0
 
   return (
-    <article className={`record${running && !playing ? ' is-paused' : ''}`} aria-labelledby="rec-h">
+    <article className={`record${doing && !playing ? ' is-paused' : ''}`} aria-labelledby="rec-h">
       <header className="rec-head">
         <div className="rec-id">
           <p className="rec-kicker">
